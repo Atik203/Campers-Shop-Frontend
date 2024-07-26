@@ -1,9 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
-export type TIcon = React.ComponentType<
-  React.ComponentProps<"svg"> & { isActive: boolean }
->;
+export type TIcon = React.ComponentType<React.ComponentProps<"svg">>;
 interface TooltipIconProps {
   icon: TIcon;
   path: string;
@@ -47,7 +45,6 @@ const TooltipIcon = ({
       ${isMobile && isActive && "text-primary"}  
       `}
               aria-hidden="true"
-              isActive={isActive}
             />
             {item > 0 && (
               <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-green-600 rounded-full">

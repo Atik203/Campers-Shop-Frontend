@@ -10,4 +10,5 @@ export interface TUserPath {
   path?: string;
   element?: ReactNode;
   children?: TUserPath[];
+  icon?: ReactNode;
 }

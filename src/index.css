@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+.sider-style {
+  background-color: rgb(243, 246, 243) !important;
+  border-right: 1px solid lightgray !important;
+  box-shadow: 2px 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  padding: 1rem 0 !important;
+  transition: all 0.3s ease !important;
+}
+
+.sider-menu-style {
+  color: hsl(var(--primary)) !important;
+  background-color: inherit !important;
+  font-weight: 500;
+  border-radius: var(--radius) !important;
+  transition: background-color 0.3s ease !important;
+  padding: 4px 0 I !important;
+}
+
+.sider-menu-style:hover {
+  color: hsl(var(--primary-foreground)) !important;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
