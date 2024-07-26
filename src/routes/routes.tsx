@@ -1,3 +1,5 @@
+import Cart from "@/components/ui/Cart";
+import WishList from "@/pages/WishList";
 import { createBrowserRouter } from "react-router-dom";
 import ErrorPage from "../pages/ErrorPage";
 import MainLayout from "./../components/layout/MainLayout";
@@ -17,6 +19,14 @@ const router = createBrowserRouter([
       {
         path: "/contact-us",
         element: <Contact />,
+      },
+      {
+        path: "/wishlist",
+        element: <WishList />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
       },
     ],
   },
