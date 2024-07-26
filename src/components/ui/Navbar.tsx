@@ -22,6 +22,8 @@ function classNames(...classes: string[]) {
 
 const menuItems = [
   { name: "Home", to: "/" },
+  { name: "Products", to: "/products" },
+  { name: "About Us", to: "/about-us" },
   { name: "Contact Us", to: "/contact-us" },
 ];
 const iconsConfig = [
@@ -126,7 +128,7 @@ export default function Navbar() {
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                           >
-                            Settings
+                            Dashboard
                           </a>
                         )}
                       </MenuItem>
@@ -175,7 +177,7 @@ export default function Navbar() {
                   to={"/contact-us"}
                   className="block text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                 >
-                  Settings
+                  Dashboard
                 </DisclosureButton>
               </div>
             </div>
