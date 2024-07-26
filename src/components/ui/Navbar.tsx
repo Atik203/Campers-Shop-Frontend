@@ -9,21 +9,12 @@ import {
   Transition,
 } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import {
-  Bars3Icon,
-  ShoppingCartIcon,
-  StarIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { ShoppingCartIcon, StarIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
+import MobileMenuButton from "./MobileMenuButton";
 import NavLogo from "./NavLogo";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./tooltip";
+import TooltipIcons from "./ToolTipIcons";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -33,6 +24,10 @@ const menuItems = [
   { name: "Home", to: "/" },
   { name: "Contact Us", to: "/contact-us" },
 ];
+const iconsConfig = [
+  { icon: StarIcon, path: "/wishlist", tooltipText: "Wishlist", item: 0 },
+  { icon: ShoppingCartIcon, path: "/cart", tooltipText: "Cart", item: 0 },
+];
 
 const SearchBar = () => (
   <div className="w-full max-w-lg lg:max-w-xs">
@@ -40,9 +35,9 @@ const SearchBar = () => (
       Search
     </label>
     <div className="relative">
-      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+      <div className=" absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
         <MagnifyingGlassIcon
-          className="h-5 w-5 text-gray-500"
+          className="h-5 w-5 text-gray-500 hover:text-black"
           aria-hidden="true"
         />
       </div>
@@ -55,17 +50,6 @@ const SearchBar = () => (
       />
     </div>
   </div>
-);
-
-const MobileMenuButton = ({ open }: { open: boolean }) => (
-  <DisclosureButton className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-    <span className="sr-only">Open main menu</span>
-    {open ? (
-      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-    ) : (
-      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-    )}
-  </DisclosureButton>
 );
 
 const MenuItemsComponent = () => (
@@ -89,29 +73,6 @@ const MenuItemsComponent = () => (
   </div>
 );
 
-const TooltipIcons = ({ className }: { className: string }) => (
-  <div className={className}>
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger>
-          <StarIcon className="h-6 w-6" aria-hidden="true" />
-        </TooltipTrigger>
-        <TooltipContent className="bg-slate-300">
-          <p>Wishlist</p>
-        </TooltipContent>
-      </Tooltip>
-      <Tooltip>
-        <TooltipTrigger>
-          <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
-        </TooltipTrigger>
-        <TooltipContent className="bg-slate-300">
-          <p>Cart</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  </div>
-);
-
 export default function Navbar() {
   return (
     <Disclosure as="nav" className="">
@@ -130,7 +91,11 @@ export default function Navbar() {
                 <MobileMenuButton open={open} />
               </div>
               <div className="hidden lg:ml-4 lg:flex lg:items-center">
-                <TooltipIcons className={"space-x-2"} />
+                <TooltipIcons
+                  className="flex items-center justify-center gap-2"
+                  icons={iconsConfig}
+                  isMobile={false}
+                />
                 <Menu as="div" className="relative ml-4 flex-shrink-0">
                   <div>
                     <MenuButton className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -192,7 +157,11 @@ export default function Navbar() {
               ))}
             </div>
             <div className="flex flex-col gap-3 px-4">
-              <TooltipIcons className={"flex flex-col gap-3"} />
+              <TooltipIcons
+                className={"flex flex-col gap-3"}
+                icons={iconsConfig}
+                isMobile={true}
+              />
               <div>
                 <img
                   className="h-8 w-8 rounded-full border-2 border-indigo-500"
@@ -202,9 +171,9 @@ export default function Navbar() {
               </div>
               <div className="mt-3 space-y-1">
                 <DisclosureButton
-                  as="a"
-                  href="#"
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                  as={NavLink}
+                  to={"/contact-us"}
+                  className="block text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                 >
                   Settings
                 </DisclosureButton>
