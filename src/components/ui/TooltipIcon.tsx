@@ -37,19 +37,25 @@ const TooltipIcon = ({
         }
       >
         {({ isActive }) => (
-          <Icon
-            className={`h-6 w-6 ${
-              !isMobile &&
-              isActive &&
-              "text-primary border-b-primary border-b-2"
-            }
-            ${isMobile && isActive && "text-primary"}  
-            `}
-            aria-hidden="true"
-            isActive={isActive}
-          />
+          <div className="relative inline-flex items-center">
+            <Icon
+              className={`h-8 w-8 ${
+                !isMobile &&
+                isActive &&
+                "text-primary border-b-primary border-b-2"
+              }
+      ${isMobile && isActive && "text-primary"}  
+      `}
+              aria-hidden="true"
+              isActive={isActive}
+            />
+            {item > 0 && (
+              <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-green-600 rounded-full">
+                {item}
+              </span>
+            )}
+          </div>
         )}
-        {item}
       </NavLink>
     </TooltipTrigger>
     <TooltipContent className="bg-slate-300">

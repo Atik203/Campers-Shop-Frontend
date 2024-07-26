@@ -25,7 +25,7 @@ const menuItems = [
   { name: "Contact Us", to: "/contact-us" },
 ];
 const iconsConfig = [
-  { icon: StarIcon, path: "/wishlist", tooltipText: "Wishlist", item: 0 },
+  { icon: StarIcon, path: "/wishlist", tooltipText: "Wishlist", item: 5 },
   { icon: ShoppingCartIcon, path: "/cart", tooltipText: "Cart", item: 0 },
 ];
 
@@ -79,7 +79,7 @@ export default function Navbar() {
       {({ open }) => (
         <>
           <div className="mx-auto px-2 sm:px-4 lg:px-8">
-            <div className="flex h-20 items-center justify-between">
+            <div className="flex h-24 items-center justify-between">
               <div className="flex px-2 lg:px-0">
                 <NavLogo />
                 <MenuItemsComponent />
