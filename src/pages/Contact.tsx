@@ -8,7 +8,7 @@ export default function Contact() {
   return (
     <div className="relative isolate bg-gray-100 ">
       <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
-        <div className="relative px-6 pb-20 pt-20 lg:static lg:px-8 lg:py-20">
+        <div className="relative px-6 pb-16 pt-16 lg:static lg:px-8 lg:py-16">
           <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
             <div className="absolute inset-y-0 left-0 -z-10 w-full overflow-hidden bg-gray-100 ring-1 ring-gray-900/10 lg:w-1/2">
               <svg
@@ -99,7 +99,7 @@ export default function Contact() {
             </dl>
           </div>
         </div>
-        <form className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48">
+        <form className="px-6 pb-16 pt-16 sm:pb-24 lg:px-8 lg:py-16">
           <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
               <div>
