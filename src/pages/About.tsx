@@ -66,7 +66,7 @@ const blogPosts = [
     description:
       "Explore our top picks for camping spots this summer. Find out what makes each location unique and why you should visit.",
     imageUrl:
-      "https://images.unsplash.com/photo-1496104679561-38b3b4d1a4d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=3603&q=80",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLkwh-aI58gxmlcpgSIcQXlsMCDU_h8KbkQg&s",
     date: "Jan 10, 2023",
     datetime: "2023-01-10",
     author: {
@@ -82,7 +82,7 @@ const blogPosts = [
     description:
       "Get tips on selecting the best camping gear for your needs. Learn what to look for in tents, sleeping bags, and more.",
     imageUrl:
-      "https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&auto=format&fit=crop&w=3603&q=80",
+      "https://media.worldnomads.com/learn/travelsmarter/camping-trip-travel-smarter-lead-new.jpg",
     date: "Feb 15, 2023",
     datetime: "2023-02-15",
     author: {
@@ -98,7 +98,7 @@ const blogPosts = [
     description:
       "Discover our top 10 camping hacks that will make your outdoor experience more enjoyable and stress-free.",
     imageUrl:
-      "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-4.0.3&auto=format&fit=crop&w=3603&q=80",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC5oFTCDDN7vZB8bQd7w1hKKtf7QxKtKgcLQ&s",
     date: "Mar 20, 2023",
     datetime: "2023-03-20",
     author: {
