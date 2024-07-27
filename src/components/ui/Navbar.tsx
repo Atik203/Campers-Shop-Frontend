@@ -8,12 +8,12 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { ShoppingCartIcon, StarIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
 import MobileMenuButton from "./MobileMenuButton";
 import NavLogo from "./NavLogo";
+import SearchBar from "./SearchBar";
 import TooltipIcons from "./ToolTipIcons";
 
 function classNames(...classes: string[]) {
@@ -30,29 +30,6 @@ const iconsConfig = [
   { icon: StarIcon, path: "/wishlist", tooltipText: "Wishlist", item: 5 },
   { icon: ShoppingCartIcon, path: "/cart", tooltipText: "Cart", item: 0 },
 ];
-
-const SearchBar = () => (
-  <div className="w-full max-w-lg lg:max-w-xs">
-    <label htmlFor="search" className="sr-only">
-      Search
-    </label>
-    <div className="relative">
-      <div className=" absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
-        <MagnifyingGlassIcon
-          className="h-5 w-5 text-gray-500 hover:text-black"
-          aria-hidden="true"
-        />
-      </div>
-      <input
-        id="search"
-        name="search"
-        className="block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3  ring-1 ring-inset ring-gray-400 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-        placeholder="Search"
-        type="search"
-      />
-    </div>
-  </div>
-);
 
 const MenuItemsComponent = () => (
   <div className="hidden lg:ml-6 lg:flex lg:space-x-8">

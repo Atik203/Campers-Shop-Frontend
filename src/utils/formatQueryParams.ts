@@ -1,24 +1,34 @@
-const formatQueryParams = (
-  selectedFilters: [string, boolean][],
-  sortOption: string,
-  minPrice: number,
-  maxPrice: number,
-  searchTerm: string
-): string => {
+interface QueryParamsOptions {
+  selectedFilters?: [string, boolean][];
+  selectedSort?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  searchTerm?: string;
+}
+
+const formatQueryParams = ({
+  selectedFilters = [],
+  selectedSort = "",
+  minPrice = 0,
+  maxPrice = Infinity,
+  searchTerm = "",
+}: QueryParamsOptions = {}): string => {
   const params = new URLSearchParams();
 
-  selectedFilters.forEach(([key, value]) => {
-    if (value) {
-      const [filterType, filterValue] = key.split("-");
-      params.append(filterType, filterValue);
-    }
-  });
-
-  if (sortOption) {
-    params.append("sort", sortOption);
+  if (selectedFilters.length) {
+    selectedFilters.forEach(([key, value]) => {
+      if (value) {
+        const [filterType, filterValue] = key.split("-");
+        params.append(filterType, filterValue);
+      }
+    });
   }
 
-  if (minPrice !== undefined && maxPrice !== undefined) {
+  if (selectedSort) {
+    params.append("sort", selectedSort);
+  }
+
+  if (minPrice !== 0 || maxPrice !== Infinity) {
     params.append("minPrice", minPrice.toString());
     params.append("maxPrice", maxPrice.toString());
   }
