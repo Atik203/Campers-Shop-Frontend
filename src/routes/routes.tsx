@@ -1,5 +1,7 @@
-import Cart from "@/components/ui/Cart";
 import About from "@/pages/About";
+import Cart from "@/pages/Cart";
+import Checkout from "@/pages/Checkout";
+import ConfirmOrder from "@/pages/ConfirmOrder";
 import WishList from "@/pages/WishList";
 import { routeGenerator } from "@/utils/routeGenerator";
 import { createBrowserRouter } from "react-router-dom";
@@ -40,6 +42,14 @@ const router = createBrowserRouter([
       {
         path: "/about-us",
         element: <About />,
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />,
+      },
+      {
+        path: "/confirm-order",
+        element: <ConfirmOrder />,
       },
     ],
   },
