@@ -32,8 +32,8 @@ export default function Banner() {
             }}
           />
         </div>
-        <p className="text-sm leading-6 ">
-          <a href="#">
+        <div className="text-sm leading-6 ">
+          <h1>
             <strong className="font-semibold">Campers Shop 2024</strong>
             <svg
               viewBox="0 0 2 2"
@@ -47,8 +47,8 @@ export default function Banner() {
               <span className="underline"> Shop now</span>
             </Link>
             <span aria-hidden="true">&rarr;</span>
-          </a>
-        </p>
+          </h1>
+        </div>
         <div className="flex flex-1 justify-end">
           <button
             type="button"

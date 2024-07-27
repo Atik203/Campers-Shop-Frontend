@@ -1,12 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { CardSkeleton } from "@/components/ui/CardSkeleton";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
 import { useGetAllProductsQuery } from "@/redux/features/product/productApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TProduct } from "@/types/product.types";
@@ -20,6 +13,7 @@ import {
   DisclosurePanel,
   Menu,
   MenuButton,
+  MenuItem,
   MenuItems,
   Transition,
   TransitionChild,
@@ -76,14 +70,17 @@ const Products = () => {
 
     console.log("Query String:", queryString);
   };
-  const { data } = useGetAllProductsQuery(undefined, {
+  const { data, isFetching, isLoading } = useGetAllProductsQuery(undefined, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
   });
 
-  const products: TProduct[] = data?.data;
-  const filters = formatProductFilters(products);
+  if (isFetching) return <p>Fetching...</p>;
+  if (isLoading) return <p>Loading...</p>;
+
+  const products: TProduct[] = data?.data || [];
+  const filters = products.length > 0 ? formatProductFilters(products) : [];
 
   const onSubmit = (data: Record<string, boolean>) => {
     const selectedFilters: [string, boolean][] = Object.entries(data).filter(
@@ -240,39 +237,44 @@ const Products = () => {
             </h1>
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
-                <div>
-                  <Select onValueChange={handleSortChange}>
-                    <SelectTrigger className="group inline-flex justify-center text-sm font-medium  hover:text-gray-900 ">
-                      <MenuButton>Sort By</MenuButton>
-                    </SelectTrigger>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
-                    >
-                      <MenuItems className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <div className="container mx-auto p-4">
-                          <SelectContent>
-                            <SelectGroup>
-                              {sortOptions.map((option) => (
-                                <SelectItem
-                                  key={option.value}
-                                  value={option.value}
-                                >
-                                  {option.name}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </div>
-                      </MenuItems>
-                    </Transition>
-                  </Select>
-                </div>
+                <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                  Sort By
+                </MenuButton>
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <MenuItems className="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="container mx-auto p-2">
+                      {sortOptions.map((option) => (
+                        <MenuItem
+                          key={option.value}
+                          as="button"
+                          className={({ active }) =>
+                            `block w-full text-left p-2 text-sm ${
+                              active ? "bg-gray-200" : ""
+                            } ${
+                              option.value === selectedSort
+                                ? "font-semibold text-base text-primary"
+                                : ""
+                            }`
+                          }
+                          onClick={() => handleSortChange(option.value)}
+                        >
+                          {option.name}
+                          {option.value === selectedSort && (
+                            <span className="ml-2 text-primary">✓</span>
+                          )}
+                        </MenuItem>
+                      ))}
+                    </div>
+                  </MenuItems>
+                </Transition>
               </Menu>
 
               <button
