@@ -1,4 +1,4 @@
-import { PhotoIcon } from "@heroicons/react/outline"; // Ensure you have this icon or replace it with your own
+import { PhotoIcon } from "@heroicons/react/24/outline"; // Ensure you have this icon or replace it with your own
 import React, { useEffect, useState } from "react";
 
 export const ImageUpload = () => {

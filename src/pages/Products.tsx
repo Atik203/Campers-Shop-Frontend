@@ -87,7 +87,8 @@ const Products = () => {
 
   const onSubmit = (data: Record<string, boolean>) => {
     const selectedFilters: [string, boolean][] = Object.entries(data).filter(
-      ([key, value]) => value
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+      ([_, value]) => value
     );
     const queryString = formatQueryParams({
       selectedFilters,
