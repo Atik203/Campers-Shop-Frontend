@@ -2,12 +2,15 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
 
 interface FormInputProps {
   name: string;
   label: string;
   placeholder?: string;
   description?: string;
+  type?: string;
+  rows?: number;
 }
 
 export const FormInput: React.FC<FormInputProps> = ({
@@ -15,6 +18,8 @@ export const FormInput: React.FC<FormInputProps> = ({
   label,
   placeholder,
   description,
+  type = "text",
+  rows = 4,
 }) => {
   const {
     register,
@@ -27,11 +32,21 @@ export const FormInput: React.FC<FormInputProps> = ({
         {label}
       </Label>
       <div className="relative">
-        <Input
-          placeholder={placeholder}
-          {...register(name)}
-          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm"
-        />
+        {type === "textarea" ? (
+          <Textarea
+            placeholder={placeholder}
+            {...register(name)}
+            rows={rows}
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm"
+          />
+        ) : (
+          <Input
+            placeholder={placeholder}
+            type={type}
+            {...register(name)}
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm"
+          />
+        )}
       </div>
       {description && (
         <p className="mt-2 text-sm text-gray-500">{description}</p>
