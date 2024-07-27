@@ -8,6 +8,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { useGetAllProductsQuery } from "@/redux/features/product/productApi";
+import { useAppSelector } from "@/redux/hooks";
 import { TProduct } from "@/types/product.types";
 import formatQueryParams from "@/utils/formatQueryParams";
 import {
@@ -86,32 +87,39 @@ const filters = [
   },
 ];
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
 const Products = () => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
-  const { register, handleSubmit, control, watch } = useForm();
+  const { handleSubmit, control } = useForm();
   const [selectedSort, setSelectedSort] = useState(sortOptions[0].value);
   const [isGridLayout, setIsGridLayout] = useState(false);
-  console.log(selectedSort);
-  console.log(minPrice);
-  console.log(maxPrice);
+  const searchTerm = useAppSelector((state) => state.search.searchTerm);
+
   const toggleLayout = () => {
     setIsGridLayout(!isGridLayout);
   };
 
   const handleSortChange = (value: string) => {
     setSelectedSort(value);
-    // Add logic to sort products based on the selected value
+
+    const queryString = formatQueryParams({
+      selectedSort,
+    });
+
+    console.log("Query String:", queryString);
   };
 
   const handlePriceChange = (min: number, max: number) => {
     setMinPrice(min);
     setMaxPrice(max);
+
+    const queryString = formatQueryParams({
+      minPrice,
+      maxPrice,
+    });
+
+    console.log("Query String:", queryString);
   };
   const { data } = useGetAllProductsQuery(undefined, {
     refetchOnFocus: true,
@@ -125,13 +133,13 @@ const Products = () => {
     const selectedFilters: [string, boolean][] = Object.entries(data).filter(
       ([key, value]) => value
     );
-    const queryString = formatQueryParams(
+    const queryString = formatQueryParams({
       selectedFilters,
       selectedSort,
       minPrice,
       maxPrice,
-      searchTerm // Assuming you have a state or prop for searchTerm
-    );
+      searchTerm,
+    });
 
     console.log("Query String:", queryString);
   };
