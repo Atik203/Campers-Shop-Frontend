@@ -1,18 +1,18 @@
 import { FormInput } from "@/components/form/FormInput";
 import { FormWrapper } from "@/components/form/FormWrapper";
 import { Label } from "@/components/ui/label";
+import { TProduct } from "@/types/product.types";
 import { uploadImageToCloudinary } from "@/utils/uploadImageToCloudinary";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
-
-type FormData = {
-  username: string;
-};
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const AddProduct = () => {
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [preview, setPreview] = useState<string | undefined>();
-  const [imageUrl, setImageUrl] = useState<string | undefined>();
+  const { reset } = useForm();
+
   useEffect(() => {
     if (!selectedFile) {
       setPreview(undefined);
@@ -34,23 +34,53 @@ const AddProduct = () => {
     setSelectedFile(e.target.files[0]);
   };
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: Partial<TProduct>) => {
+    let url;
+    const toastId = toast.loading("Submitting Data...");
     if (selectedFile) {
       try {
-        const url = await uploadImageToCloudinary(selectedFile);
-        setImageUrl(url);
+        url = await uploadImageToCloudinary(selectedFile);
       } catch (error) {
-        console.error("Error uploading image:", error);
+        toast.error("Failed to upload image", { id: toastId });
+        return;
       }
     }
-    console.log(imageUrl);
-    console.log(data);
+    const { stock, price, ...remainingData } = data;
+    const productData = {
+      ...remainingData,
+      image: url,
+      stock: Number(stock),
+      price: Number(price),
+    };
+    console.log(productData);
+    toast.success("Product Added Successfully", { id: toastId });
+    reset();
   };
 
   return (
     <div>
       <FormWrapper onSubmit={onSubmit}>
-        <FormInput name="username" label="Username" placeholder="username" />
+        <FormInput name="title" label="Title" placeholder="Product Title" />
+        <FormInput name="size" label="Size" placeholder="Product Size" />
+        <FormInput
+          name="stock"
+          label="Quantity"
+          placeholder="Product Stock Quantity"
+        />
+        <FormInput name="price" label="Price" placeholder="Product Price" />
+        <FormInput
+          name="category"
+          label="Category"
+          placeholder="Product Category"
+        />
+        <FormInput name="brand" label="Brand" placeholder="Product Brand" />
+        <FormInput
+          name="description"
+          label="Description"
+          placeholder="Product Description"
+          type="textarea"
+          rows={5}
+        />
         <div className="max-w-lg mx-auto">
           <Label
             htmlFor="image"
@@ -64,7 +94,7 @@ const AddProduct = () => {
                 <img
                   src={preview}
                   alt="Selected"
-                  className="mx-auto max-w-40 object-cover"
+                  className="mx-auto w-40 h-40 object-contain"
                 />
               ) : (
                 <PhotoIcon
