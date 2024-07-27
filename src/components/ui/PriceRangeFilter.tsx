@@ -40,7 +40,7 @@ export function PriceRangeFilter({
   };
 
   return (
-    <div className={cn("flex flex-col space-y-4 mb-3", className)}>
+    <div className={cn("flex flex-col space-y-4 mb-3 mx-3", className)}>
       <h2 className="font-semibold my-1">Price Range</h2>
       <div className="flex space-x-4">
         <div className="flex flex-col">
