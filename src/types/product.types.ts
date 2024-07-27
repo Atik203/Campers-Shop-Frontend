@@ -17,4 +17,5 @@ export interface TProduct {
   reviews?: TReview[];
   inStock?: boolean;
   size?: string;
+  color?: string;
 }
