@@ -3,25 +3,17 @@ import {
   FLUSH,
   PAUSE,
   PERSIST,
-  persistReducer,
   PURGE,
   REGISTER,
   REHYDRATE,
 } from "redux-persist";
-import persistStore from "redux-persist/es/persistStore";
-import storage from "redux-persist/lib/storage";
 import { baseApi } from "./api/baseApi";
-import authReducer from "./features/auth/authSlice";
+import searchReducer, { SearchState } from "./features/product/searchSlice";
 
-const persistConfig = {
-  key: "auth",
-  storage,
-};
-const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
-    auth: persistedAuthReducer,
+    search: searchReducer,
   },
   middleware: (getDefaultMiddlewares) =>
     getDefaultMiddlewares({
@@ -31,7 +23,9 @@ export const store = configureStore({
     }).concat(baseApi.middleware),
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+// export type RootState = ReturnType<typeof store.getState>;
+export type RootState = {
+  search: SearchState;
+  [baseApi.reducerPath]: ReturnType<typeof baseApi.reducer>;
+};
 export type AppDispatch = typeof store.dispatch;
-
-export const persistor = persistStore(store);
