@@ -1,6 +1,3 @@
-import { CardSkeleton } from "@/components/ui/CardSkeleton";
-import { useGetAllProductsQuery } from "@/redux/features/product/productApi";
-import { TProduct } from "@/types/product.types";
 import {
   Dialog,
   DialogPanel,
@@ -22,7 +19,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
-import { PriceRangeFilter } from "./../components/ui/PriceRangeFilter";
+
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
   { name: "Best Rating", href: "#", current: false },
@@ -30,16 +27,14 @@ const sortOptions = [
   { name: "Price: Low to High", href: "#", current: false },
   { name: "Price: High to Low", href: "#", current: false },
 ];
-
+const subCategories = [
+  { name: "Totes", href: "#" },
+  { name: "Backpacks", href: "#" },
+  { name: "Travel Bags", href: "#" },
+  { name: "Hip Bags", href: "#" },
+  { name: "Laptop Sleeves", href: "#" },
+];
 const filters = [
-  {
-    id: "stock",
-    name: "Availability",
-    options: [
-      { value: "in-stock", label: "In-Stock", checked: false },
-      { value: "out-of-stock", label: "Out of Stock", checked: false },
-    ],
-  },
   {
     id: "color",
     name: "Color",
@@ -81,23 +76,8 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Products = () => {
+export default function ProductFilter() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(1000);
-
-  const handlePriceChange = (min: number, max: number) => {
-    setMinPrice(min);
-    setMaxPrice(max);
-  };
-  const { data } = useGetAllProductsQuery(undefined, {
-    refetchOnFocus: true,
-    refetchOnReconnect: true,
-    refetchOnMountOrArgChange: true,
-  });
-
-  const products: TProduct[] = data?.data;
-  console.log(products);
 
   return (
     <div className="">
@@ -148,11 +128,20 @@ const Products = () => {
 
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
-                    <PriceRangeFilter
-                      minPrice={0}
-                      maxPrice={1000}
-                      onPriceChange={handlePriceChange}
-                    />
+                    <h3 className="sr-only">Categories</h3>
+                    <ul
+                      role="list"
+                      className="px-2 py-3 font-medium text-gray-900"
+                    >
+                      {subCategories.map((category) => (
+                        <li key={category.name}>
+                          <a href={category.href} className="block px-2 py-3">
+                            {category.name}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+
                     {filters.map((section) => (
                       <Disclosure
                         as="div"
@@ -220,7 +209,7 @@ const Products = () => {
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              ALl Products
+              New Arrivals
             </h1>
 
             <div className="flex items-center">
@@ -295,11 +284,18 @@ const Products = () => {
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               {/* Filters */}
               <form className="hidden lg:block">
-                <PriceRangeFilter
-                  minPrice={0}
-                  maxPrice={1000}
-                  onPriceChange={handlePriceChange}
-                />
+                <h3 className="sr-only">Categories</h3>
+                <ul
+                  role="list"
+                  className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
+                >
+                  {subCategories.map((category) => (
+                    <li key={category.name}>
+                      <a href={category.href}>{category.name}</a>
+                    </li>
+                  ))}
+                </ul>
+
                 {filters.map((section) => (
                   <Disclosure
                     as="div"
@@ -360,15 +356,11 @@ const Products = () => {
               </form>
 
               {/* Product grid */}
-              <div className="lg:col-span-3">
-                <CardSkeleton count={4} />
-              </div>
+              <div className="lg:col-span-3">{/* Your content */}</div>
             </div>
           </section>
         </main>
       </div>
     </div>
   );
-};
-
-export default Products;
+}
