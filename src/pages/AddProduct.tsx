@@ -10,47 +10,52 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const AddProduct = () => {
-  const [selectedFile, setSelectedFile] = useState<File | undefined>();
-  const [preview, setPreview] = useState<string | undefined>();
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
   const { reset } = useForm();
   const [CreateProduct] = useCreateProductMutation();
 
   useEffect(() => {
-    if (!selectedFile) {
-      setPreview(undefined);
+    if (selectedFiles.length === 0) {
+      setPreviews([]);
       return;
     }
 
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setPreview(objectUrl);
+    const objectUrls = selectedFiles.map((file) => URL.createObjectURL(file));
+    setPreviews(objectUrls);
 
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
+    return () => {
+      objectUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [selectedFiles]);
 
-  const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onSelectFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined);
+      setSelectedFiles([]);
       return;
     }
 
-    setSelectedFile(e.target.files[0]);
+    setSelectedFiles(Array.from(e.target.files));
   };
 
   const onSubmit = async (data: Partial<TProduct>) => {
-    let url;
     const toastId = toast.loading("Submitting Data...");
-    if (selectedFile) {
+    const urls = [];
+
+    for (const file of selectedFiles) {
       try {
-        url = await uploadImageToCloudinary(selectedFile);
+        const url = await uploadImageToCloudinary(file);
+        urls.push(url);
       } catch (error) {
         toast.error("Failed to upload image", { id: toastId });
         return;
       }
     }
+
     const { stock, price, ...remainingData } = data;
     const productData = {
       ...remainingData,
-      image: url,
+      images: urls,
       stock: Number(stock),
       price: Number(price),
     };
@@ -60,6 +65,7 @@ const AddProduct = () => {
       if (result.success) {
         toast.success("Product Added Successfully", { id: toastId });
         reset();
+        setSelectedFiles([]);
       } else {
         toast.error("Failed to add product", { id: toastId });
       }
@@ -98,16 +104,19 @@ const AddProduct = () => {
             htmlFor="image"
             className="block text-sm font-medium leading-6 text-gray-700"
           >
-            Image
+            Images
           </Label>
           <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
             <div className="text-center">
-              {preview ? (
-                <img
-                  src={preview}
-                  alt="Selected"
-                  className="mx-auto w-40 h-40 object-contain"
-                />
+              {previews.length > 0 ? (
+                previews.map((preview, index) => (
+                  <img
+                    key={index}
+                    src={preview}
+                    alt="Selected"
+                    className="mx-auto w-40 h-40 object-contain"
+                  />
+                ))
               ) : (
                 <PhotoIcon
                   className="mx-auto h-12 w-12 text-gray-300"
@@ -116,22 +125,25 @@ const AddProduct = () => {
               )}
               <div className="mt-4 flex text-sm leading-6 text-gray-600">
                 <label
-                  htmlFor="file"
+                  htmlFor="files"
                   className="relative cursor-pointer rounded-md bg-white font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                 >
-                  <span>Upload a file</span>
+                  <span>Upload files</span>
                   <input
-                    id="file"
-                    name="file"
+                    id="files"
+                    name="files"
                     type="file"
                     className="sr-only"
-                    onChange={onSelectFile}
+                    multiple
+                    onChange={onSelectFiles}
                   />
                 </label>
-                <p className="pl-1">or drag and drop</p>
+                <p className="pl-1">
+                  or drag and drop single or multiple images
+                </p>
               </div>
               <p className="text-xs leading-5 text-gray-600">
-                PNG, JPG, GIF up to 10MB
+                PNG, JPG, GIF up to 10MB each
               </p>
             </div>
           </div>
