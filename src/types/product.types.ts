@@ -6,6 +6,7 @@ export interface TReview {
 }
 
 export interface TProduct {
+  _id: string;
   title: string;
   image: string;
   price: number;
