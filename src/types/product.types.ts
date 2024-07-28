@@ -8,34 +8,13 @@ export interface TAuthorReview {
 
 export interface TReview {
   _id?: string;
+  averageRating?: number;
   totalCounts: number;
-  counts: [
-    {
-      rating: 1;
-      count: number;
-      _id?: string;
-    },
-    {
-      rating: 2;
-      count: number;
-      _id?: string;
-    },
-    {
-      rating: 3;
-      count: number;
-      _id?: string;
-    },
-    {
-      rating: 4;
-      count: number;
-      _id?: string;
-    },
-    {
-      rating: 5;
-      count: number;
-      _id?: string;
-    }
-  ];
+  counts: {
+    rating: number;
+    count: number;
+    _id?: string;
+  }[];
   featured: TAuthorReview[];
 }
 
@@ -51,7 +30,7 @@ export interface TProduct {
   stock: number;
   averageRating?: number;
   brand: string;
-  reviews?: TReview[];
+  reviews?: TReview;
   inStock?: boolean;
   sizes?: ["XS", "S", "M", "L", "XL", "XXL"];
   colors?: [

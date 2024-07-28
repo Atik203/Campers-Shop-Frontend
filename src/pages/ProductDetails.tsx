@@ -1,26 +1,52 @@
 import { RadioGroup, Tab } from "@headlessui/react";
 import { useState } from "react";
+import ReviewSection from "../components/ui/ReviewSection";
 
 const product = {
-  title: "Stylish Backpack",
+  title: "Waterproof Jacket",
   images: [
-    "https://res.cloudinary.com/cloudinary203/image/upload/v1722104316/tqmtqujj4rjhb1bewqil.jpg",
-    "https://res.cloudinary.com/cloudinary203/image/upload/v1722104316/tqmtqujj4rjhb1bewqil.jpg",
+    "https://res.cloudinary.com/cloudinary203/image/upload/v1722104351/j63s43xytek8jwik5txj.jpg",
     "https://res.cloudinary.com/cloudinary203/image/upload/v1722104351/j63s43xytek8jwik5txj.jpg",
   ],
-  price: 49.99,
+  price: 89.99,
   description:
-    "A stylish and spacious backpack, perfect for daily use and travel.",
-  category: "Bags",
-  stock: 20,
-  averageRating: 4.5,
-  brand: "Brand A",
+    "Stay dry with this waterproof jacket, perfect for all weather conditions.",
+  category: "Clothing",
+  stock: 15,
+  averageRating: 4.7,
+  brand: "Brand B",
+  reviews: {
+    totalCounts: 80,
+    counts: [
+      { rating: 1, count: 1 },
+      { rating: 2, count: 3 },
+      { rating: 3, count: 6 },
+      { rating: 4, count: 20 },
+      { rating: 5, count: 50 },
+    ],
+    featured: [
+      {
+        name: "Charlie Davis",
+        image:
+          "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixqx=oilqXxSqey&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+        comment: "Excellent jacket, keeps me dry even in heavy rain.",
+        rating: 5,
+      },
+      {
+        name: "Diana Green",
+        image:
+          "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
+        comment: "Comfortable and lightweight, but could use more pockets.",
+        rating: 4,
+      },
+    ],
+  },
+
   inStock: true,
-  sizes: ["S", "M", "L"],
+  sizes: ["M", "L", "XL"],
   colors: [
-    { name: "Black", hex: "#000000" },
-    { name: "Blue", hex: "#0000FF" },
     { name: "Red", hex: "#FF0000" },
+    { name: "Green", hex: "#008000" },
   ],
 };
 
@@ -29,6 +55,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function ProductDetails() {
+  const reviews = { ...product.reviews, averageRating: product.averageRating };
   const [selectedColor, setSelectedColor] = useState<string>(
     product?.colors[0]?.name ?? ""
   );
@@ -38,7 +65,7 @@ export default function ProductDetails() {
 
   return (
     <div className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+      <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 sm:py-20 lg:max-w-7xl lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
           {/* Image gallery */}
           <Tab.Group as="div" className="flex flex-col-reverse">
@@ -188,11 +215,12 @@ export default function ProductDetails() {
               type="button"
               className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-primary py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              Add to bag
+              Add to Cart
             </button>
           </div>
         </div>
       </div>
+      <ReviewSection reviews={reviews} />
     </div>
   );
 }
