@@ -78,5 +78,6 @@ module.exports = {
     require("tailwindcss-animate"),
     require('@tailwindcss/forms'), 
     require('@tailwindcss/aspect-ratio'),
+     require('@tailwindcss/typography'),
   ],
 };

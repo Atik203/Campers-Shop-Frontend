@@ -2,6 +2,7 @@ import About from "@/pages/About";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
 import ConfirmOrder from "@/pages/ConfirmOrder";
+import ProductDetails from "@/pages/ProductDetails";
 import WishList from "@/pages/WishList";
 import { routeGenerator } from "@/utils/routeGenerator";
 import { createBrowserRouter } from "react-router-dom";
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: "/confirm-order",
         element: <ConfirmOrder />,
+      },
+      {
+        path: "/product-details",
+        element: <ProductDetails />,
       },
     ],
   },
