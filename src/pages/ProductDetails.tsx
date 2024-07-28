@@ -1,4 +1,15 @@
-import { RadioGroup, Tab } from "@headlessui/react";
+import {
+  Label,
+  RadioGroup,
+  RadioGroupLabel,
+  RadioGroupOption,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+} from "@headlessui/react";
+import { BookmarkCheck, BookMarked } from "lucide-react";
 import { useState } from "react";
 import ReviewSection from "../components/ui/ReviewSection";
 
@@ -62,16 +73,21 @@ export default function ProductDetails() {
   const [selectedSize, setSelectedSize] = useState<string>(
     product?.sizes[0] ?? ""
   );
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
+  const handleWishlist = () => {
+    setIsWishlisted(!isWishlisted);
+    // Add your wishlist logic here (e.g., API call to add/remove from wishlist)
+  };
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 sm:py-20 lg:max-w-7xl lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
           {/* Image gallery */}
-          <Tab.Group as="div" className="flex flex-col-reverse">
+          <TabGroup as="div" className="flex flex-col-reverse">
             {/* Image selector */}
             <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
-              <Tab.List className="grid grid-cols-4 gap-6">
+              <TabList className="grid grid-cols-4 gap-6">
                 {product.images.map((src, index) => (
                   <Tab
                     key={index}
@@ -98,28 +114,40 @@ export default function ProductDetails() {
                     )}
                   </Tab>
                 ))}
-              </Tab.List>
+              </TabList>
             </div>
 
-            <Tab.Panels className="aspect-h-1 aspect-w-1 w-full">
+            <TabPanels className="aspect-h-1 aspect-w-1 w-full">
               {product.images.map((src, index) => (
-                <Tab.Panel key={index}>
+                <TabPanel key={index}>
                   <img
                     src={src}
                     alt={`Product image ${index + 1}`}
                     className="h-full w-full object-cover object-center sm:rounded-lg"
                   />
-                </Tab.Panel>
+                </TabPanel>
               ))}
-            </Tab.Panels>
-          </Tab.Group>
+            </TabPanels>
+          </TabGroup>
 
           {/* Product info */}
           <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              {product.title}
-            </h1>
-
+            <div className="flex items-center justify-between">
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+                {product.title}
+              </h1>
+              <button
+                type="button"
+                onClick={handleWishlist}
+                className="p-2 text-gray-500 hover:text-gray-900 focus:outline-none"
+              >
+                {isWishlisted ? (
+                  <BookMarked className="h-8 w-8 text-primary" />
+                ) : (
+                  <BookmarkCheck className="h-8 w-8 text-primary" />
+                )}
+              </button>
+            </div>
             <div className="mt-3">
               <h2 className="sr-only">Product information</h2>
               <p className="text-3xl tracking-tight text-gray-900">
@@ -143,12 +171,12 @@ export default function ProductDetails() {
                 onChange={setSelectedColor}
                 className="mt-2"
               >
-                <RadioGroup.Label className="sr-only">
+                <RadioGroupLabel className="sr-only">
                   Choose a color
-                </RadioGroup.Label>
+                </RadioGroupLabel>
                 <div className="flex items-center space-x-3">
                   {product.colors.map((color) => (
-                    <RadioGroup.Option
+                    <RadioGroupOption
                       key={color.name}
                       value={color.name}
                       className={({ active, checked }) =>
@@ -160,9 +188,9 @@ export default function ProductDetails() {
                         )
                       }
                     >
-                      <RadioGroup.Label as="span" className="sr-only">
+                      <Label as="span" className="sr-only">
                         {color.name}
-                      </RadioGroup.Label>
+                      </Label>
                       <span
                         aria-hidden="true"
                         className={classNames(
@@ -170,7 +198,7 @@ export default function ProductDetails() {
                         )}
                         style={{ backgroundColor: color.hex }}
                       />
-                    </RadioGroup.Option>
+                    </RadioGroupOption>
                   ))}
                 </div>
               </RadioGroup>
@@ -186,12 +214,10 @@ export default function ProductDetails() {
                 onChange={setSelectedSize}
                 className="mt-2"
               >
-                <RadioGroup.Label className="sr-only">
-                  Choose a size
-                </RadioGroup.Label>
+                <Label className="sr-only">Choose a size</Label>
                 <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
                   {product.sizes.map((size) => (
-                    <RadioGroup.Option
+                    <RadioGroupOption
                       key={size}
                       value={size}
                       className={({ active, checked }) =>
@@ -204,8 +230,8 @@ export default function ProductDetails() {
                         )
                       }
                     >
-                      <RadioGroup.Label as="span">{size}</RadioGroup.Label>
-                    </RadioGroup.Option>
+                      <Label as="span">{size}</Label>
+                    </RadioGroupOption>
                   ))}
                 </div>
               </RadioGroup>
