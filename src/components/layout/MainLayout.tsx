@@ -5,10 +5,10 @@ import Navbar from "../ui/Navbar";
 
 const MainLayout = () => {
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-8xl mx-auto">
       <Banner />
       <Navbar />
-      <div className="max-w-6xl mx-auto min-h-screen">
+      <div className="max-w-7xl mx-auto min-h-screen">
         <Outlet />
       </div>
       <Footer />
