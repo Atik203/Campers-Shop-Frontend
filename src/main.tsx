@@ -6,6 +6,13 @@ import { Toaster } from "sonner";
 import "./index.css";
 import { store } from "./redux/store.ts";
 
+import {
+  CheckBadgeIcon,
+  ExclamationCircleIcon,
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/24/outline";
+import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/solid";
 import router from "./routes/routes.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -15,13 +22,19 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         visibleToasts={10}
         richColors={true}
         toastOptions={{
-          style: {
-            background: "mediumseagreen",
-            color: "white",
-            fontSize: "16px",
-            padding: "16px",
-            borderRadius: "6px",
+          classNames: {
+            success: "toast-success toast-common",
+            error: "toast-error toast-common",
+            warning: "toast-warning toast-common",
+            info: "toast-info toast-common",
           },
+        }}
+        icons={{
+          success: <CheckBadgeIcon className="w-6 h-6" />,
+          info: <InformationCircleIcon className="w-6 h-6" />,
+          warning: <ExclamationCircleIcon className="w-6 h-6" />,
+          error: <ExclamationTriangleIcon className="w-6 h-6" />,
+          loading: <MagnifyingGlassCircleIcon className="w-6 h-6" />,
         }}
       />
       <RouterProvider router={router} />

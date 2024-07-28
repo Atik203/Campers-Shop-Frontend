@@ -22,6 +22,31 @@
 .sider-menu-style:hover {
   color: hsl(var(--primary-foreground)) !important;
 }
+
+.toast-success {
+  background-color: #38a169 !important; /* Green */
+}
+
+.toast-error {
+  background-color: #e53e3e !important; /* Red */
+  color: white;
+}
+
+.toast-warning {
+  background-color: #d69e2e !important; /* Yellow */
+}
+
+.toast-info {
+  background-color: #3182ce !important; /* Blue */
+}
+
+.toast-common {
+  padding: 16px !important;
+  border-radius: 8px !important;
+  color: white !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

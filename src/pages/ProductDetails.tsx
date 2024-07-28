@@ -1,5 +1,10 @@
 import { useGetSingleProductQuery } from "@/redux/features/product/productApi";
 import {
+  addTOCart,
+  addToWishlist,
+} from "@/redux/features/product/productSlice";
+import { TProduct, TReview } from "@/types/product.types";
+import {
   Label,
   RadioGroup,
   RadioGroupLabel,
@@ -10,10 +15,13 @@ import {
   TabPanel,
   TabPanels,
 } from "@headlessui/react";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { BookmarkCheck, BookMarked } from "lucide-react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 import ReviewSection from "../components/ui/ReviewSection";
+import { useAppDispatch } from "./../redux/hooks";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -24,19 +32,50 @@ export default function ProductDetails() {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const dispatch = useAppDispatch();
 
   const { data, isError, isFetching, isLoading } = useGetSingleProductQuery(id);
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
   if (isFetching) return <div>Fetching...</div>;
 
-  const product = data?.data;
-  const reviews = { ...product.reviews, averageRating: product.averageRating };
+  const product: TProduct = data?.data;
+  const reviews = {
+    ...product.reviews,
+    averageRating: product.averageRating,
+  } as TReview;
 
   const handleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
-    // Add your wishlist logic here (e.g., API call to add/remove from wishlist)
+    const toastId = toast.loading("Updating wishlist...");
+    dispatch(addToWishlist(product));
+    setIsWishlisted(true);
+    toast.success("Added to wishlist", { id: toastId });
   };
+  const handleIncrement = () => setQuantity(quantity + 1);
+  const handleDecrement = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
+
+  const handleAddToCart = () => {
+    if (!selectedColor || !selectedSize || quantity <= 0) {
+      return toast.error("Please select color, size and quantity");
+    }
+
+    const color = product.colors?.find((c) => c.name === selectedColor);
+    const size = product.sizes?.find((s) => s === selectedSize);
+
+    const cartItem = {
+      ...product,
+      colors: [color],
+      sizes: [size],
+      stock: quantity,
+    };
+
+    const toastId = toast.loading("Adding to cart...");
+
+    dispatch(addTOCart(cartItem));
+    toast.success("Added to cart", { id: toastId });
+  };
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 sm:py-20 lg:max-w-7xl lg:px-8">
@@ -46,7 +85,7 @@ export default function ProductDetails() {
             {/* Image selector */}
             <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
               <TabList className="grid grid-cols-4 gap-6">
-                {product.images.map((src, index) => (
+                {product.images.map((src, index: number) => (
                   <Tab
                     key={index}
                     className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
@@ -97,12 +136,13 @@ export default function ProductDetails() {
               <button
                 type="button"
                 onClick={handleWishlist}
+                disabled={isWishlisted}
                 className="p-2 text-gray-500 hover:text-gray-900 focus:outline-none"
               >
                 {isWishlisted ? (
-                  <BookMarked className="h-8 w-8 text-primary" />
-                ) : (
                   <BookmarkCheck className="h-8 w-8 text-primary" />
+                ) : (
+                  <BookMarked className="h-8 w-8 text-primary" />
                 )}
               </button>
             </div>
@@ -133,7 +173,7 @@ export default function ProductDetails() {
                   Choose a color
                 </RadioGroupLabel>
                 <div className="flex items-center space-x-3">
-                  {product.colors.map((color) => (
+                  {product?.colors?.map((color) => (
                     <RadioGroupOption
                       key={color.name}
                       value={color.name}
@@ -174,7 +214,7 @@ export default function ProductDetails() {
               >
                 <Label className="sr-only">Choose a size</Label>
                 <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                  {product.sizes.map((size) => (
+                  {product.sizes?.map((size) => (
                     <RadioGroupOption
                       key={size}
                       value={size}
@@ -194,9 +234,39 @@ export default function ProductDetails() {
                 </div>
               </RadioGroup>
             </div>
+            <div className="mt-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium text-gray-900">Quantity</h3>
+              </div>
 
+              <div className="mt-2 flex items-center">
+                <button
+                  onClick={handleDecrement}
+                  disabled={quantity <= 1}
+                  className="px-3 py-1 border rounded-md bg-gray-100 hover:text-primary hover:bg-gray-200"
+                >
+                  <MinusIcon className="h-6 w-6" />
+                </button>
+                <input
+                  type="number"
+                  value={quantity}
+                  max={product.stock}
+                  min={0}
+                  onChange={(e) => setQuantity(Number(e.target.value))}
+                  className="mx-2 w-20 text-center border rounded-md"
+                />
+                <button
+                  onClick={handleIncrement}
+                  disabled={quantity >= product.stock}
+                  className="px-3 py-1 border rounded-md bg-gray-100 hover:text-primary hover:bg-gray-200"
+                >
+                  <PlusIcon className="h-6 w-6" />
+                </button>
+              </div>
+            </div>
             <button
               type="button"
+              onClick={handleAddToCart}
               className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-primary py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Add to Cart
