@@ -1,5 +1,5 @@
 export interface TAuthorReview {
-  _id: string;
+  _id?: string;
   name: string;
   image: string;
   comment: string;
@@ -7,28 +7,33 @@ export interface TAuthorReview {
 }
 
 export interface TReview {
-  _id: string;
+  _id?: string;
   totalCounts: number;
   counts: [
     {
       rating: 1;
       count: number;
+      _id?: string;
     },
     {
       rating: 2;
       count: number;
+      _id?: string;
     },
     {
       rating: 3;
       count: number;
+      _id?: string;
     },
     {
       rating: 4;
       count: number;
+      _id?: string;
     },
     {
       rating: 5;
       count: number;
+      _id?: string;
     }
   ];
   featured: TAuthorReview[];
@@ -37,7 +42,7 @@ export interface TReview {
 export const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 
 export interface TProduct {
-  _id: string;
+  _id?: string;
   title: string;
   images: string[];
   price: number;
@@ -53,6 +58,7 @@ export interface TProduct {
     {
       name: string;
       hex: string;
+      _id?: string;
     }
   ];
 }

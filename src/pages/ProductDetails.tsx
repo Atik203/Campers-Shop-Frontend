@@ -1,59 +1,26 @@
 import { RadioGroup, Tab } from "@headlessui/react";
-import { StarIcon } from "@heroicons/react/20/solid";
-import { HeartIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
-export interface TReview {
-  name: string;
-  image: string;
-  comment: string;
-  rating: number;
-}
-
-export interface TProduct {
-  _id: string;
-  title: string;
-  image: string;
-  price: number;
-  description: string;
-  category: string;
-  stock: number;
-  averageRating?: number;
-  brand: string;
-  reviews?: TReview[];
-  inStock?: boolean;
-  size?: string;
-  colors?: string[];
-}
-
-const product: TProduct = {
-  _id: "1",
-  title: "Zip Tote Basket",
-  image:
-    "https://tailwindui.com/img/ecommerce-images/product-page-03-product-01.jpg",
-  price: 140,
-  description: `
-    <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, shoulder sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
-  `,
-  category: "Accessories",
-  stock: 12,
-  averageRating: 4,
-  brand: "Fashion Brand",
-  colors: ["beige", "gray", "green"],
-  reviews: [
-    {
-      name: "John Doe",
-      image: "https://randomuser.me/api/portraits/men/32.jpg",
-      comment: "Great quality and versatile. Highly recommend!",
-      rating: 5,
-    },
-    {
-      name: "Jane Smith",
-      image: "https://randomuser.me/api/portraits/women/44.jpg",
-      comment: "Love the design and material. Perfect for daily use.",
-      rating: 4,
-    },
-    // More reviews...
+const product = {
+  title: "Stylish Backpack",
+  images: [
+    "https://res.cloudinary.com/cloudinary203/image/upload/v1722104316/tqmtqujj4rjhb1bewqil.jpg",
+    "https://res.cloudinary.com/cloudinary203/image/upload/v1722104316/tqmtqujj4rjhb1bewqil.jpg",
+    "https://res.cloudinary.com/cloudinary203/image/upload/v1722104351/j63s43xytek8jwik5txj.jpg",
+  ],
+  price: 49.99,
+  description:
+    "A stylish and spacious backpack, perfect for daily use and travel.",
+  category: "Bags",
+  stock: 20,
+  averageRating: 4.5,
+  brand: "Brand A",
+  inStock: true,
+  sizes: ["S", "M", "L"],
+  colors: [
+    { name: "Black", hex: "#000000" },
+    { name: "Blue", hex: "#0000FF" },
+    { name: "Red", hex: "#FF0000" },
   ],
 };
 
@@ -63,7 +30,10 @@ function classNames(...classes: string[]) {
 
 export default function ProductDetails() {
   const [selectedColor, setSelectedColor] = useState<string>(
-    product?.colors[0] ?? ""
+    product?.colors[0]?.name ?? ""
+  );
+  const [selectedSize, setSelectedSize] = useState<string>(
+    product?.sizes[0] ?? ""
   );
 
   return (
@@ -75,12 +45,7 @@ export default function ProductDetails() {
             {/* Image selector */}
             <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
               <Tab.List className="grid grid-cols-4 gap-6">
-                {[
-                  product.image,
-                  ...(product.reviews
-                    ? product.reviews.map((review) => review.image)
-                    : []),
-                ].map((src, index) => (
+                {product.images.map((src, index) => (
                   <Tab
                     key={index}
                     className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
@@ -110,12 +75,7 @@ export default function ProductDetails() {
             </div>
 
             <Tab.Panels className="aspect-h-1 aspect-w-1 w-full">
-              {[
-                product.image,
-                ...(product.reviews
-                  ? product.reviews.map((review) => review.image)
-                  : []),
-              ].map((src, index) => (
+              {product.images.map((src, index) => (
                 <Tab.Panel key={index}>
                   <img
                     src={src}
@@ -138,151 +98,98 @@ export default function ProductDetails() {
               <p className="text-3xl tracking-tight text-gray-900">
                 ${product.price}
               </p>
-              <p className="text-sm text-gray-500">Brand: {product.brand}</p>
-            </div>
-
-            {/* Reviews */}
-            <div className="mt-3">
-              <h3 className="sr-only">Reviews</h3>
-              <div className="flex items-center">
-                <div className="flex items-center">
-                  {[0, 1, 2, 3, 4].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      className={classNames(
-                        product.averageRating! > rating
-                          ? "text-indigo-500"
-                          : "text-gray-300",
-                        "h-5 w-5 flex-shrink-0"
-                      )}
-                      aria-hidden="true"
-                    />
-                  ))}
-                </div>
-                <p className="sr-only">
-                  {product.averageRating} out of 5 stars
-                </p>
-              </div>
             </div>
 
             <div className="mt-6">
               <h3 className="sr-only">Description</h3>
 
-              <div
-                className="space-y-6 text-base text-gray-700"
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              />
+              <div className="space-y-6">
+                <p className="text-base text-gray-900">{product.description}</p>
+              </div>
             </div>
 
-            <form className="mt-6">
-              {/* Colors */}
-              <div>
-                <h3 className="text-sm text-gray-600">Color</h3>
+            <div className="mt-6">
+              <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
-                <RadioGroup
-                  value={selectedColor}
-                  onChange={setSelectedColor}
-                  className="mt-2"
-                >
-                  <RadioGroup.Label className="sr-only">
-                    Choose a color
-                  </RadioGroup.Label>
-                  <span className="flex items-center space-x-3">
-                    {product.colors?.map((color) => (
-                      <RadioGroup.Option
-                        key={color}
-                        value={color}
-                        className={({ active, checked }) =>
-                          classNames(
-                            color,
-                            active && checked ? "ring ring-offset-1" : "",
-                            !active && checked ? "ring-2" : "",
-                            "relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none"
-                          )
-                        }
-                      >
-                        <RadioGroup.Label as="span" className="sr-only">
-                          {color}
-                        </RadioGroup.Label>
-                        <span
-                          aria-hidden="true"
-                          className={classNames(
-                            color,
-                            "h-8 w-8 rounded-full border border-black border-opacity-10"
-                          )}
-                        />
-                      </RadioGroup.Option>
-                    ))}
-                  </span>
-                </RadioGroup>
-              </div>
-
-              <div className="sm:flex-col1 mt-10 flex">
-                <button
-                  type="submit"
-                  className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
-                >
-                  Add to bag
-                </button>
-                <button
-                  type="button"
-                  className="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
-                >
-                  <HeartIcon
-                    className="h-6 w-6 flex-shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span className="sr-only">Add to favorites</span>
-                </button>
-              </div>
-            </form>
-
-            {/* Reviews Section */}
-            <section aria-labelledby="reviews-heading" className="mt-12">
-              <h2
-                id="reviews-heading"
-                className="text-lg font-medium text-gray-900"
+              <RadioGroup
+                value={selectedColor}
+                onChange={setSelectedColor}
+                className="mt-2"
               >
-                Customer Reviews
-              </h2>
-
-              <div className="mt-6 space-y-10">
-                {product.reviews?.map((review) => (
-                  <div key={review.name} className="flex space-x-4">
-                    <div className="flex-shrink-0">
-                      <img
-                        className="h-12 w-12 rounded-full"
-                        src={review.image}
-                        alt=""
+                <RadioGroup.Label className="sr-only">
+                  Choose a color
+                </RadioGroup.Label>
+                <div className="flex items-center space-x-3">
+                  {product.colors.map((color) => (
+                    <RadioGroup.Option
+                      key={color.name}
+                      value={color.name}
+                      className={({ active, checked }) =>
+                        classNames(
+                          color.hex,
+                          active && checked ? "ring ring-offset-1" : "",
+                          !active && checked ? "ring-2" : "",
+                          "relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none"
+                        )
+                      }
+                    >
+                      <RadioGroup.Label as="span" className="sr-only">
+                        {color.name}
+                      </RadioGroup.Label>
+                      <span
+                        aria-hidden="true"
+                        className={classNames(
+                          "h-8 w-8 rounded-full border border-black border-opacity-10"
+                        )}
+                        style={{ backgroundColor: color.hex }}
                       />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-900">
-                        {review.name}
-                      </h3>
-                      <div className="flex items-center">
-                        {[0, 1, 2, 3, 4].map((rating) => (
-                          <StarIcon
-                            key={rating}
-                            className={classNames(
-                              review.rating > rating
-                                ? "text-indigo-500"
-                                : "text-gray-300",
-                              "h-5 w-5 flex-shrink-0"
-                            )}
-                            aria-hidden="true"
-                          />
-                        ))}
-                      </div>
-                      <p className="sr-only">{review.rating} out of 5 stars</p>
-                      <div className="mt-4 text-sm text-gray-600">
-                        <p>{review.comment}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                    </RadioGroup.Option>
+                  ))}
+                </div>
+              </RadioGroup>
+            </div>
+
+            <div className="mt-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium text-gray-900">Size</h3>
               </div>
-            </section>
+
+              <RadioGroup
+                value={selectedSize}
+                onChange={setSelectedSize}
+                className="mt-2"
+              >
+                <RadioGroup.Label className="sr-only">
+                  Choose a size
+                </RadioGroup.Label>
+                <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                  {product.sizes.map((size) => (
+                    <RadioGroup.Option
+                      key={size}
+                      value={size}
+                      className={({ active, checked }) =>
+                        classNames(
+                          active ? "ring-2 ring-indigo-500" : "",
+                          checked
+                            ? "bg-primary text-white hover:bg-primary"
+                            : "bg-white text-gray-900 hover:bg-gray-50",
+                          "flex cursor-pointer items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase sm:flex-1"
+                        )
+                      }
+                    >
+                      <RadioGroup.Label as="span">{size}</RadioGroup.Label>
+                    </RadioGroup.Option>
+                  ))}
+                </div>
+              </RadioGroup>
+            </div>
+
+            <button
+              type="button"
+              className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-primary py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Add to bag
+            </button>
           </div>
         </div>
       </div>

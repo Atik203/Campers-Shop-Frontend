@@ -35,9 +35,9 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ListIcon } from "lucide-react";
 import { Fragment, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import ProductCardGrid from "../components/ui/ProductCardGrid";
+import ProductCardList from "../components/ui/ProductCardList";
 import { PriceRangeFilter } from "./../components/ui/PriceRangeFilter";
-import ProductCardGrid from "./ProductCardGrid";
-import ProductCardList from "./ProductCardList";
 const sortOptions = [
   { name: "Best Rating", value: "rating" },
   { name: "Newest", value: "newest" },
