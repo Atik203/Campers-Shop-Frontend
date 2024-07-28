@@ -112,7 +112,7 @@ const blogPosts = [
 
 export default function About() {
   return (
-    <div className="mx-auto">
+    <div className="mx-auto mb-16">
       <main className="isolate">
         {/* Hero section */}
         <div className="relative isolate -z-10">
