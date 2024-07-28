@@ -1,6 +1,7 @@
 import { FormInput } from "@/components/form/FormInput";
 import { FormWrapper } from "@/components/form/FormWrapper";
 import { Label } from "@/components/ui/label";
+import { useCreateProductMutation } from "@/redux/features/product/productApi";
 import { TProduct } from "@/types/product.types";
 import { uploadImageToCloudinary } from "@/utils/uploadImageToCloudinary";
 import { PhotoIcon } from "@heroicons/react/24/outline";
@@ -12,6 +13,7 @@ const AddProduct = () => {
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [preview, setPreview] = useState<string | undefined>();
   const { reset } = useForm();
+  const [CreateProduct] = useCreateProductMutation();
 
   useEffect(() => {
     if (!selectedFile) {
@@ -52,9 +54,18 @@ const AddProduct = () => {
       stock: Number(stock),
       price: Number(price),
     };
-    console.log(productData);
-    toast.success("Product Added Successfully", { id: toastId });
-    reset();
+
+    try {
+      const result = await CreateProduct(productData).unwrap();
+      if (result.success) {
+        toast.success("Product Added Successfully", { id: toastId });
+        reset();
+      } else {
+        toast.error("Failed to add product", { id: toastId });
+      }
+    } catch (error) {
+      toast.error("Failed to add product", { id: toastId });
+    }
   };
 
   return (
@@ -73,6 +84,7 @@ const AddProduct = () => {
           label="Category"
           placeholder="Product Category"
         />
+        <FormInput name="color" label="Color" placeholder="Product Color" />
         <FormInput name="brand" label="Brand" placeholder="Product Brand" />
         <FormInput
           name="description"
