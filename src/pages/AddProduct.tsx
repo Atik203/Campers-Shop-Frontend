@@ -1,44 +1,19 @@
 import { FormInput } from "@/components/form/FormInput";
 import { FormWrapper } from "@/components/form/FormWrapper";
-import { Label } from "@/components/ui/label";
 import MultiColorPicker, { TColor } from "@/components/ui/MultiColorPicker";
+import MultipleImageUploader from "@/components/ui/MultipleImageUploader";
 import { useCreateProductMutation } from "@/redux/features/product/productApi";
 import { TProduct } from "@/types/product.types";
 import { uploadImageToCloudinary } from "@/utils/uploadImageToCloudinary";
-import { PhotoIcon } from "@heroicons/react/24/outline";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const AddProduct = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>([]);
   const { reset } = useForm();
   const [CreateProduct] = useCreateProductMutation();
   const [colors, setColors] = useState<TColor[]>([]);
-
-  useEffect(() => {
-    if (selectedFiles.length === 0) {
-      setPreviews([]);
-      return;
-    }
-
-    const objectUrls = selectedFiles.map((file) => URL.createObjectURL(file));
-    setPreviews(objectUrls);
-
-    return () => {
-      objectUrls.forEach((url) => URL.revokeObjectURL(url));
-    };
-  }, [selectedFiles]);
-
-  const onSelectFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFiles([]);
-      return;
-    }
-
-    setSelectedFiles(Array.from(e.target.files));
-  };
 
   const onSubmit = async (data: Partial<TProduct>) => {
     const toastId = toast.loading("Submitting Data...");
@@ -119,55 +94,10 @@ const AddProduct = () => {
           type="textarea"
           rows={5}
         />
-        <div className="max-w-lg mx-auto">
-          <Label
-            htmlFor="image"
-            className="block text-sm font-medium leading-6 text-gray-700"
-          >
-            Images
-          </Label>
-          <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-            <div className="text-center">
-              {previews.length > 0 ? (
-                previews.map((preview, index) => (
-                  <img
-                    key={index}
-                    src={preview}
-                    alt="Selected"
-                    className="mx-auto w-40 h-40 object-contain"
-                  />
-                ))
-              ) : (
-                <PhotoIcon
-                  className="mx-auto h-12 w-12 text-gray-300"
-                  aria-hidden="true"
-                />
-              )}
-              <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                <label
-                  htmlFor="files"
-                  className="relative cursor-pointer rounded-md bg-white font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                >
-                  <span>Upload files</span>
-                  <input
-                    id="files"
-                    name="files"
-                    type="file"
-                    className="sr-only"
-                    multiple
-                    onChange={onSelectFiles}
-                  />
-                </label>
-                <p className="pl-1">
-                  or drag and drop single or multiple images
-                </p>
-              </div>
-              <p className="text-xs leading-5 text-gray-600">
-                PNG, JPG, GIF up to 10MB each
-              </p>
-            </div>
-          </div>
-        </div>
+        <MultipleImageUploader
+          images={selectedFiles}
+          setImages={setSelectedFiles}
+        />
       </FormWrapper>
     </div>
   );
