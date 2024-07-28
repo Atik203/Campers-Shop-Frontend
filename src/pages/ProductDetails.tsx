@@ -1,3 +1,4 @@
+import { useGetSingleProductQuery } from "@/redux/features/product/productApi";
 import {
   Label,
   RadioGroup,
@@ -11,69 +12,26 @@ import {
 } from "@headlessui/react";
 import { BookmarkCheck, BookMarked } from "lucide-react";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import ReviewSection from "../components/ui/ReviewSection";
-
-const product = {
-  title: "Waterproof Jacket",
-  images: [
-    "https://res.cloudinary.com/cloudinary203/image/upload/v1722104351/j63s43xytek8jwik5txj.jpg",
-    "https://res.cloudinary.com/cloudinary203/image/upload/v1722104351/j63s43xytek8jwik5txj.jpg",
-  ],
-  price: 89.99,
-  description:
-    "Stay dry with this waterproof jacket, perfect for all weather conditions.",
-  category: "Clothing",
-  stock: 15,
-  averageRating: 4.7,
-  brand: "Brand B",
-  reviews: {
-    totalCounts: 80,
-    counts: [
-      { rating: 1, count: 1 },
-      { rating: 2, count: 3 },
-      { rating: 3, count: 6 },
-      { rating: 4, count: 20 },
-      { rating: 5, count: 50 },
-    ],
-    featured: [
-      {
-        name: "Charlie Davis",
-        image:
-          "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixqx=oilqXxSqey&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        comment: "Excellent jacket, keeps me dry even in heavy rain.",
-        rating: 5,
-      },
-      {
-        name: "Diana Green",
-        image:
-          "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
-        comment: "Comfortable and lightweight, but could use more pockets.",
-        rating: 4,
-      },
-    ],
-  },
-
-  inStock: true,
-  sizes: ["M", "L", "XL"],
-  colors: [
-    { name: "Red", hex: "#FF0000" },
-    { name: "Green", hex: "#008000" },
-  ],
-};
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function ProductDetails() {
-  const reviews = { ...product.reviews, averageRating: product.averageRating };
-  const [selectedColor, setSelectedColor] = useState<string>(
-    product?.colors[0]?.name ?? ""
-  );
-  const [selectedSize, setSelectedSize] = useState<string>(
-    product?.sizes[0] ?? ""
-  );
+  const { id } = useParams<{ id: string }>();
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
   const [isWishlisted, setIsWishlisted] = useState(false);
+
+  const { data, isError, isFetching, isLoading } = useGetSingleProductQuery(id);
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error</div>;
+  if (isFetching) return <div>Fetching...</div>;
+
+  const product = data?.data;
+  const reviews = { ...product.reviews, averageRating: product.averageRating };
 
   const handleWishlist = () => {
     setIsWishlisted(!isWishlisted);
