@@ -12,6 +12,7 @@ interface RatingProps {
   variant?: keyof typeof ratingVariants;
   onRatingChange?: (rating: number) => void;
   readOnly?: boolean;
+  showBadge?: boolean;
 }
 
 const ratingVariants = {
@@ -38,6 +39,7 @@ export const Rating: React.FC<RatingProps> = ({
   variant = "default",
   onRatingChange,
   readOnly = false,
+  showBadge = true,
   ...props
 }) => {
   const [hoverRating, setHoverRating] = useState<number | null>(null);
@@ -116,7 +118,9 @@ export const Rating: React.FC<RatingProps> = ({
           })
         )}
       </div>
-      <Badge className="px-2 py-1 bg-primary text-white rounded-full">{`${currentRating}`}</Badge>
+      {showBadge && (
+        <Badge className="px-2 py-1 bg-primary text-white rounded-full">{`${currentRating}`}</Badge>
+      )}
     </div>
   );
 };
