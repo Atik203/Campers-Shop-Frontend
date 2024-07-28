@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { CardSkeleton } from "@/components/ui/CardSkeleton";
+import { CardSkeletonList } from "@/components/ui/CardSkeletonList";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useGetAllProductsQuery } from "@/redux/features/product/productApi";
 import { useAppSelector } from "@/redux/hooks";
 import { TProduct } from "@/types/product.types";
@@ -29,6 +36,8 @@ import { ListIcon } from "lucide-react";
 import { Fragment, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { PriceRangeFilter } from "./../components/ui/PriceRangeFilter";
+import ProductCardGrid from "./ProductCardGrid";
+import ProductCardList from "./ProductCardList";
 const sortOptions = [
   { name: "Best Rating", value: "rating" },
   { name: "Newest", value: "newest" },
@@ -42,7 +51,7 @@ const Products = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
   const { handleSubmit, control } = useForm();
   const [selectedSort, setSelectedSort] = useState(sortOptions[0].value);
-  const [isGridLayout, setIsGridLayout] = useState(false);
+  const [isGridLayout, setIsGridLayout] = useState(true);
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
 
   const toggleLayout = () => {
@@ -283,11 +292,30 @@ const Products = () => {
                 onClick={toggleLayout}
               >
                 <span className="sr-only">Toggle layout</span>
-                {isGridLayout ? (
-                  <ListIcon className="h-5 w-5" aria-hidden="true" />
-                ) : (
-                  <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
-                )}
+                <TooltipProvider>
+                  {isGridLayout ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <ListIcon className="h-5 w-5" aria-hidden="true" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Switch to List View</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Squares2X2Icon
+                          className="h-5 w-5"
+                          aria-hidden="true"
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Switch to Grid View</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                </TooltipProvider>
               </button>
               <button
                 type="button"
@@ -389,12 +417,26 @@ const Products = () => {
               {/* Product grid */}
               <div className="lg:col-span-3">
                 {isGridLayout ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <CardSkeleton count={4} />
+                  isFetching || isLoading ? (
+                    <div>
+                      <CardSkeleton count={4} />
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                      {products.map((product) => (
+                        <ProductCardGrid key={product._id} {...product} />
+                      ))}
+                    </div>
+                  )
+                ) : isFetching || isLoading ? (
+                  <div>
+                    <CardSkeletonList count={3} />
                   </div>
                 ) : (
-                  <div className="flex flex-col space-y-4">
-                    <CardSkeleton count={4} />
+                  <div className="space-y-4">
+                    {products.map((product) => (
+                      <ProductCardList key={product._id} {...product} />
+                    ))}
                   </div>
                 )}
               </div>
