@@ -1,3 +1,5 @@
+import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import {
   Disclosure,
   DisclosureButton,
@@ -53,6 +55,16 @@ const MenuItemsComponent = () => (
 );
 
 export default function Navbar() {
+  const cartItems = useAppSelector(
+    (state: RootState) => state.product.cartProducts
+  );
+  const wishlistItems = useAppSelector(
+    (state: RootState) => state.product.wishlistProducts
+  );
+
+  iconsConfig[0].item = wishlistItems.length;
+  iconsConfig[1].item = cartItems.length;
+
   return (
     <Disclosure as="nav" className="">
       {({ open }) => (
