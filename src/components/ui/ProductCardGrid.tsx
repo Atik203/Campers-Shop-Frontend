@@ -11,8 +11,10 @@ import { Rating } from "@/components/ui/Rating";
 import { TProduct } from "@/types/product.types";
 import _ from "lodash";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const ProductCardGrid: React.FC<TProduct> = ({
+  _id,
   title,
   category,
   sizes,
@@ -45,12 +47,14 @@ const ProductCardGrid: React.FC<TProduct> = ({
         <p>{_.truncate(description, { length: 80 })}</p>
       </CardContent>
       <CardFooter>
-        <Button
-          variant="outline"
-          className="bg-primary text-white hover:bg-indigo-600 hover:text-white"
-        >
-          Show Details
-        </Button>
+        <Link to={`/product-details/${_id}`}>
+          <Button
+            variant="outline"
+            className="bg-primary text-white hover:bg-indigo-600 hover:text-white"
+          >
+            Show Details
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );
