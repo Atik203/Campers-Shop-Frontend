@@ -52,7 +52,7 @@ export interface TProduct {
   colors?: [
     {
       name: string;
-      value: string;
+      hex: string;
     }
   ];
 }
