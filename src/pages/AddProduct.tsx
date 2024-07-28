@@ -1,6 +1,7 @@
 import { FormInput } from "@/components/form/FormInput";
 import { FormWrapper } from "@/components/form/FormWrapper";
 import { Label } from "@/components/ui/label";
+import MultiColorPicker, { TColor } from "@/components/ui/MultiColorPicker";
 import { useCreateProductMutation } from "@/redux/features/product/productApi";
 import { TProduct } from "@/types/product.types";
 import { uploadImageToCloudinary } from "@/utils/uploadImageToCloudinary";
@@ -14,6 +15,7 @@ const AddProduct = () => {
   const [previews, setPreviews] = useState<string[]>([]);
   const { reset } = useForm();
   const [CreateProduct] = useCreateProductMutation();
+  const [colors, setColors] = useState<TColor[]>([]);
 
   useEffect(() => {
     if (selectedFiles.length === 0) {
@@ -90,7 +92,25 @@ const AddProduct = () => {
           label="Category"
           placeholder="Product Category"
         />
-        <FormInput name="color" label="Color" placeholder="Product Color" />
+
+        <MultiColorPicker colors={colors} setColors={setColors} />
+        <div className="mt-4 mx-auto">
+          <h3 className="text-lg font-medium text-center">Selected Colors</h3>
+          <div className="mt-2 space-y-2">
+            {colors.map((color, index) => (
+              <div key={index} className="flex items-center justify-center">
+                <span
+                  className="block w-8 h-8 mr-2 rounded"
+                  style={{ backgroundColor: color.hex }}
+                ></span>
+                <span>
+                  {color.name} ({color.hex})
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <FormInput name="brand" label="Brand" placeholder="Product Brand" />
         <FormInput
           name="description"
