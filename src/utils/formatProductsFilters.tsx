@@ -6,14 +6,14 @@ export const formatProductFilters = (products: TProduct[]) => {
   const sizeSet = new Set<string>();
 
   products.forEach((product) => {
-    if (product.color) {
-      colorSet.add(product.color);
+    if (product.colors) {
+      product.colors.forEach((color) => colorSet.add(color.name));
     }
     if (product.category) {
       categorySet.add(product.category);
     }
-    if (product.size) {
-      sizeSet.add(product.size);
+    if (product.sizes) {
+      product.sizes.forEach((size) => sizeSet.add(size));
     }
   });
 
@@ -51,38 +51,3 @@ export const formatProductFilters = (products: TProduct[]) => {
     },
   ];
 };
-
-// const filters = [
-//   {
-//     id: "stock",
-//     name: "Availability",
-//     options: [
-//       { value: "in-stock", label: "In-Stock", checked: false },
-//       { value: "out-of-stock", label: "Out of Stock", checked: false },
-//     ],
-//   },
-//   {
-//     id: "color",
-//     name: "Color",
-//     options: [
-//       { value: "white", label: "White", checked: false },
-//       { value: "beige", label: "Beige", checked: false },
-//     ],
-//   },
-//   {
-//     id: "category",
-//     name: "Category",
-//     options: [
-//       { value: "travel", label: "Travel", checked: true },
-//       { value: "organization", label: "Organization", checked: false },
-//     ],
-//   },
-//   {
-//     id: "size",
-//     name: "Size",
-//     options: [
-//       { value: "2l", label: "2L", checked: false },
-//       { value: "40l", label: "40L", checked: true },
-//     ],
-//   },
-// ];

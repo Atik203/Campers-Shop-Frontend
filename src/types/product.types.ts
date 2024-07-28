@@ -34,7 +34,7 @@ export interface TReview {
   featured: TAuthorReview[];
 }
 
-export const SIZE = ["XS", "S", "M", "L", "XL", "XXL"];
+export const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 
 export interface TProduct {
   _id: string;
