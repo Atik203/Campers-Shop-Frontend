@@ -37,6 +37,7 @@ import { Fragment, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ProductCardGrid from "../components/ui/ProductCardGrid";
 import ProductCardList from "../components/ui/ProductCardList";
+import PaginationComponent from "./../components/ui/PaginationComponent";
 import { PriceRangeFilter } from "./../components/ui/PriceRangeFilter";
 const sortOptions = [
   { name: "Best Rating", value: "rating" },
@@ -53,33 +54,65 @@ const Products = () => {
   const [selectedSort, setSelectedSort] = useState(sortOptions[0].value);
   const [isGridLayout, setIsGridLayout] = useState(true);
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
+  const [queryString, setQueryString] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10;
+
+  console.log(currentPage);
 
   const toggleLayout = () => {
     setIsGridLayout(!isGridLayout);
   };
 
+  const updateQueryString = (params: Record<string, unknown>) => {
+    const newQueryString = formatQueryParams(params);
+    setQueryString(newQueryString);
+    console.log("Updated Query String:", newQueryString);
+  };
+
   const handleSortChange = (value: string) => {
     setSelectedSort(value);
-
-    const queryString = formatQueryParams({
-      selectedSort,
-    });
-
-    console.log("Query String:", queryString);
+    updateQueryString({ selectedSort: value, minPrice, maxPrice, searchTerm });
   };
 
   const handlePriceChange = (min: number, max: number) => {
     setMinPrice(min);
     setMaxPrice(max);
+    updateQueryString({
+      selectedSort,
+      minPrice: min,
+      maxPrice: max,
+      searchTerm,
+    });
+  };
 
-    const queryString = formatQueryParams({
+  const handleClearFilters = () => {
+    setMinPrice(0);
+    setMaxPrice(1000);
+    setSelectedSort(sortOptions[0].value);
+    updateQueryString({
+      selectedSort: sortOptions[0].value,
+      minPrice: 0,
+      maxPrice: 1000,
+      searchTerm,
+    });
+  };
+
+  const onSubmit = (data: Record<string, boolean>) => {
+    const selectedFilters: [string, boolean][] = Object.entries(data).filter(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      ([_, value]) => value
+    );
+    updateQueryString({
+      selectedFilters,
+      selectedSort,
       minPrice,
       maxPrice,
+      searchTerm,
     });
-
-    console.log("Query String:", queryString);
   };
-  const { data, isFetching, isLoading } = useGetAllProductsQuery(undefined, {
+
+  const { data, isFetching, isLoading } = useGetAllProductsQuery(queryString, {
     refetchOnFocus: true,
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
@@ -89,37 +122,8 @@ const Products = () => {
   if (isLoading) return <p>Loading...</p>;
 
   const products: TProduct[] = data?.data || [];
+
   const filters = products.length > 0 ? formatProductFilters(products) : [];
-
-  const handleClearFilters = () => {
-    setMinPrice(0);
-    setMaxPrice(1000);
-    setSelectedSort(sortOptions[0].value);
-    const queryString = formatQueryParams({
-      selectedSort,
-      minPrice,
-      maxPrice,
-      searchTerm,
-    });
-
-    console.log("clear Query String:", queryString);
-  };
-
-  const onSubmit = (data: Record<string, boolean>) => {
-    const selectedFilters: [string, boolean][] = Object.entries(data).filter(
-      /* eslint-disable @typescript-eslint/no-unused-vars */
-      ([_, value]) => value
-    );
-    const queryString = formatQueryParams({
-      selectedFilters,
-      selectedSort,
-      minPrice,
-      maxPrice,
-      searchTerm,
-    });
-
-    console.log("Query String:", queryString);
-  };
 
   return (
     <div className="">
@@ -471,6 +475,12 @@ const Products = () => {
                     ))}
                   </div>
                 )}
+
+                <PaginationComponent
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
               </div>
             </div>
           </section>

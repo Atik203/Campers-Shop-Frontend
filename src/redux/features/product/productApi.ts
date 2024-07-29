@@ -3,10 +3,13 @@ import { baseApi } from "@/redux/api/baseApi";
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: () => ({
-        url: "product/",
-        method: "GET",
-      }),
+      query: (queryString = "") => {
+        const defaultParams = "minPrice=0&maxPrice=1000&sort=rating";
+        return {
+          url: `product/?${queryString !== defaultParams ? queryString : ""}`,
+          method: "GET",
+        };
+      },
       providesTags: ["Product"],
     }),
     createProduct: builder.mutation({
