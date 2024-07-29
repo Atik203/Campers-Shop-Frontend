@@ -288,16 +288,16 @@ const Products = () => {
 
         <main className="mx-auto max-w-7xl px-4 lg:px-0">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-16">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-base md:text-4xl font-bold tracking-tight text-gray-900">
               ALl Products
             </h1>
             <div className="flex items-center gap-2">
               <Menu as="div" className="relative inline-block text-left">
                 <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                   <div className="flex justify-center items-center gap-2">
-                    Sort By
+                    Sort
                     <span className="bg-slate-200 px-2 py-2 text-center flex justify-center items-center">
-                      {selectedSort ? `: ${selectedSortLabel}` : "Default"}
+                      {selectedSort ? `${selectedSortLabel}` : "Default"}
                     </span>
                   </div>
                 </MenuButton>
@@ -342,7 +342,7 @@ const Products = () => {
                   <div className="flex justify-center items-center gap-2">
                     Show
                     <span className="bg-slate-200 px-2 py-2 text-center flex justify-center items-center">
-                      {selectedDisplay ? `: ${selectedDisplay}` : "6"}
+                      {selectedDisplay ? `${selectedDisplay}` : "6"}
                     </span>
                   </div>
                 </MenuButton>
