@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/tooltip";
 import { useGetAllProductsQuery } from "@/redux/features/product/productApi";
 import { useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import { TProduct } from "@/types/product.types";
-import { formatProductFilters } from "@/utils/formatProductsFilters";
 import formatQueryParams from "@/utils/formatQueryParams";
 import {
   Dialog,
@@ -33,7 +33,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ListIcon } from "lucide-react";
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ProductCardGrid from "../components/ui/ProductCardGrid";
 import ProductCardList from "../components/ui/ProductCardList";
@@ -47,55 +47,53 @@ const sortOptions = [
 ];
 
 const Products = () => {
+  const filters = useAppSelector((state: RootState) => state.product.filters);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(100000);
+  const [maxPrice, setMaxPrice] = useState(1000);
   const { handleSubmit, control } = useForm();
-  const [selectedSort, setSelectedSort] = useState(sortOptions[0].value);
+  const [selectedSort, setSelectedSort] = useState("");
   const [isGridLayout, setIsGridLayout] = useState(true);
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
   const [queryString, setQueryString] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 10;
 
-  console.log(currentPage);
+  const updateQueryString = useCallback((params: Record<string, unknown>) => {
+    const newQueryString = formatQueryParams(params);
+    setQueryString(newQueryString);
+  }, []);
+
+  useEffect(() => {
+    updateQueryString({
+      page: currentPage,
+    });
+  }, [currentPage, updateQueryString]);
+
+  useEffect(() => {
+    updateQueryString({
+      searchTerm,
+    });
+  }, [searchTerm, updateQueryString]);
 
   const toggleLayout = () => {
     setIsGridLayout(!isGridLayout);
   };
 
-  const updateQueryString = (params: Record<string, unknown>) => {
-    const newQueryString = formatQueryParams(params);
-    setQueryString(newQueryString);
-    console.log("Updated Query String:", newQueryString);
-  };
-
   const handleSortChange = (value: string) => {
     setSelectedSort(value);
-    updateQueryString({ selectedSort: value, minPrice, maxPrice, searchTerm });
-  };
-
-  const handlePriceChange = (min: number, max: number) => {
-    setMinPrice(min);
-    setMaxPrice(max);
-    updateQueryString({
-      selectedSort,
-      minPrice: min,
-      maxPrice: max,
-      searchTerm,
-    });
+    updateQueryString({ selectedSort: value });
   };
 
   const handleClearFilters = () => {
     setMinPrice(0);
     setMaxPrice(1000);
-    setSelectedSort(sortOptions[0].value);
-    updateQueryString({
-      selectedSort: sortOptions[0].value,
-      minPrice: 0,
-      maxPrice: 1000,
-      searchTerm,
-    });
+    setSelectedSort("");
+    updateQueryString({});
+  };
+
+  const handlePriceChange = (min: number, max: number) => {
+    setMinPrice(min);
+    setMaxPrice(max);
   };
 
   const onSubmit = (data: Record<string, boolean>) => {
@@ -103,13 +101,18 @@ const Products = () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ([_, value]) => value
     );
-    updateQueryString({
-      selectedFilters,
-      selectedSort,
-      minPrice,
-      maxPrice,
-      searchTerm,
-    });
+
+    if (minPrice !== 0 || maxPrice !== 1000) {
+      updateQueryString({
+        selectedFilters,
+        minPrice,
+        maxPrice,
+      });
+    } else {
+      updateQueryString({
+        selectedFilters,
+      });
+    }
   };
 
   const { data, isFetching, isLoading } = useGetAllProductsQuery(queryString, {
@@ -121,9 +124,9 @@ const Products = () => {
   if (isFetching) return <p>Fetching...</p>;
   if (isLoading) return <p>Loading...</p>;
 
-  const products: TProduct[] = data?.data || [];
+  const totalPages = Math.ceil(data?.totalData / 6);
 
-  const filters = products.length > 0 ? formatProductFilters(products) : [];
+  const products: TProduct[] = data?.data || [];
 
   return (
     <div className="">

@@ -25,6 +25,12 @@ export const formatProductFilters = (products: TProduct[]) => {
     }));
   };
 
+  const ratingOptions = [1, 2, 3, 4, 5].map((value) => ({
+    value: value,
+    label: `⭐`.repeat(value),
+    checked: false,
+  }));
+
   return [
     {
       id: "stock",
@@ -48,6 +54,11 @@ export const formatProductFilters = (products: TProduct[]) => {
       id: "size",
       name: "Size",
       options: formatOptions(sizeSet),
+    },
+    {
+      id: "averageRating",
+      name: "Rating",
+      options: ratingOptions,
     },
   ];
 };
