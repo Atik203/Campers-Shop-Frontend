@@ -36,9 +36,25 @@ const productSlide = createSlice({
     setFilters: (state, action) => {
       state.filters = action.payload;
     },
+    removeCartProduct: (state, action) => {
+      state.cartProducts = state.cartProducts.filter(
+        (product) => product._id !== action.payload
+      );
+    },
+    removeWishlistProduct: (state, action) => {
+      state.wishlistProducts = state.wishlistProducts.filter(
+        (product) => product._id !== action.payload
+      );
+    },
   },
 });
 
-export const { addTOCart, addToWishlist, setFilters } = productSlide.actions;
+export const {
+  addTOCart,
+  addToWishlist,
+  setFilters,
+  removeCartProduct,
+  removeWishlistProduct,
+} = productSlide.actions;
 
 export default productSlide.reducer;

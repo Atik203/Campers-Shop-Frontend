@@ -1,3 +1,6 @@
+import { removeCartProduct } from "@/redux/features/product/productSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { RootState } from "@/redux/store";
 import {
   CheckIcon,
   ClockIcon,
@@ -5,47 +8,30 @@ import {
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
-const products = [
-  {
-    id: 1,
-    name: "Basic Tee",
-    href: "#",
-    price: "$32.00",
-    color: "Sienna",
-    inStock: true,
-    size: "Large",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in sienna.",
-  },
-  {
-    id: 2,
-    name: "Basic Tee",
-    href: "#",
-    price: "$32.00",
-    color: "Black",
-    inStock: false,
-    leadTime: "3–4 weeks",
-    size: "Large",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-02.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-  },
-  {
-    id: 3,
-    name: "Nomad Tumbler",
-    href: "#",
-    price: "$35.00",
-    color: "White",
-    inStock: true,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-01-product-03.jpg",
-    imageAlt: "Insulated bottle with white base and black snap lid.",
-  },
-];
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
 
 export default function Cart() {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector(
+    (state: RootState) => state.product.cartProducts
+  );
+
+  const subtotal = products.reduce(
+    (acc, product) => acc + product.price * product.stock,
+    0
+  );
+
+  const handleRemoveProduct = (id: string) => () => {
+    const toastId = toast.loading("Removing product from cart...");
+    dispatch(removeCartProduct(id));
+
+    toast.success("Product removed from cart", { id: toastId });
+  };
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -62,12 +48,12 @@ export default function Cart() {
               role="list"
               className="divide-y divide-gray-200 border-b border-t border-gray-200"
             >
-              {products.map((product, productIdx) => (
-                <li key={product.id} className="flex py-6 sm:py-10">
+              {products.map((product) => (
+                <li key={product._id} className="flex py-6 sm:py-10">
                   <div className="flex-shrink-0">
                     <img
-                      src={product.imageSrc}
-                      alt={product.imageAlt}
+                      src={product.images[0]}
+                      alt={product.description}
                       className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
                     />
                   </div>
@@ -76,57 +62,76 @@ export default function Cart() {
                     <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
                       <div>
                         <div className="flex justify-between">
-                          <h3 className="text-sm">
-                            <a
-                              href={product.href}
-                              className="font-medium text-gray-700 hover:text-gray-800"
-                            >
-                              {product.name}
-                            </a>
+                          <h3 className="text-base">
+                            <Link to={`/product-details/${product._id}`}>
+                              <h2 className="font-medium text-gray-700 hover:text-primary">
+                                {product.title}
+                              </h2>
+                            </Link>
                           </h3>
                         </div>
-                        <div className="mt-1 flex text-sm">
-                          <p className="text-gray-500">{product.color}</p>
-                          {product.size ? (
-                            <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">
-                              {product.size}
-                            </p>
-                          ) : null}
+                        <div className="mt-6 flex space-x-6">
+                          <div className="flex items-center justify-center gap-2">
+                            <h3 className="text-sm font-medium text-gray-900">
+                              Color
+                            </h3>
+                            <div>
+                              {product?.colors?.map((color) => (
+                                <div
+                                  key={color.name}
+                                  className="flex items-center space-x-2"
+                                >
+                                  <span className="text-sm">{color.name}</span>
+                                  <span
+                                    aria-hidden="true"
+                                    className="h-6 w-6 rounded-full border border-black border-opacity-10"
+                                    style={{ backgroundColor: color.hex }}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-center gap-2">
+                            <h3 className="text-sm font-medium text-gray-900">
+                              Size
+                            </h3>
+                            <div className="">
+                              {product?.sizes?.map((size) => (
+                                <div
+                                  key={size}
+                                  className="flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase bg-white text-gray-900"
+                                >
+                                  {size}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         </div>
                         <p className="mt-1 text-sm font-medium text-gray-900">
-                          {product.price}
+                          ${product.price.toFixed(2)}
                         </p>
                       </div>
 
                       <div className="mt-4 sm:mt-0 sm:pr-9">
-                        <label
-                          htmlFor={`quantity-${productIdx}`}
-                          className="sr-only"
-                        >
-                          Quantity, {product.name}
-                        </label>
-                        <select
-                          id={`quantity-${productIdx}`}
-                          name={`quantity-${productIdx}`}
-                          className="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                        >
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          <option value={6}>6</option>
-                          <option value={7}>7</option>
-                          <option value={8}>8</option>
-                        </select>
+                        <p className="mt-1 flex items-center justify-start md:justify-center gap-2 text-sm font-medium">
+                          Quantity:
+                          <span className="bg-slate-200 px-3 text-lg py-1 text-center flex justify-center items-center">
+                            {product.stock}
+                          </span>
+                        </p>
 
                         <div className="absolute right-0 top-0">
                           <button
                             type="button"
+                            onClick={handleRemoveProduct(product._id as string)}
                             className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
                           >
                             <span className="sr-only">Remove</span>
-                            <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+                            <XMarkIcon
+                              className="h-6 w-6 font-bold"
+                              aria-hidden="true"
+                            />
                           </button>
                         </div>
                       </div>
@@ -146,9 +151,7 @@ export default function Cart() {
                       )}
 
                       <span>
-                        {product.inStock
-                          ? "In stock"
-                          : `Ships in ${product.leadTime}`}
+                        {product.inStock ? "In stock" : `Out of Stock`}
                       </span>
                     </p>
                   </div>
@@ -172,15 +175,14 @@ export default function Cart() {
             <dl className="mt-6 space-y-4">
               <div className="flex items-center justify-between">
                 <dt className="text-sm text-gray-600">Subtotal</dt>
-                <dd className="text-sm font-medium text-gray-900">$99.00</dd>
+                <dd className="text-sm font-medium text-gray-900">
+                  ${subtotal.toFixed(2)}
+                </dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="flex items-center text-sm text-gray-600">
                   <span>Shipping estimate</span>
-                  <a
-                    href="#"
-                    className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
-                  >
+                  <a className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
                     <span className="sr-only">
                       Learn more about how shipping is calculated
                     </span>
@@ -190,15 +192,12 @@ export default function Cart() {
                     />
                   </a>
                 </dt>
-                <dd className="text-sm font-medium text-gray-900">$5.00</dd>
+                <dd className="text-sm font-medium text-gray-900">$0.00</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="flex text-sm text-gray-600">
                   <span>Tax estimate</span>
-                  <a
-                    href="#"
-                    className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
-                  >
+                  <a className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
                     <span className="sr-only">
                       Learn more about how tax is calculated
                     </span>
@@ -208,13 +207,15 @@ export default function Cart() {
                     />
                   </a>
                 </dt>
-                <dd className="text-sm font-medium text-gray-900">$8.32</dd>
+                <dd className="text-sm font-medium text-gray-900">$0.00</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="text-base font-medium text-gray-900">
                   Order total
                 </dt>
-                <dd className="text-base font-medium text-gray-900">$112.32</dd>
+                <dd className="text-base font-medium text-gray-900">
+                  ${subtotal.toFixed(2)}{" "}
+                </dd>
               </div>
             </dl>
 
