@@ -75,11 +75,11 @@ export default function Cart() {
                             <h3 className="text-sm font-medium text-gray-900">
                               Color
                             </h3>
-                            <div>
+                            <div className="flex items-center justify-center gap-1">
                               {product?.colors?.map((color) => (
                                 <div
                                   key={color.name}
-                                  className="flex items-center space-x-2"
+                                  className="flex items-center justify-center space-x-2 flex-wrap"
                                 >
                                   <span className="text-sm">{color.name}</span>
                                   <span
@@ -96,11 +96,11 @@ export default function Cart() {
                             <h3 className="text-sm font-medium text-gray-900">
                               Size
                             </h3>
-                            <div className="">
+                            <div className="flex items-center justify-center gap-1">
                               {product?.sizes?.map((size) => (
                                 <div
                                   key={size}
-                                  className="flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase bg-white text-gray-900"
+                                  className="flex items-center justify-center rounded-md border py-1 px-2 text-sm font-medium uppercase bg-white text-gray-900"
                                 >
                                   {size}
                                 </div>
@@ -117,7 +117,7 @@ export default function Cart() {
                         <p className="mt-1 flex items-center justify-start md:justify-center gap-2 text-sm font-medium">
                           Quantity:
                           <span className="bg-slate-200 px-3 text-lg py-1 text-center flex justify-center items-center">
-                            {product.stock}
+                            {product?.quantity}
                           </span>
                         </p>
 
