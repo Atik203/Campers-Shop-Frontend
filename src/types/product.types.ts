@@ -40,4 +40,5 @@ export interface TProduct {
       _id?: string;
     }
   ];
+  quantity?: number;
 }

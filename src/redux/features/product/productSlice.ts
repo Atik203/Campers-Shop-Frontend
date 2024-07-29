@@ -46,6 +46,11 @@ const productSlide = createSlice({
         (product) => product._id !== action.payload
       );
     },
+    updateCartProduct: (state, action) => {
+      state.cartProducts = state.cartProducts.map((product) =>
+        product._id === action.payload._id ? action.payload : product
+      );
+    },
   },
 });
 
@@ -55,6 +60,7 @@ export const {
   setFilters,
   removeCartProduct,
   removeWishlistProduct,
+  updateCartProduct,
 } = productSlide.actions;
 
 export default productSlide.reducer;

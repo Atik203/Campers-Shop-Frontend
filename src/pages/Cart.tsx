@@ -7,6 +7,8 @@ import {
   QuestionMarkCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -19,6 +21,10 @@ export default function Cart() {
   const products = useAppSelector(
     (state: RootState) => state.product.cartProducts
   );
+  const [quantity, setQuantity] = useState(1);
+
+  const handleIncrement = () => setQuantity(quantity + 1);
+  const handleDecrement = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
 
   const subtotal = products.reduce(
     (acc, product) => acc + product.price * product.stock,
@@ -71,17 +77,16 @@ export default function Cart() {
                           </h3>
                         </div>
                         <div className="mt-6 flex space-x-6">
-                          <div className="flex items-center justify-center gap-2">
+                          <div className="flex items-center my-2 justify-center gap-2">
                             <h3 className="text-sm font-medium text-gray-900">
                               Color
                             </h3>
-                            <div>
+                            <div className="flex items-center justify-center gap-1">
                               {product?.colors?.map((color) => (
                                 <div
                                   key={color.name}
-                                  className="flex items-center space-x-2"
+                                  className="flex items-center justify-center space-x-2 flex-wrap"
                                 >
-                                  <span className="text-sm">{color.name}</span>
                                   <span
                                     aria-hidden="true"
                                     className="h-6 w-6 rounded-full border border-black border-opacity-10"
@@ -92,15 +97,15 @@ export default function Cart() {
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-center gap-2">
+                          <div className="flex items-center my-2 justify-center gap-2">
                             <h3 className="text-sm font-medium text-gray-900">
                               Size
                             </h3>
-                            <div className="">
+                            <div className="flex items-center justify-center gap-1">
                               {product?.sizes?.map((size) => (
                                 <div
                                   key={size}
-                                  className="flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase bg-white text-gray-900"
+                                  className="flex items-center justify-center rounded-md border py-1 px-2 text-sm font-medium uppercase bg-white text-gray-900"
                                 >
                                   {size}
                                 </div>
@@ -114,13 +119,6 @@ export default function Cart() {
                       </div>
 
                       <div className="mt-4 sm:mt-0 sm:pr-9">
-                        <p className="mt-1 flex items-center justify-start md:justify-center gap-2 text-sm font-medium">
-                          Quantity:
-                          <span className="bg-slate-200 px-3 text-lg py-1 text-center flex justify-center items-center">
-                            {product.stock}
-                          </span>
-                        </p>
-
                         <div className="absolute right-0 top-0">
                           <button
                             type="button"
@@ -136,7 +134,38 @@ export default function Cart() {
                         </div>
                       </div>
                     </div>
+                    <div className="mt-4 flex items-center justify-start gap-2">
+                      <div className="flex items-center justify-center">
+                        <h3 className="text-sm font-medium text-gray-900">
+                          Quantity
+                        </h3>
+                      </div>
 
+                      <div className="mt-2 flex items-center">
+                        <button
+                          onClick={handleDecrement}
+                          disabled={quantity <= 1}
+                          className="px-3 py-1 border rounded-md bg-gray-100 hover:text-primary hover:bg-gray-200"
+                        >
+                          <MinusIcon className="h-6 w-6" />
+                        </button>
+                        <input
+                          type="number"
+                          value={product.quantity}
+                          max={product.stock}
+                          min={0}
+                          onChange={(e) => setQuantity(Number(e.target.value))}
+                          className="mx-2 w-20 text-center border rounded-md"
+                        />
+                        <button
+                          onClick={handleIncrement}
+                          disabled={quantity >= product.stock}
+                          className="px-3 py-1 border rounded-md bg-gray-100 hover:text-primary hover:bg-gray-200"
+                        >
+                          <PlusIcon className="h-6 w-6" />
+                        </button>
+                      </div>
+                    </div>
                     <p className="mt-4 flex space-x-2 text-sm text-gray-700">
                       {product.inStock ? (
                         <CheckIcon

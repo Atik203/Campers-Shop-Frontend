@@ -3,7 +3,10 @@ import { useGetSingleProductQuery } from "@/redux/features/product/productApi";
 import {
   addTOCart,
   addToWishlist,
+  updateCartProduct,
 } from "@/redux/features/product/productSlice";
+
+import { RootState } from "@/redux/store";
 import { TProduct, TReview } from "@/types/product.types";
 import {
   Label,
@@ -22,7 +25,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import ReviewSection from "../components/ui/ReviewSection";
-import { useAppDispatch } from "./../redux/hooks";
+import { useAppDispatch, useAppSelector } from "./../redux/hooks";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -30,11 +33,16 @@ function classNames(...classes: string[]) {
 
 export default function ProductDetails() {
   const { id } = useParams<{ id: string }>();
-  const [selectedColor, setSelectedColor] = useState<string>("");
-  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string[]>([]);
+  const [selectedSize, setSelectedSize] = useState<string[]>([]);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const dispatch = useAppDispatch();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const cartProducts = useAppSelector(
+    (state: RootState) => state.product.cartProducts
+  );
 
   const { data, isFetching, isLoading, isSuccess } =
     useGetSingleProductQuery(id);
@@ -58,24 +66,59 @@ export default function ProductDetails() {
   const handleDecrement = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
 
   const handleAddToCart = () => {
-    if (!selectedColor || !selectedSize || quantity <= 0) {
+    if (!selectedColor.length || !selectedSize.length || quantity <= 0) {
       return toast.error("Please select color, size and quantity");
     }
 
-    const color = product.colors?.find((c) => c.name === selectedColor);
-    const size = product.sizes?.find((s) => s === selectedSize);
+    const colors = product?.colors?.filter((color) =>
+      selectedColor.includes(color.name)
+    );
+    const sizes = product?.sizes?.filter((size) => selectedSize.includes(size));
+    const newStock = product.stock - quantity;
 
-    const cartItem = {
-      ...product,
-      colors: [color],
-      sizes: [size],
-      stock: quantity,
-    };
+    const cartProduct = cartProducts.find((item) => item._id === product._id);
 
-    const toastId = toast.loading("Adding to cart...");
+    if (cartProduct) {
+      const stock = cartProduct.stock - quantity;
 
-    dispatch(addTOCart(cartItem));
-    toast.success("Added to cart", { id: toastId });
+      if (stock < 0) {
+        setIsButtonDisabled(true);
+        return toast.error("Out of stock");
+      }
+
+      const addNewColors = colors?.filter(
+        (color) => !cartProduct.colors?.includes(color)
+      );
+
+      const addNewSizes = sizes?.filter(
+        (size) => !cartProduct.sizes?.includes(size)
+      );
+
+      const newCartProduct = {
+        ...cartProduct,
+        stock,
+        colors: [...cartProduct.colors!, ...addNewColors!],
+        sizes: [...cartProduct.sizes!, ...addNewSizes!],
+        quantity: (cartProduct?.quantity ?? 0) + quantity,
+      };
+      const toastId = toast.loading("Updating cart...");
+      dispatch(updateCartProduct(newCartProduct));
+      return toast.success("Added to cart", { id: toastId });
+    } else if (newStock < 0) {
+      setIsButtonDisabled(true);
+      return toast.error("Out of stock");
+    } else {
+      const cartItem = {
+        ...product,
+        colors,
+        sizes,
+        stock: newStock,
+        quantity,
+      };
+      const toastId = toast.loading("Adding to cart...");
+      dispatch(addTOCart(cartItem));
+      toast.success("Added to cart", { id: toastId });
+    }
   };
 
   return (
@@ -280,8 +323,19 @@ export default function ProductDetails() {
                 </div>
                 <button
                   type="button"
+                  disabled={
+                    isButtonDisabled ||
+                    product.stock <= 0 ||
+                    product.inStock === false
+                  }
                   onClick={handleAddToCart}
-                  className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-primary py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className={`mt-10 flex w-full items-center cursor-pointer justify-center rounded-md border border-transparent py-3 px-8 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+                    isButtonDisabled ||
+                    product.stock <= 0 ||
+                    product.inStock === false
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-primary hover:bg-indigo-700"
+                  }`}
                 >
                   Add to Cart
                 </button>
