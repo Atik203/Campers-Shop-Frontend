@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { CardSkeleton } from "@/components/ui/CardSkeleton";
 import { CardSkeletonList } from "@/components/ui/CardSkeletonList";
+import NoDataFound from "@/components/ui/NoDataFound";
 import {
   Tooltip,
   TooltipContent,
@@ -40,23 +40,41 @@ import ProductCardList from "../components/ui/ProductCardList";
 import PaginationComponent from "./../components/ui/PaginationComponent";
 import { PriceRangeFilter } from "./../components/ui/PriceRangeFilter";
 const sortOptions = [
+  { name: "Default", value: "" },
   { name: "Best Rating", value: "rating" },
   { name: "Newest", value: "newest" },
   { name: "Price: Low to High", value: "ASC" },
   { name: "Price: High to Low", value: "DSC" },
 ];
-
+const displayOptions = [
+  { value: 3, name: "3" },
+  { value: 6, name: "6" },
+  { value: 9, name: "9" },
+  { value: 18, name: "18" },
+  { value: 36, name: "36" },
+];
 const Products = () => {
   const filters = useAppSelector((state: RootState) => state.product.filters);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
   const { handleSubmit, control } = useForm();
-  const [selectedSort, setSelectedSort] = useState("");
+  const [selectedSort, setSelectedSort] = useState(sortOptions[0].value);
   const [isGridLayout, setIsGridLayout] = useState(true);
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
   const [queryString, setQueryString] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedDisplay, setSelectedDisplay] = useState(6);
+  const selectedSortLabel =
+    sortOptions.find((option) => option.value === selectedSort)?.name ||
+    "Default";
+
+  const handleDisplayChange = (value: number) => {
+    setSelectedDisplay(value);
+    updateQueryString({
+      limit: value,
+    });
+  };
 
   const updateQueryString = useCallback((params: Record<string, unknown>) => {
     const newQueryString = formatQueryParams(params);
@@ -66,8 +84,9 @@ const Products = () => {
   useEffect(() => {
     updateQueryString({
       page: currentPage,
+      limit: selectedDisplay,
     });
-  }, [currentPage, updateQueryString]);
+  }, [currentPage, updateQueryString, selectedDisplay]);
 
   useEffect(() => {
     updateQueryString({
@@ -84,16 +103,13 @@ const Products = () => {
     updateQueryString({ selectedSort: value });
   };
 
-  const handleClearFilters = () => {
-    setMinPrice(0);
-    setMaxPrice(1000);
-    setSelectedSort("");
-    updateQueryString({});
-  };
-
   const handlePriceChange = (min: number, max: number) => {
     setMinPrice(min);
     setMaxPrice(max);
+    updateQueryString({
+      minPrice: min,
+      maxPrice: max,
+    });
   };
 
   const onSubmit = (data: Record<string, boolean>) => {
@@ -120,9 +136,6 @@ const Products = () => {
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
   });
-
-  if (isFetching) return <p>Fetching...</p>;
-  if (isLoading) return <p>Loading...</p>;
 
   const totalPages = Math.ceil(data?.totalData / 6);
 
@@ -230,12 +243,16 @@ const Products = () => {
                                           id={`filter-${section.id}-${optionIdx}`}
                                           type="checkbox"
                                           className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                          onChange={(e) => {
+                                            field.onChange(e.target.checked);
+                                            handleSubmit(onSubmit)();
+                                          }}
                                         />
                                       )}
                                     />
                                     <label
                                       htmlFor={`filter-${section.id}-${optionIdx}`}
-                                      className="ml-3 text-sm text-gray-600"
+                                      className="ml-3 text-sm text-black font-semibold"
                                     >
                                       {option.label}
                                     </label>
@@ -247,7 +264,7 @@ const Products = () => {
                         )}
                       </Disclosure>
                     ))}
-                    <div className="flex mt-2 items-center justify-between">
+                    {/* <div className="flex mt-2 items-center justify-between">
                       <Button
                         type="submit"
                         className="mx-3 rounded-md border border-transparent bg-primary px-3 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
@@ -261,7 +278,7 @@ const Products = () => {
                       >
                         Clear Filters
                       </Button>
-                    </div>
+                    </div> */}
                   </form>
                 </DialogPanel>
               </TransitionChild>
@@ -274,10 +291,15 @@ const Products = () => {
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               ALl Products
             </h1>
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <Menu as="div" className="relative inline-block text-left">
                 <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                  Sort By
+                  <div className="flex justify-center items-center gap-2">
+                    Sort By
+                    <span className="bg-slate-200 px-2 py-2 text-center flex justify-center items-center">
+                      {selectedSort ? `: ${selectedSortLabel}` : "Default"}
+                    </span>
+                  </div>
                 </MenuButton>
                 <Transition
                   as={Fragment}
@@ -307,6 +329,51 @@ const Products = () => {
                         >
                           {option.name}
                           {option.value === selectedSort && (
+                            <span className="ml-2 text-primary">✓</span>
+                          )}
+                        </MenuItem>
+                      ))}
+                    </div>
+                  </MenuItems>
+                </Transition>
+              </Menu>
+              <Menu as="div" className="relative inline-block text-left ml-4">
+                <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                  <div className="flex justify-center items-center gap-2">
+                    Show
+                    <span className="bg-slate-200 px-2 py-2 text-center flex justify-center items-center">
+                      {selectedDisplay ? `: ${selectedDisplay}` : "6"}
+                    </span>
+                  </div>
+                </MenuButton>
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <MenuItems className="absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="container mx-auto p-2">
+                      {displayOptions.map((option) => (
+                        <MenuItem
+                          key={option.value}
+                          as="button"
+                          className={({ active }) =>
+                            `block w-full text-left p-2 text-sm ${
+                              active ? "bg-gray-200" : ""
+                            } ${
+                              option.value === selectedDisplay
+                                ? "font-semibold text-base text-primary"
+                                : ""
+                            }`
+                          }
+                          onClick={() => handleDisplayChange(option.value)}
+                        >
+                          {option.name}
+                          {option.value === selectedDisplay && (
                             <span className="ml-2 text-primary">✓</span>
                           )}
                         </MenuItem>
@@ -419,12 +486,16 @@ const Products = () => {
                                       id={`filter-${section.id}-${optionIdx}`}
                                       type="checkbox"
                                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                      onChange={(e) => {
+                                        field.onChange(e.target.checked);
+                                        handleSubmit(onSubmit)();
+                                      }}
                                     />
                                   )}
                                 />
                                 <label
                                   htmlFor={`filter-${section.id}-${optionIdx}`}
-                                  className="ml-3 text-sm text-gray-600"
+                                  className="ml-3 text-black font-semibold"
                                 >
                                   {option.label}
                                 </label>
@@ -436,40 +507,25 @@ const Products = () => {
                     )}
                   </Disclosure>
                 ))}
-                <div className="flex mt-2 items-center justify-between">
-                  <Button
-                    type="submit"
-                    className="mx-3 rounded-md border border-transparent bg-primary px-3 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                  >
-                    Apply Filters
-                  </Button>
-
-                  <Button
-                    onClick={handleClearFilters}
-                    className="mx-3 rounded-md border border-transparent bg-secondary-foreground px-3 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                  >
-                    Clear Filters
-                  </Button>
-                </div>
               </form>
 
               {/* Product grid */}
               <div className="lg:col-span-3">
-                {isGridLayout ? (
-                  isFetching || isLoading ? (
-                    <div>
-                      <CardSkeleton count={4} />
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                      {products.map((product) => (
-                        <ProductCardGrid key={product._id} {...product} />
-                      ))}
-                    </div>
-                  )
-                ) : isFetching || isLoading ? (
+                {isFetching || isLoading ? (
                   <div>
-                    <CardSkeletonList count={3} />
+                    {isGridLayout ? (
+                      <CardSkeleton count={4} />
+                    ) : (
+                      <CardSkeletonList count={3} />
+                    )}
+                  </div>
+                ) : products.length === 0 ? (
+                  <NoDataFound />
+                ) : isGridLayout ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {products.map((product) => (
+                      <ProductCardGrid key={product._id} {...product} />
+                    ))}
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -478,7 +534,6 @@ const Products = () => {
                     ))}
                   </div>
                 )}
-
                 <PaginationComponent
                   currentPage={currentPage}
                   totalPages={totalPages}
