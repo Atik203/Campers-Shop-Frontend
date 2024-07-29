@@ -4,6 +4,8 @@ interface QueryParamsOptions {
   minPrice?: number;
   maxPrice?: number;
   searchTerm?: string;
+  page?: number;
+  limit?: number;
 }
 
 const formatQueryParams = ({
@@ -12,6 +14,8 @@ const formatQueryParams = ({
   minPrice = 0,
   maxPrice = Infinity,
   searchTerm = "",
+  page = 1,
+  limit = 6,
 }: QueryParamsOptions = {}): string => {
   const params = new URLSearchParams();
 
@@ -36,6 +40,10 @@ const formatQueryParams = ({
   if (searchTerm) {
     params.append("search", searchTerm);
   }
+
+  // Add pagination parameters
+  params.append("page", page.toString());
+  params.append("limit", limit.toString());
 
   return params.toString();
 };

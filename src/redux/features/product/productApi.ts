@@ -4,9 +4,13 @@ const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProducts: builder.query({
       query: (queryString = "") => {
-        const defaultParams = "minPrice=0&maxPrice=1000&sort=rating";
+        const defaultParams = "minPrice=0&maxPrice=1000&page=1&limit=6";
         return {
-          url: `product/?${queryString !== defaultParams ? queryString : ""}`,
+          url: `product/?${
+            queryString && queryString !== defaultParams
+              ? queryString
+              : "page=1&limit=6"
+          }`,
           method: "GET",
         };
       },
