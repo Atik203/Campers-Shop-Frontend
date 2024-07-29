@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { CardSkeleton } from "@/components/ui/CardSkeleton";
 import { CardSkeletonList } from "@/components/ui/CardSkeletonList";
 import NoDataFound from "@/components/ui/NoDataFound";
@@ -129,6 +130,17 @@ const Products = () => {
         selectedFilters,
       });
     }
+  };
+
+  const handleClearFilters = () => {
+    setMinPrice(0);
+    setMaxPrice(1000);
+    setSelectedSort("Default");
+    setSelectedDisplay(6);
+    updateQueryString({
+      page: 1,
+      limit: selectedDisplay,
+    });
   };
 
   const { data, isFetching, isLoading } = useGetAllProductsQuery(queryString, {
@@ -264,21 +276,14 @@ const Products = () => {
                         )}
                       </Disclosure>
                     ))}
-                    {/* <div className="flex mt-2 items-center justify-between">
-                      <Button
-                        type="submit"
-                        className="mx-3 rounded-md border border-transparent bg-primary px-3 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                      >
-                        Apply Filters
-                      </Button>
-
+                    <div className="flex mt-2 items-center justify-center">
                       <Button
                         onClick={handleClearFilters}
                         className="mx-3 rounded-md border border-transparent bg-secondary-foreground px-3 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                       >
                         Clear Filters
                       </Button>
-                    </div> */}
+                    </div>
                   </form>
                 </DialogPanel>
               </TransitionChild>
@@ -507,6 +512,14 @@ const Products = () => {
                     )}
                   </Disclosure>
                 ))}
+                <div className="flex mt-2 items-center justify-center">
+                  <Button
+                    onClick={handleClearFilters}
+                    className="mx-3 rounded-md border border-transparent bg-secondary-foreground px-3 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
               </form>
 
               {/* Product grid */}
