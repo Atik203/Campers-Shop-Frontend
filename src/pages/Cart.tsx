@@ -1,4 +1,8 @@
-import { removeCartProduct } from "@/redux/features/product/productSlice";
+import {
+  decrementCartQuantity,
+  incrementCartQuantity,
+  removeCartProduct,
+} from "@/redux/features/product/productSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import {
@@ -8,23 +12,22 @@ import {
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function Cart() {
   const dispatch = useAppDispatch();
+
   const products = useAppSelector(
     (state: RootState) => state.product.cartProducts
   );
-  const [quantity, setQuantity] = useState(1);
 
-  const handleIncrement = () => setQuantity(quantity + 1);
-  const handleDecrement = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
+  const handleIncrement = (id: string) => {
+    dispatch(incrementCartQuantity({ id, quantity: 1 }));
+  };
+  const handleDecrement = (id: string) => {
+    dispatch(decrementCartQuantity({ id, quantity: 1 }));
+  };
 
   const subtotal = products.reduce(
     (acc, product) => acc + product.price * product.stock,
@@ -44,7 +47,10 @@ export default function Cart() {
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
           Shopping Cart
         </h1>
-        <form className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16"
+        >
           <section aria-labelledby="cart-heading" className="lg:col-span-7">
             <h2 id="cart-heading" className="sr-only">
               Items in your shopping cart
@@ -143,23 +149,23 @@ export default function Cart() {
 
                       <div className="mt-2 flex items-center">
                         <button
-                          onClick={handleDecrement}
-                          disabled={quantity <= 1}
+                          onClick={() => handleDecrement(product._id as string)}
+                          disabled={product.quantity! <= 1}
                           className="px-3 py-1 border rounded-md bg-gray-100 hover:text-primary hover:bg-gray-200"
                         >
                           <MinusIcon className="h-6 w-6" />
                         </button>
                         <input
-                          type="number"
+                          type="text"
                           value={product.quantity}
                           max={product.stock}
+                          disabled
                           min={0}
-                          onChange={(e) => setQuantity(Number(e.target.value))}
                           className="mx-2 w-20 text-center border rounded-md"
                         />
                         <button
-                          onClick={handleIncrement}
-                          disabled={quantity >= product.stock}
+                          onClick={() => handleIncrement(product._id as string)}
+                          disabled={product.stock! <= 0}
                           className="px-3 py-1 border rounded-md bg-gray-100 hover:text-primary hover:bg-gray-200"
                         >
                           <PlusIcon className="h-6 w-6" />
@@ -252,7 +258,18 @@ export default function Cart() {
               <Link to="/checkout">
                 <button
                   type="submit"
-                  className="w-full rounded-md border border-transparent bg-primary px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  disabled={
+                    products.length === 0 ||
+                    products.some((product) => product.stock === 0) ||
+                    products.some((product) => product.inStock === false)
+                  }
+                  className={`w-full rounded-md border border-transparent px-4 py-3 text-base font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 ${
+                    products.length === 0 ||
+                    products.some((product) => product.stock === 0) ||
+                    products.some((product) => product.inStock === false)
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-primary hover:bg-indigo-700"
+                  }`}
                 >
                   Checkout
                 </button>
