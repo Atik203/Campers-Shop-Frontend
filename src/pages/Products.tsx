@@ -48,7 +48,7 @@ const sortOptions = [
 const Products = () => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const [maxPrice, setMaxPrice] = useState(100000);
   const { handleSubmit, control } = useForm();
   const [selectedSort, setSelectedSort] = useState(sortOptions[0].value);
   const [isGridLayout, setIsGridLayout] = useState(true);
@@ -90,6 +90,20 @@ const Products = () => {
 
   const products: TProduct[] = data?.data || [];
   const filters = products.length > 0 ? formatProductFilters(products) : [];
+
+  const handleClearFilters = () => {
+    setMinPrice(0);
+    setMaxPrice(1000);
+    setSelectedSort(sortOptions[0].value);
+    const queryString = formatQueryParams({
+      selectedSort,
+      minPrice,
+      maxPrice,
+      searchTerm,
+    });
+
+    console.log("clear Query String:", queryString);
+  };
 
   const onSubmit = (data: Record<string, boolean>) => {
     const selectedFilters: [string, boolean][] = Object.entries(data).filter(
@@ -226,12 +240,21 @@ const Products = () => {
                         )}
                       </Disclosure>
                     ))}
-                    <Button
-                      type="submit"
-                      className="mx-3 rounded-md border border-transparent bg-primary px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                    >
-                      Apply Filters
-                    </Button>
+                    <div className="flex mt-2 items-center justify-between">
+                      <Button
+                        type="submit"
+                        className="mx-3 rounded-md border border-transparent bg-primary px-3 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                      >
+                        Apply Filters
+                      </Button>
+
+                      <Button
+                        onClick={handleClearFilters}
+                        className="mx-3 rounded-md border border-transparent bg-secondary-foreground px-3 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                      >
+                        Clear Filters
+                      </Button>
+                    </div>
                   </form>
                 </DialogPanel>
               </TransitionChild>
@@ -406,12 +429,21 @@ const Products = () => {
                     )}
                   </Disclosure>
                 ))}
-                <Button
-                  type="submit"
-                  className="rounded-md border border-transparent bg-primary px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                >
-                  Apply Filters
-                </Button>
+                <div className="flex mt-2 items-center justify-between">
+                  <Button
+                    type="submit"
+                    className="mx-3 rounded-md border border-transparent bg-primary px-3 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  >
+                    Apply Filters
+                  </Button>
+
+                  <Button
+                    onClick={handleClearFilters}
+                    className="mx-3 rounded-md border border-transparent bg-secondary-foreground px-3 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
               </form>
 
               {/* Product grid */}
