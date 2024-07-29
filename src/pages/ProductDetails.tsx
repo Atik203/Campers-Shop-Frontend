@@ -36,13 +36,17 @@ export default function ProductDetails() {
   const [quantity, setQuantity] = useState(1);
   const dispatch = useAppDispatch();
 
-  const { data, isFetching, isLoading } = useGetSingleProductQuery(id);
+  const { data, isFetching, isLoading, isSuccess } =
+    useGetSingleProductQuery(id);
 
   const product: TProduct = data?.data;
-  const reviews = {
-    ...product.reviews,
-    averageRating: product.averageRating,
-  } as TReview;
+  let reviews;
+  if (isSuccess) {
+    reviews = {
+      ...product.reviews,
+      averageRating: product.averageRating,
+    } as TReview;
+  }
 
   const handleWishlist = () => {
     const toastId = toast.loading("Updating wishlist...");
