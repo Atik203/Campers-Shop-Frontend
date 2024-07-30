@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   addOrderedProducts,
   removeCartProduct,
@@ -43,6 +44,7 @@ export type CardPaymentDetails = {
   expireMonth: string;
   expireYear: string;
   created: number;
+  transitionId: string;
 };
 
 export interface CheckoutFormInputs {
@@ -76,98 +78,96 @@ export default function Checkout() {
     paymentMethods[0]
   );
 
-  const onSubmit = async (data: CheckoutFormInputs) => {
-    const toastId = toast.loading("Processing Order...");
-
-    const orderProductData = {
-      products,
-      orderData: {
-        firstName: data.firstName,
-        lastName: data.lastName,
+  const createOrderData = (data: CheckoutFormInputs) => ({
+    products,
+    orderData: {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      city: data.city,
+      postalCode: data.postalCode,
+      deliveryMethod: selectedDeliveryMethod.title,
+      paymentMethod: selectedPaymentMethod.title,
+    },
+  });
+  const handleStripePayment = async (
+    data: CheckoutFormInputs,
+    toastId: number | string
+  ) => {
+    if (!stripe || !elements) {
+      toast.error("Stripe is not properly initialized.", { id: toastId });
+      return null;
+    }
+    const cardElement = elements.getElement(CardElement);
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement!,
+      billing_details: {
+        name: `${data.firstName} ${data.lastName}`,
         email: data.email,
         phone: data.phone,
-        address: data.address,
-        city: data.city,
-        postalCode: data.postalCode,
-        deliveryMethod: selectedDeliveryMethod.title,
-        paymentMethod: selectedPaymentMethod.title,
+        address: {
+          line1: data.address,
+          city: data.city,
+          postal_code: data.postalCode,
+        },
       },
-    };
+    });
+
+    if (error) {
+      toast.error("Payment failed. Please try again.", { id: toastId });
+      return null;
+    }
+
+    return paymentMethod;
+  };
+
+  const placeOrder = (orderData: any, toastId: number | string) => {
+    dispatch(addOrderedProducts({ products, orderData }));
+    products.forEach((product) => dispatch(removeCartProduct(product._id)));
+    toast.success("Order placed successfully.", { id: toastId });
+    navigate("/success-order");
+  };
+
+  const onSubmit = async (data: CheckoutFormInputs) => {
+    const toastId = toast.loading("Processing Order...");
+    const orderProductData = createOrderData(data);
 
     if (!orderProductData.products.length) {
       toast.error("No products in cart.", { id: toastId });
       navigate("/success-order");
       return;
     }
+
     if (!orderProductData.orderData) {
       toast.error("Fill up the checkout form.", { id: toastId });
       return;
     }
 
     if (selectedPaymentMethod.id === "stripe") {
-      if (!stripe || !elements) {
-        return;
-      }
-      const cardElement = elements.getElement(CardElement);
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: "card",
-        card: cardElement!,
-        billing_details: {
-          name: data.firstName + " " + data.lastName,
-          email: data.email,
-          phone: data.phone,
-          address: {
-            line1: data.address,
-            city: data.city,
-            postal_code: data.postalCode,
+      const paymentMethod = await handleStripePayment(data, toastId);
+      if (paymentMethod) {
+        const orderData = {
+          ...orderProductData.orderData,
+          paymentDetails: {
+            transitionId: paymentMethod.id,
+            brand: paymentMethod.card?.brand,
+            cardLast4: paymentMethod.card?.last4,
+            expireMonth: paymentMethod.card?.exp_month,
+            expireYear: paymentMethod.card?.exp_year,
+            created: paymentMethod.created,
           },
-        },
-      });
-
-      if (error) {
-        toast.error("Payment failed. Please try again.", { id: toastId });
-      } else {
-        console.log(paymentMethod);
-
-        // Handle payment success
-        for (const product of products) {
-          dispatch(
-            addOrderedProducts({
-              product,
-              orderData: {
-                ...orderProductData.orderData,
-                paymentDetails: {
-                  brand: paymentMethod.card?.brand,
-                  cardLast4: paymentMethod.card?.last4,
-                  expireMonth: paymentMethod.card?.exp_month,
-                  expireYear: paymentMethod.card?.exp_year,
-                  created: paymentMethod.created,
-                },
-              },
-            })
-          );
-          dispatch(removeCartProduct(product._id));
-        }
-
-        toast.success("Order placed successfully.", { id: toastId });
-        navigate("/success-order");
+        };
+        placeOrder(orderData, toastId);
       }
     } else {
-      // Handle cash on delivery
-      for (const product of products) {
-        dispatch(
-          addOrderedProducts({
-            product,
-            orderData: {
-              ...orderProductData.orderData,
-              paymentDetails: "COD",
-            },
-          })
-        );
-        dispatch(removeCartProduct(product._id));
-      }
-      toast.success("Order placed successfully.", { id: toastId });
-      navigate("/success-order");
+      const orderData = {
+        ...orderProductData.orderData,
+        paymentDetails: "Cash on delivery",
+      };
+      placeOrder(orderData, toastId);
     }
   };
 
