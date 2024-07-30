@@ -10,7 +10,6 @@ import Navbar from "../ui/Navbar";
 
 const MainLayout = () => {
   const queryStrings = "page=1";
-
   const { data, isSuccess } = useGetAllProductsQuery(queryStrings, {
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
