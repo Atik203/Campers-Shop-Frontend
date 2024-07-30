@@ -13,7 +13,7 @@ type Filter = {
   options: FilterOption[];
 };
 
-type orderedProducts = {
+export type TOrderProducts = {
   products: TProduct[];
   orderData: CheckoutFormInputs;
 };
@@ -22,7 +22,8 @@ export interface ProductState {
   cartProducts: TProduct[];
   wishlistProducts: TProduct[];
   filters: Filter[];
-  orderedProducts: orderedProducts[];
+  orderedProducts: TOrderProducts[];
+  currentOrder: TOrderProducts | null;
 }
 
 const initialState: ProductState = {
@@ -30,6 +31,7 @@ const initialState: ProductState = {
   wishlistProducts: [],
   filters: [],
   orderedProducts: [],
+  currentOrder: null,
 };
 
 const productSlide = createSlice({
@@ -95,8 +97,27 @@ const productSlide = createSlice({
         return product;
       });
     },
-    addOrderedProducts: (state, action) => {
-      state.orderedProducts = [...state.orderedProducts, action.payload];
+    addOrderedProducts: (
+      state,
+      action: PayloadAction<{
+        products: TProduct[];
+        orderData: CheckoutFormInputs;
+      }>
+    ) => {
+      state.orderedProducts = [
+        ...state.orderedProducts,
+        {
+          products: action.payload.products,
+          orderData: action.payload.orderData,
+        },
+      ];
+      state.currentOrder = {
+        products: action.payload.products,
+        orderData: action.payload.orderData,
+      };
+    },
+    removeCurrentOrders: (state) => {
+      state.currentOrder = null;
     },
   },
 });
@@ -111,6 +132,7 @@ export const {
   incrementCartQuantity,
   decrementCartQuantity,
   addOrderedProducts,
+  removeCurrentOrders,
 } = productSlide.actions;
 
 export default productSlide.reducer;
