@@ -10,7 +10,7 @@ import { CheckCircleIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const deliveryMethods = [
@@ -37,27 +37,31 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
+export type CardPaymentDetails = {
+  brand: string;
+  cardLast4: string;
+  expireMonth: string;
+  expireYear: string;
+  created: number;
+};
+
 export interface CheckoutFormInputs {
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
   address: string;
-  apartment: string;
   city: string;
   postalCode: string;
-  cardNumber?: string;
-  nameOnCard?: string;
-  expirationDate?: string;
-  cvc?: string;
   paymentMethod?: string;
   deliveryMethod?: string;
-  transactionId?: string;
+  paymentDetails?: CardPaymentDetails | string;
 }
 
 export default function Checkout() {
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate();
 
   const products = useAppSelector(
     (state: RootState) => state.product.cartProducts
@@ -83,13 +87,22 @@ export default function Checkout() {
         email: data.email,
         phone: data.phone,
         address: data.address,
-        apartment: data.apartment,
         city: data.city,
         postalCode: data.postalCode,
         deliveryMethod: selectedDeliveryMethod.title,
         paymentMethod: selectedPaymentMethod.title,
       },
     };
+
+    if (!orderProductData.products.length) {
+      toast.error("No products in cart.", { id: toastId });
+      navigate("/success-order");
+      return;
+    }
+    if (!orderProductData.orderData) {
+      toast.error("Fill up the checkout form.", { id: toastId });
+      return;
+    }
 
     if (selectedPaymentMethod.id === "stripe") {
       if (!stripe || !elements) {
@@ -105,7 +118,6 @@ export default function Checkout() {
           phone: data.phone,
           address: {
             line1: data.address,
-            line2: data.apartment,
             city: data.city,
             postal_code: data.postalCode,
           },
@@ -124,7 +136,13 @@ export default function Checkout() {
               product,
               orderData: {
                 ...orderProductData.orderData,
-                transactionId: paymentMethod?.id,
+                paymentDetails: {
+                  brand: paymentMethod.card?.brand,
+                  cardLast4: paymentMethod.card?.last4,
+                  expireMonth: paymentMethod.card?.exp_month,
+                  expireYear: paymentMethod.card?.exp_year,
+                  created: paymentMethod.created,
+                },
               },
             })
           );
@@ -132,6 +150,7 @@ export default function Checkout() {
         }
 
         toast.success("Order placed successfully.", { id: toastId });
+        navigate("/success-order");
       }
     } else {
       // Handle cash on delivery
@@ -141,13 +160,14 @@ export default function Checkout() {
             product,
             orderData: {
               ...orderProductData.orderData,
-              transactionId: "COD",
+              paymentDetails: "COD",
             },
           })
         );
         dispatch(removeCartProduct(product._id));
       }
       toast.success("Order placed successfully.", { id: toastId });
+      navigate("/success-order");
     }
   };
 
@@ -220,7 +240,7 @@ export default function Checkout() {
                 </label>
                 <div className="mt-1">
                   <input
-                    {...register("emailAddress")}
+                    {...register("email")}
                     type="email"
                     id="email-address"
                     name="emailAddress"
@@ -269,24 +289,6 @@ export default function Checkout() {
                       name="address"
                       id="address"
                       autoComplete="street-address"
-                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div className="">
-                  <label
-                    htmlFor="apartment"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Apartment, House, etc.
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      {...register("apartment")}
-                      type="text"
-                      name="apartment"
-                      id="apartment"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                   </div>

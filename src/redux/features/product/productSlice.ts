@@ -22,7 +22,7 @@ export interface ProductState {
   cartProducts: TProduct[];
   wishlistProducts: TProduct[];
   filters: Filter[];
-  orderedProducts: TProduct[];
+  orderedProducts: orderedProducts[];
 }
 
 const initialState: ProductState = {
