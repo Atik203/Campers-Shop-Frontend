@@ -30,7 +30,7 @@ export default function Cart() {
   };
 
   const subtotal = products.reduce(
-    (acc, product) => acc + product.price * product.stock,
+    (acc, product) => acc + product.price * (product?.quantity ?? 1),
     0
   );
 
@@ -173,7 +173,7 @@ export default function Cart() {
                       </div>
                     </div>
                     <p className="mt-4 flex space-x-2 text-sm text-gray-700">
-                      {product.inStock ? (
+                      {product.stock ? (
                         <CheckIcon
                           className="h-5 w-5 flex-shrink-0 text-green-500"
                           aria-hidden="true"
@@ -185,9 +185,7 @@ export default function Cart() {
                         />
                       )}
 
-                      <span>
-                        {product.inStock ? "In stock" : `Out of Stock`}
-                      </span>
+                      <span>{product.stock ? "In stock" : `Out of Stock`}</span>
                     </p>
                   </div>
                 </li>

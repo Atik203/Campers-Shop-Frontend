@@ -13,7 +13,18 @@ import {
   InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/solid";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import router from "./routes/routes.tsx";
+const stripePromise = loadStripe(
+  "pk_test_51OJHcNFhnMriScoZptjHqvKSgfcIbd6u1OeAVLjmmMvuKUrzL2yY7QuTNWrOrpVApf1BInwrKBDyGT2qVa3H2VXa00anIhDANI"
+);
+
+const options = {
+  // passing the client secret obtained from the server
+  clientSecret:
+    "sk_test_51OJHcNFhnMriScoZQHzLBgeRpPWHOyFeJ8EFGWigvI1gouVDSi617BR23MASb47ZcCwN9Tp4Ooh5Thc0UNAea74I00UjPT6ufG",
+};
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -37,7 +48,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           loading: <MagnifyingGlassCircleIcon className="w-6 h-6" />,
         }}
       />
-      <RouterProvider router={router} />
+      <Elements stripe={stripePromise}>
+        <RouterProvider router={router} />
+      </Elements>
     </Provider>
   </React.StrictMode>
 );

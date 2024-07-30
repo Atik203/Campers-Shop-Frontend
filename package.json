@@ -24,6 +24,8 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@reduxjs/toolkit": "^2.2.6",
+    "@stripe/react-stripe-js": "^2.7.3",
+    "@stripe/stripe-js": "^4.1.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/typography": "^0.5.13",
     "antd": "^5.19.3",

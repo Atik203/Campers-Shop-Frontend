@@ -1,3 +1,4 @@
+import { CheckoutFormInputs } from "@/pages/Checkout";
 import { TProduct } from "@/types/product.types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type FilterOption = {
@@ -11,16 +12,24 @@ type Filter = {
   name: string;
   options: FilterOption[];
 };
+
+type orderedProducts = {
+  products: TProduct[];
+  orderData: CheckoutFormInputs;
+};
+
 export interface ProductState {
   cartProducts: TProduct[];
   wishlistProducts: TProduct[];
   filters: Filter[];
+  orderedProducts: TProduct[];
 }
 
 const initialState: ProductState = {
   cartProducts: [],
   wishlistProducts: [],
   filters: [],
+  orderedProducts: [],
 };
 
 const productSlide = createSlice({
@@ -62,7 +71,7 @@ const productSlide = createSlice({
             ...product,
             quantity: product.quantity! + action.payload.quantity,
             stock: newStock,
-            inStock: newStock <= 0,
+            inStock: newStock > 0,
           };
         }
         return product;
@@ -86,6 +95,9 @@ const productSlide = createSlice({
         return product;
       });
     },
+    addOrderedProducts: (state, action) => {
+      state.orderedProducts = [...state.orderedProducts, action.payload];
+    },
   },
 });
 
@@ -98,6 +110,7 @@ export const {
   updateCartProduct,
   incrementCartQuantity,
   decrementCartQuantity,
+  addOrderedProducts,
 } = productSlide.actions;
 
 export default productSlide.reducer;
