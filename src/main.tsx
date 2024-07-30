@@ -20,12 +20,6 @@ const stripePromise = loadStripe(
   "pk_test_51OJHcNFhnMriScoZptjHqvKSgfcIbd6u1OeAVLjmmMvuKUrzL2yY7QuTNWrOrpVApf1BInwrKBDyGT2qVa3H2VXa00anIhDANI"
 );
 
-const options = {
-  // passing the client secret obtained from the server
-  clientSecret:
-    "sk_test_51OJHcNFhnMriScoZQHzLBgeRpPWHOyFeJ8EFGWigvI1gouVDSi617BR23MASb47ZcCwN9Tp4Ooh5Thc0UNAea74I00UjPT6ufG",
-};
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
