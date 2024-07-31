@@ -23,7 +23,7 @@ const FeaturedSection = () => {
 
   const products = data?.data ? shuffleArray(data?.data) : null;
   return (
-    <div className="pb-12">
+    <div className="pb-12 min-h-screen">
       <TitleDescriptionBlock
         title="Featured Products"
         description="Check out our featured products, handpicked for their exceptional quality and popularity. These items are highly recommended by our team and customers alike."
