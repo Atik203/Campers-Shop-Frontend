@@ -1,4 +1,5 @@
 import BestSellingSection from "@/components/ui/custom/BestSellingSection";
+import BlogSection from "@/components/ui/custom/BlogSection";
 import CategorySection from "@/components/ui/custom/CategorySection";
 import FeaturedSection from "@/components/ui/custom/FeaturedSection";
 import TestimonialSection from "@/components/ui/custom/TestimonialSection";
@@ -12,6 +13,7 @@ const Home = () => {
       <CategorySection />
       <FeaturedSection />
       <TestimonialSection />
+      <BlogSection />
     </div>
   );
 };

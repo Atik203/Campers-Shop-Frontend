@@ -33,12 +33,14 @@ export default function CategorySection() {
   return (
     <div className="pb-4">
       <div className="py-12 sm:py-20 xl:mx-auto xl:max-w-7xl xl:px-8">
-        <TitleDescriptionBlock
-          title="Explore Our Categories"
-          description=" Browse through our diverse range of categories to find the products
+        <div className="px-2">
+          <TitleDescriptionBlock
+            title="Explore Our Categories"
+            description=" Browse through our diverse range of categories to find the products
             that best suit your needs. From outdoor gear to camping essentials,
             we have everything you need for your next adventure."
-        />
+          />
+        </div>
 
         <Link
           to={"/products"}

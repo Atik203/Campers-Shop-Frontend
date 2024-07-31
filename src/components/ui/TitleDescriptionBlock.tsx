@@ -14,7 +14,7 @@ const TitleDescriptionBlock: React.FC<BlockProps> = ({
         <h2 className="text-2xl md:text-4xl text-black leading-none  font-bold mb-6">
           {title}
         </h2>
-        <p className="text-base w-11/12 md:w-10/12 mx-auto">{description}</p>
+        <p className="text-base max-w-xl mx-auto">{description}</p>
       </div>
     </div>
   );
