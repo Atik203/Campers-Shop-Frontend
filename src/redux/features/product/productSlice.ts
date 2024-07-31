@@ -104,13 +104,17 @@ const productSlide = createSlice({
         orderData: CheckoutFormInputs;
       }>
     ) => {
+      const { products, orderData } = action.payload;
+
+      // Append the new order to the orderedProducts array
       state.orderedProducts = [
         ...state.orderedProducts,
         {
-          products: action.payload.products,
-          orderData: action.payload.orderData,
+          products,
+          orderData,
         },
       ];
+
       state.currentOrder = {
         products: action.payload.products,
         orderData: action.payload.orderData,

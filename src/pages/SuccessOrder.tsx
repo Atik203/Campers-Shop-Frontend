@@ -2,7 +2,6 @@ import { removeCurrentOrders } from "@/redux/features/product/productSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { TProduct } from "@/types/product.types";
-import convertStripeTimestamp from "@/utils/convertStringTimeStamp";
 import { Link } from "react-router-dom";
 
 export default function SuccessOrder() {
@@ -23,11 +22,8 @@ export default function SuccessOrder() {
   }, 0);
 
   const products = currentOrder?.products;
+  const orderData = currentOrder?.orderData;
   const paymentDetails = currentOrder?.orderData.paymentDetails;
-  let formattedDate;
-  if (typeof paymentDetails === "object") {
-    formattedDate = convertStripeTimestamp(paymentDetails.created);
-  }
 
   return (
     <div className="mx-auto">
@@ -43,8 +39,8 @@ export default function SuccessOrder() {
           </p>
 
           <dl className="mt-16 text-sm font-medium">
-            <dt className="text-gray-900">Tracking number</dt>
-            <dd className="mt-2 text-primary">51547878755545848512</dd>
+            <dt className="text-gray-900">Order number</dt>
+            <dd className="mt-2 text-primary">{orderData?.orderNumber}</dd>
           </dl>
 
           <ul
@@ -181,7 +177,7 @@ export default function SuccessOrder() {
                         Expires {paymentDetails?.expireMonth} /
                         {paymentDetails?.expireYear}
                       </p>
-                      <p>Order Date & TIme: {formattedDate}</p>
+                      <p>Order Date & TIme: {orderData?.time}</p>
                     </div>
                   </dd>
                 </div>
@@ -193,6 +189,9 @@ export default function SuccessOrder() {
                   <dd className="mt-2 space-y-2 sm:flex sm:space-x-4 sm:space-y-0">
                     <div className="flex-auto">
                       <p className="text-gray-900">{paymentDetails}</p>
+                      <p className="text-gray-900">
+                        Order Date & TIme: {orderData?.time}
+                      </p>
                     </div>
                   </dd>
                 </div>
