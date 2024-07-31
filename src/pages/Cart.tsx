@@ -14,6 +14,7 @@ import {
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 export default function Cart() {
   const dispatch = useAppDispatch();
@@ -36,9 +37,26 @@ export default function Cart() {
 
   const handleRemoveProduct = (id: string) => () => {
     const toastId = toast.loading("Removing product from cart...");
-    dispatch(removeCartProduct(id));
 
-    toast.success("Product removed from cart", { id: toastId });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(removeCartProduct(id));
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your product has been deleted.",
+          icon: "success",
+        });
+        toast.success("Product removed from cart", { id: toastId });
+      }
+    });
   };
 
   return (
