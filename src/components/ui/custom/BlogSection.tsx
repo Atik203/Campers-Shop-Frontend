@@ -1,3 +1,5 @@
+import TitleDescriptionBlock from "../TitleDescriptionBlock";
+
 const blogPosts = [
   {
     id: 1,
@@ -52,20 +54,16 @@ const blogPosts = [
 
 const BlogSection = () => {
   return (
-    <div>
+    <div className="mb-12">
       {/* Blog section */}
-      <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-40 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            From the Blog
-          </h2>
-          <p className="mt-2 text-lg leading-8 text-gray-600">
-            Get inspired by our latest blog posts, featuring tips, guides, and
+      <div className="mx-auto mt-24 max-w-7xl px-6 sm:mt-28">
+        <TitleDescriptionBlock
+          title="From the Blog"
+          description="  Get inspired by our latest blog posts, featuring tips, guides, and
             stories from fellow camping enthusiasts. Discover new destinations,
             learn about the best gear, and get expert advice to make your next
-            outdoor adventure unforgettable.
-          </p>
-        </div>
+            outdoor adventure unforgettable."
+        />
         <div className="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {blogPosts.map((post) => (
             <article
