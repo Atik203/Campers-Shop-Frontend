@@ -11,6 +11,7 @@ interface FormInputProps {
   description?: string;
   type?: string;
   rows?: number;
+  defaultValue?: string;
 }
 
 export const FormInput: React.FC<FormInputProps> = ({
@@ -20,6 +21,7 @@ export const FormInput: React.FC<FormInputProps> = ({
   description,
   type = "text",
   rows = 4,
+  defaultValue,
 }) => {
   const {
     register,
@@ -37,6 +39,7 @@ export const FormInput: React.FC<FormInputProps> = ({
             placeholder={placeholder}
             {...register(name)}
             rows={rows}
+            defaultValue={defaultValue}
             className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm"
           />
         ) : (
@@ -44,6 +47,7 @@ export const FormInput: React.FC<FormInputProps> = ({
             placeholder={placeholder}
             type={type}
             {...register(name)}
+            defaultValue={defaultValue}
             className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm"
           />
         )}

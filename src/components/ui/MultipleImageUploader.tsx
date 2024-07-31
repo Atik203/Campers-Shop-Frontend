@@ -34,13 +34,15 @@ const MultipleImageUploader: React.FC<MultiImageUploaderProps> = ({
 
   const removeImage = (index: number) => {
     if (index < initialUrlsRef.current.length) {
-      initialUrlsRef.current.splice(index, 1);
+      const newInitialUrls = [...initialUrlsRef.current];
+      newInitialUrls.splice(index, 1);
+      initialUrlsRef.current = newInitialUrls;
     } else {
       const newIndex = index - initialUrlsRef.current.length;
       const newSelectedFiles = images.filter((_, i) => i !== newIndex);
       setImages(newSelectedFiles);
     }
-
+    // Update the previews state
     setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
