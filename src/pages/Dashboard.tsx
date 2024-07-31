@@ -1,7 +1,9 @@
+import OrderHistory from "./OrderHistory";
+
 const Dashboard = () => {
   return (
     <div>
-      <h1>This is Dashboard component</h1>
+      <OrderHistory />
     </div>
   );
 };

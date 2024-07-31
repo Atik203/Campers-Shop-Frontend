@@ -30,7 +30,6 @@ const UpdateProduct = () => {
     const toastId = toast.loading("Submitting Data...");
 
     const urls = [...product.images];
-
     for (const file of selectedFiles) {
       try {
         const url = await uploadImageToCloudinary(file);

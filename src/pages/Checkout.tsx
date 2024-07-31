@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
+import { v4 as uuidv4 } from "uuid";
 const deliveryMethods = [
   {
     id: 1,
@@ -43,7 +43,6 @@ export type CardPaymentDetails = {
   cardLast4: string;
   expireMonth: string;
   expireYear: string;
-  created: number;
   transitionId: string;
 };
 
@@ -58,6 +57,8 @@ export interface CheckoutFormInputs {
   paymentMethod?: string;
   deliveryMethod?: string;
   paymentDetails?: CardPaymentDetails | string;
+  time: string;
+  orderNumber: string;
 }
 
 export default function Checkout() {
@@ -90,6 +91,16 @@ export default function Checkout() {
       postalCode: data.postalCode,
       deliveryMethod: selectedDeliveryMethod.title,
       paymentMethod: selectedPaymentMethod.title,
+      time: new Date().toLocaleString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      }), // e.g. "September 20, 2021, 3:48:00 PM"
+      orderNumber: uuidv4().slice(0, 18),
     },
   });
   const handleStripePayment = async (
@@ -157,7 +168,6 @@ export default function Checkout() {
             cardLast4: paymentMethod.card?.last4,
             expireMonth: paymentMethod.card?.exp_month,
             expireYear: paymentMethod.card?.exp_year,
-            created: paymentMethod.created,
           },
         };
         placeOrder(orderData, toastId);
