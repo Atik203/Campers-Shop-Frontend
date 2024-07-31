@@ -1370,12 +1370,24 @@
     lodash.merge "^4.6.2"
     postcss-selector-parser "6.0.10"
 
+"@tanstack/react-table@^8.19.3":
+  version "8.19.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.19.3.tgz#be1d9ee991ac06b7d4d17cc5c66469ac157bfd8a"
+  integrity sha512-MtgPZc4y+cCRtU16y1vh1myuyZ2OdkWgMEBzyjYsoMWMicKZGZvcDnub3Zwb6XF2pj9iRMvm1SO1n57lS0vXLw==
+  dependencies:
+    "@tanstack/table-core" "8.19.3"
+
 "@tanstack/react-virtual@^3.8.1":
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.8.3.tgz#3455fd7e259655ab555ac130b5ac59c3eeae98bc"
   integrity sha512-9ICwbDUUzN99CJIGc373i8NLoj6zFTKI2Hlcmo0+lCSAhPQ5mxq4dGOMKmLYoEFyHcGQ64Bd6ZVbnPpM6lNK5w==
   dependencies:
     "@tanstack/virtual-core" "3.8.3"
+
+"@tanstack/table-core@8.19.3":
+  version "8.19.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/table-core/-/table-core-8.19.3.tgz#669e3eca2179ee3456fc068fed8683df01607c43"
+  integrity sha512-IqREj9ADoml9zCAouIG/5kCGoyIxPFdqdyoxis9FisXFi5vT+iYfEfLosq4xkU/iDbMcEuAj+X8dWRLvKYDNoQ==
 
 "@tanstack/virtual-core@3.8.3":
   version "3.8.3"

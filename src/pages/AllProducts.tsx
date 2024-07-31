@@ -1,7 +1,9 @@
+import { ProductTable } from "@/components/ui/custom/ProductTable";
+
 const AllProducts = () => {
   return (
     <div>
-      <h1>This is AllProducts component</h1>
+      <ProductTable />
     </div>
   );
 };
