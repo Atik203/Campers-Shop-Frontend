@@ -18,11 +18,9 @@ export default function OrderHistory() {
   return (
     <div>
       {!orders.length ? (
-        <div className="flex items-center justify-center h-full">
-          <h1 className="text-2xl font-semibold text-gray-500">
-            No order history
-          </h1>
-          <p>
+        <div className="text-center mt-5 min-h-screen h-full">
+          <h1 className="text-2xl font-bold">No order history</h1>
+          <p className="font-semibold">
             You haven't placed any orders yet. <br />
             <Link to="/" className="text-primary hover:text-indigo-500">
               Continue shopping

@@ -1,9 +1,9 @@
-import OrderHistory from "./OrderHistory";
+import { BasicDashboard } from "./BasicDashboard";
 
 const Dashboard = () => {
   return (
     <div>
-      <OrderHistory />
+      <BasicDashboard />
     </div>
   );
 };

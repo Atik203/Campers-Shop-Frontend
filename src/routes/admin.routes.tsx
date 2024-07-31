@@ -1,4 +1,6 @@
+import OrderHistory from "@/pages/OrderHistory";
 import UpdateProduct from "@/pages/UpdateProduct";
+import { ClipboardDocumentListIcon } from "@heroicons/react/20/solid";
 import {
   Cog6ToothIcon,
   HomeIcon,
@@ -36,5 +38,11 @@ export const adminPaths = [
   {
     path: "update-product/:id",
     element: <UpdateProduct />,
+  },
+  {
+    name: "Orders",
+    path: "orders",
+    element: <OrderHistory />,
+    icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
   },
 ];
