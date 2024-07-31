@@ -8,13 +8,14 @@ import { sidebarItemsGenerator } from "../../utils/sidebarItemsGenerator";
 const { Sider } = Layout;
 
 const Sidebar = () => {
+  // @ts-expect-error - SidebarItems type is not defined
   const sidebarItems = sidebarItemsGenerator(adminPaths, "dashboard");
   const [collapsed, setCollapsed] = useState(false);
 
   return (
     <Sider
       breakpoint="lg"
-      collapsedWidth={60}
+      collapsedWidth={50}
       theme="light"
       className="sider-style"
       collapsible
