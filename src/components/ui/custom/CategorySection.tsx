@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import TitleDescriptionBlock from "../TitleDescriptionBlock";
 
 const categories = [
   {
@@ -32,18 +33,20 @@ export default function CategorySection() {
   return (
     <div className="pb-4">
       <div className="py-12 sm:py-20 xl:mx-auto xl:max-w-7xl xl:px-8">
-        <div className="px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8 xl:px-0">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-            Shop by Category
-          </h2>
-          <Link
-            to={"/products"}
-            className="hidden text-sm font-semibold text-primary hover:text-indigo-500 sm:block"
-          >
-            Browse all categories
-            <span aria-hidden="true"> &rarr;</span>
-          </Link>
-        </div>
+        <TitleDescriptionBlock
+          title="Explore Our Categories"
+          description=" Browse through our diverse range of categories to find the products
+            that best suit your needs. From outdoor gear to camping essentials,
+            we have everything you need for your next adventure."
+        />
+
+        <Link
+          to={"/products"}
+          className="hidden text-sm text-end font-semibold text-primary hover:text-indigo-500 sm:block"
+        >
+          Browse all categories
+          <span aria-hidden="true"> &rarr;</span>
+        </Link>
 
         <div className="mt-4 flow-root">
           <div className="-my-2">
