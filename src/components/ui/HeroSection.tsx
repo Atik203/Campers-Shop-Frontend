@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function HeroSection() {
   return (
     <div className="relative overflow-hidden mb-12">
@@ -82,12 +84,12 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              <a
-                href="#"
+              <Link
+                to={"/products"}
                 className="inline-block rounded-lg border border-transparent bg-primary px-8 py-3 text-center font-medium text-white hover:bg-indigo-700"
               >
                 Explore Collection
-              </a>
+              </Link>
             </div>
           </div>
         </div>
