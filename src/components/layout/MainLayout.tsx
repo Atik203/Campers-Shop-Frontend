@@ -1,6 +1,6 @@
 import { useGetAllProductsQuery } from "@/redux/features/product/productApi";
 import { setFilters } from "@/redux/features/product/productSlice";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { formatProductFilters } from "@/utils/formatProductsFilters";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
@@ -10,6 +10,24 @@ import Navbar from "../ui/Navbar";
 
 const MainLayout = () => {
   const queryStrings = "page=1";
+  const products = useAppSelector((state) => state.product.cartProducts);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (products.length > 0) {
+        event.preventDefault();
+        event.returnValue =
+          "You have items in your cart. Are you sure you want to leave?";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [products]);
+
   const { data, isSuccess } = useGetAllProductsQuery(queryStrings, {
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
