@@ -15,6 +15,7 @@ import {
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/solid";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { HelmetProvider } from "react-helmet-async";
 import router from "./routes/routes.tsx";
 const stripePromise = loadStripe(
   "pk_test_51OJHcNFhnMriScoZptjHqvKSgfcIbd6u1OeAVLjmmMvuKUrzL2yY7QuTNWrOrpVApf1BInwrKBDyGT2qVa3H2VXa00anIhDANI"
@@ -43,7 +44,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         }}
       />
       <Elements stripe={stripePromise}>
-        <RouterProvider router={router} />
+        <HelmetProvider>
+          <RouterProvider router={router} />
+        </HelmetProvider>
       </Elements>
     </Provider>
   </React.StrictMode>
