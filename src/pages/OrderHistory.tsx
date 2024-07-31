@@ -84,21 +84,59 @@ export default function OrderHistory() {
                               <div className="lg:flex-1">
                                 <div className="sm:flex">
                                   <div>
-                                    <h4 className="font-medium text-gray-900">
-                                      {product.title}
-                                    </h4>
-                                    <p className="mt-2 hidden text-sm text-gray-500 sm:block">
-                                      {product.description}
-                                    </p>
+                                    <div className="text-start">
+                                      <h4 className="font-medium text-gray-900">
+                                        {product.title}
+                                      </h4>
+                                      <p className="mt-1 font-medium text-gray-900  sm:mt-0">
+                                        {product.price}
+                                      </p>
+                                    </div>
+                                    <div className="mt-2 flex space-x-6">
+                                      <div className="flex items-center my-2 justify-center gap-2">
+                                        <h3 className="text-sm font-medium text-gray-900">
+                                          Color
+                                        </h3>
+                                        <div className="flex items-center justify-center gap-1">
+                                          {product?.colors?.map((color) => (
+                                            <div
+                                              key={color.name}
+                                              className="flex items-center justify-center space-x-2 flex-wrap"
+                                            >
+                                              <span
+                                                aria-hidden="true"
+                                                className="h-6 w-6 rounded-full border border-black border-opacity-10"
+                                                style={{
+                                                  backgroundColor: color.hex,
+                                                }}
+                                              />
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+
+                                      <div className="flex items-center my-2 justify-center gap-2">
+                                        <h3 className="text-sm font-medium text-gray-900">
+                                          Size
+                                        </h3>
+                                        <div className="flex items-center justify-center gap-1">
+                                          {product?.sizes?.map((size) => (
+                                            <div
+                                              key={size}
+                                              className="flex items-center justify-center rounded-md border py-1 px-2 text-sm font-medium uppercase bg-white text-gray-900"
+                                            >
+                                              {size}
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </div>
                                   </div>
-                                  <p className="mt-1 font-medium text-gray-900 sm:ml-6 sm:mt-0">
-                                    {product.price}
-                                  </p>
                                 </div>
                                 <div className="mt-2 flex text-sm font-medium sm:mt-4">
                                   <Link
                                     to={`/product-details/${product._id}`}
-                                    className="text-primary hover:text-indigo-500"
+                                    className="text-primary  hover:text-indigo-500"
                                   >
                                     View Product
                                   </Link>

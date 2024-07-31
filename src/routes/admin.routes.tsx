@@ -18,7 +18,7 @@ export const adminPaths = [
     icon: <HomeIcon className="h-6 w-6" />,
   },
   {
-    name: "Products Management",
+    name: "Management",
     icon: <Cog6ToothIcon className="h-6 w-6" />,
     children: [
       {
