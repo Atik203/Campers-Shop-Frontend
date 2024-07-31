@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { ScrollArea } from "./scroll-area";
@@ -37,6 +38,10 @@ const MultiColorPicker: React.FC<MultiColorPickerProps> = ({
       setColorName("");
       setCurrentColor("#b32aa9");
     }
+  };
+
+  const handleRemoveColor = (color: TColor) => {
+    setColors(colors.filter((c) => c.hex !== color.hex));
   };
 
   return (
@@ -99,7 +104,13 @@ const MultiColorPicker: React.FC<MultiColorPickerProps> = ({
                     ></span>
                     <span>
                       {color.name} ({color.hex})
-                    </span>
+                    </span>{" "}
+                    <button
+                      onClick={() => handleRemoveColor(color)}
+                      className="ml-2 text-black font-bold "
+                    >
+                      <XMarkIcon className="h-5 w-5" />
+                    </button>
                   </div>
                 ))}
               </div>
