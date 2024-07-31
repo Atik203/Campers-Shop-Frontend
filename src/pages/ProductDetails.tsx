@@ -22,6 +22,7 @@ import {
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { BookmarkCheck, BookMarked } from "lucide-react";
 import { useState } from "react";
+import ReactImageMagnify from "react-image-magnify";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import ReviewSection from "../components/ui/ReviewSection";
@@ -170,10 +171,35 @@ export default function ProductDetails() {
                 <TabPanels className="aspect-h-1 aspect-w-1 w-full">
                   {product.images.map((src, index) => (
                     <TabPanel key={index}>
-                      <img
+                      {/* <img
                         src={src}
                         alt={`Product image ${index + 1}`}
                         className="h-full w-full object-cover object-center sm:rounded-lg"
+                      /> */}
+                      <ReactImageMagnify
+                        {...{
+                          smallImage: {
+                            alt: `Product image ${index + 1}`,
+                            isFluidWidth: true,
+                            src: src,
+                            sizes:
+                              "(max-width: 480px) 100vw, (max-width: 1200px) 30vw, 360px",
+                          },
+                          largeImage: {
+                            src: src,
+                            width: 1200,
+                            height: 1800,
+                          },
+                          lensStyle: { backgroundColor: "rgba(0,0,0,.6)" },
+                          enlargedImageContainerDimensions: {
+                            width: "150%",
+                            height: "150%",
+                          },
+                          enlargedImagePosition: "over",
+                          enlargedImageStyle: { objectFit: "contain" },
+                        }}
+                        style={{ width: "100%", height: "100%" }}
+                        imageClassName="object-contain w-full h-full sm:rounded-lg"
                       />
                     </TabPanel>
                   ))}
