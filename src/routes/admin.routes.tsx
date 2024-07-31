@@ -1,3 +1,4 @@
+import UpdateProduct from "@/pages/UpdateProduct";
 import {
   Cog6ToothIcon,
   HomeIcon,
@@ -31,5 +32,9 @@ export const adminPaths = [
         icon: <TableCellsIcon className="h-6 w-6" />,
       },
     ],
+  },
+  {
+    path: "update-product/:id",
+    element: <UpdateProduct />,
   },
 ];
