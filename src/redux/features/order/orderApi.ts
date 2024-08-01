@@ -3,8 +3,8 @@ import { baseApi } from "@/redux/api/baseApi";
 const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllOrders: builder.query({
-      query: () => ({
-        url: "order/",
+      query: (query) => ({
+        url: `/order/?${query}`,
         method: "GET",
       }),
       providesTags: ["Order"],
@@ -33,6 +33,14 @@ const orderApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Order", "Product"],
     }),
+    updateOrderStatus: builder.mutation({
+      query: ({ orderId, status }) => ({
+        url: `order/update-order/`,
+        method: "PUT",
+        body: { status, id: orderId },
+      }),
+      invalidatesTags: ["Order"],
+    }),
   }),
 });
 
@@ -41,4 +49,5 @@ export const {
   useCreateOrderMutation,
   useGetSingleOrderQuery,
   useDeleteOrderMutation,
+  useUpdateOrderStatusMutation,
 } = orderApi;

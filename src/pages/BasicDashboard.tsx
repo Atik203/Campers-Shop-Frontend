@@ -55,9 +55,6 @@ export function BasicDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-bold">${rounded}</div>
-            <p className="text-sm text-muted-foreground">
-              +12% from last month
-            </p>
           </CardContent>
         </Card>
         <Card>
@@ -66,7 +63,6 @@ export function BasicDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-bold">{totalProducts}</div>
-            <p className="text-sm text-muted-foreground">+5 new this month</p>
           </CardContent>
         </Card>
         <Card>
@@ -75,7 +71,6 @@ export function BasicDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-bold">{totalOrders}</div>
-            <p className="text-sm text-muted-foreground">+4 from last week</p>
           </CardContent>
         </Card>
         <Card className="md:col-span-2 lg:col-span-3">

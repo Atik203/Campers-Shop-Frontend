@@ -1,3 +1,4 @@
+import AllOrders from "@/pages/order/AllOrders";
 import OrderHistory from "@/pages/order/OrderHistory";
 import UpdateProduct from "@/pages/product/UpdateProduct";
 import { ClipboardDocumentListIcon } from "@heroicons/react/20/solid";
@@ -32,6 +33,12 @@ export const adminPaths = [
         path: "all-products",
         element: <AllProducts />,
         icon: <TableCellsIcon className="h-6 w-6" />,
+      },
+      {
+        name: "All Orders",
+        path: "all-orders",
+        element: <AllOrders />,
+        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
       },
     ],
   },
