@@ -31,6 +31,7 @@ import {
 } from "@tanstack/react-table";
 import { ChevronDown, Trash2Icon } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import PaginationComponent from "../customUI/PaginationComponent";
@@ -88,18 +89,26 @@ export function OrderTable() {
 
   const columns: ColumnDef<TOrder>[] = [
     {
-      accessorKey: "products[0].images[0]",
+      accessorKey: "Image",
       header: "Image",
-      cell: ({ row }) => (
-        <img
-          src={row.original.products[0]?.images[0]}
-          alt={row.original.products[0]?.title}
-          className="h-16 w-16 object-cover"
-        />
-      ),
+      cell: ({ row }) => {
+        const products = row.original.products;
+        return (
+          <div className="flex flex-col items-end">
+            {products.map((product) => (
+              <img
+                key={product._id}
+                src={product.images[0]}
+                alt={product.title}
+                className="h-16 w-16 object-cover"
+              />
+            ))}
+          </div>
+        );
+      },
     },
     {
-      accessorKey: "products[0].title",
+      accessorKey: "Title",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -109,20 +118,57 @@ export function OrderTable() {
           Title <ChevronDown className="ml-2 h-4 w-4" />
         </Button>
       ),
-      cell: ({ row }) => <div>{row.original.products[0]?.title}</div>,
+      cell: ({ row }) => {
+        const products = row.original.products;
+        return (
+          <div className="flex flex-col gap-6 items-start">
+            {products.map((product, index) => (
+              <Link
+                to={`/product-details/${product._id}`}
+                className="cursor-pointer"
+                key={product._id}
+              >
+                {index + 1}. {product.title}
+              </Link>
+            ))}
+          </div>
+        );
+      },
     },
     {
-      accessorKey: "products[0].category",
+      accessorKey: "Category",
       header: "Category",
-      cell: ({ row }) => <div>{row.original.products[0]?.category}</div>,
+      cell: ({ row }) => {
+        const products = row.original.products;
+        return (
+          <div className="flex flex-col gap-6 items-start">
+            {products.map((product, index) => (
+              <h1 key={product._id}>
+                {index + 1}. {product.category}
+              </h1>
+            ))}
+          </div>
+        );
+      },
     },
     {
-      accessorKey: "products[0].quantity",
+      accessorKey: "Quantity",
       header: "Quantity",
-      cell: ({ row }) => <div>{row.original.products[0]?.quantity || 1}</div>,
+      cell: ({ row }) => {
+        const products = row.original.products;
+        return (
+          <div className="flex flex-col gap-6 items-start">
+            {products.map((product, index) => (
+              <h1 key={product._id}>
+                {index + 1}. {product.quantity || 1}pcs
+              </h1>
+            ))}
+          </div>
+        );
+      },
     },
     {
-      accessorKey: "orderData.firstName",
+      accessorKey: "Customer Name",
       header: "Customer Name",
       cell: ({ row }) => (
         <div>
@@ -131,18 +177,50 @@ export function OrderTable() {
       ),
     },
     {
-      accessorKey: "orderData.time",
+      accessorKey: "Order Time",
       header: "Order Time",
       cell: ({ row }) => <div>{row.original.orderData.time}</div>,
     },
     {
-      accessorKey: "orderData.status",
+      accessorKey: "Order Number",
+      header: "Order Number",
+      cell: ({ row }) => <div>{row.original.orderData.orderNumber}</div>,
+    },
+    {
+      accessorKey: "Payment & Delivery Method",
+      header: "Payment & Delivery Method",
+      cell: ({ row }) => {
+        const { paymentMethod, deliveryMethod } = row.original.orderData;
+        return (
+          <div className="">
+            <h1>
+              {paymentMethod} & {deliveryMethod}
+            </h1>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "Total Payment",
+      header: "Total Payment",
+      cell: ({ row }) => (
+        <div>
+          $
+          {row.original.products.reduce(
+            (acc, product) => acc + product.price * (product.quantity || 1),
+            0
+          )}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "Status",
       header: "Status",
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="cursor-pointer">
-              {row.original.orderData.status}{" "}
+            <Button variant="outline" className="cursor-pointer text-sm">
+              {row.original.orderData.status}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -150,7 +228,8 @@ export function OrderTable() {
             {STATUS.map((status) => (
               <DropdownMenuCheckboxItem
                 key={status}
-                className="capitalize cursor-pointer"
+                style={{ fontWeight: "normal", fontSize: "1rem" }}
+                className="capitalize cursor-pointer text-sm"
                 checked={status === row.original.orderData.status}
                 onCheckedChange={() =>
                   handleStatusChange(row.original._id!, status)
@@ -164,7 +243,7 @@ export function OrderTable() {
       ),
     },
     {
-      accessorKey: "actions",
+      accessorKey: "Actions",
       enableHiding: false,
       cell: ({ row }) => {
         const order = row.original;
@@ -255,7 +334,14 @@ export function OrderTable() {
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      style={{
+                        fontWeight: "bold",
+                        color: "black",
+                        fontSize: "14px",
+                      }}
+                      key={header.id}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -270,7 +356,13 @@ export function OrderTable() {
             <TableBody>
               {table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id}>
+                  <TableRow
+                    style={{
+                      color: "black",
+                      fontSize: "14px",
+                    }}
+                    key={row.id}
+                  >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
                         {flexRender(

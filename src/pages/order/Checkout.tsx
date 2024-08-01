@@ -94,8 +94,6 @@ export default function Checkout() {
   ) => {
     try {
       const result = await CreateOrder(order).unwrap();
-
-      console.log(result);
       if (result.success) {
         dispatch(addOrder({ products, orderData }));
         products.forEach((product) => dispatch(removeCartProduct(product._id)));
@@ -130,24 +128,32 @@ export default function Checkout() {
       return;
     }
 
-    if (selectedPaymentMethod.id === "stripe") {
+    if (selectedPaymentMethod.id === "Stripe") {
       const paymentMethod = await handleStripePayment(data, toastId);
-      if (paymentMethod) {
-        const orderData = {
-          ...orderProductData.orderData,
-          paymentDetails: {
-            paymentType: selectedPaymentMethod.id as "COD" | "Stripe",
-            cardPaymentDetails: {
-              transactionId: paymentMethod.id,
-              brand: paymentMethod.card?.brand || "",
-              cardLast4: paymentMethod.card?.last4 || "",
-              expireMonth: paymentMethod.card?.exp_month?.toString() || "",
-              expireYear: paymentMethod.card?.exp_year?.toString() || "",
-            },
+      const orderData = {
+        ...orderProductData.orderData,
+        paymentDetails: {
+          paymentType: selectedPaymentMethod.id as string,
+          cardPaymentDetails: {
+            transactionId: paymentMethod?.id,
+            brand: paymentMethod?.card?.brand,
+            cardLast4: paymentMethod?.card?.last4,
+            expireMonth: paymentMethod?.card?.exp_month?.toString(),
+            expireYear: paymentMethod?.card?.exp_year?.toString(),
           },
-        };
-        placeOrder(orderData, toastId, orderProductData as TSubmitOrder);
-      }
+        },
+      };
+
+      const updatedOrderProductData = {
+        products: orderProductData.products,
+        orderData,
+      };
+
+      await placeOrder(
+        orderData as TOrderData,
+        toastId,
+        updatedOrderProductData as TSubmitOrder
+      );
     } else {
       const orderData = {
         ...orderProductData.orderData,
@@ -155,9 +161,10 @@ export default function Checkout() {
           paymentType: selectedPaymentMethod.id,
         },
       };
-      placeOrder(orderData, toastId, orderProductData as TSubmitOrder);
+      await placeOrder(orderData, toastId, orderProductData as TSubmitOrder);
     }
   };
+
   const subtotal = products.reduce(
     (acc, product) => acc + product.price * (product?.quantity ?? 1),
     0

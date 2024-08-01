@@ -47,6 +47,6 @@ export const createOrderData = (
       productId: product._id,
       quantity: product.quantity,
     })),
+    status: "Order Placed",
   },
-  status: "Order Placed",
 });
