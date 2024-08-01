@@ -15,7 +15,7 @@ const orderApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Order"],
+      invalidatesTags: ["Order", "Product"],
     }),
 
     getSingleOrder: builder.query({
@@ -31,7 +31,7 @@ const orderApi = baseApi.injectEndpoints({
         url: `order/delete-order/${id}/`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Order"],
+      invalidatesTags: ["Order", "Product"],
     }),
   }),
 });

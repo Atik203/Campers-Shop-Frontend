@@ -1,12 +1,14 @@
-import { useAppSelector } from "@/redux/hooks";
-import { RootState } from "@/redux/store";
+import { useGetAllOrdersQuery } from "@/redux/features/order/orderApi";
+import { TOrder } from "@/types";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
 export default function OrderHistory() {
-  const orders = useAppSelector(
-    (state: RootState) => state.product.orderedProducts
-  );
+  // const orders = useAppSelector((state: RootState) => state.order.orders);
+
+  const { data, isLoading, isError } = useGetAllOrdersQuery(undefined);
+
+  const orders: TOrder[] = data?.data || [];
 
   const total = orders.reduce((acc, order) => {
     const orderTotal = order.products.reduce((orderAcc, product) => {
@@ -14,6 +16,14 @@ export default function OrderHistory() {
     }, 0);
     return acc + orderTotal;
   }, 0);
+
+  if (isLoading || isError) {
+    return (
+      <div className="mt-5 text-center text-gray-500">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div>
