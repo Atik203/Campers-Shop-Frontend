@@ -8,13 +8,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useGetAllOrdersQuery } from "@/redux/features/order/orderApi";
 import { useGetAllProductsQuery } from "@/redux/features/product/productApi";
+import { TOrder } from "@/types";
 import { TProduct } from "@/types/product.types";
 
+function calculateTotal(orders: TOrder[]): number {
+  return orders.reduce((overallTotal, order) => {
+    const orderTotal = order.products.reduce((total, product) => {
+      return total + product.price * (product.quantity || 1);
+    }, 0);
+    return overallTotal + orderTotal;
+  }, 0);
+}
 export function BasicDashboard() {
   const { data, isFetching, isLoading } = useGetAllProductsQuery("page=1");
+  const {
+    data: orderData,
+    isLoading: isOrderLoading,
+    isFetching: isOrderFetching,
+  } = useGetAllOrdersQuery(undefined);
 
-  if (isFetching || isLoading) {
+  if (isFetching || isLoading || isOrderLoading || isOrderFetching) {
     return (
       <div className="min-h-screen text-center mt-5 text-lg text-gray-600">
         Loading...
@@ -22,14 +37,14 @@ export function BasicDashboard() {
     );
   }
   const products = data?.data as TProduct[];
+  const orders: TOrder[] = orderData?.data;
 
-  const totalSales = products.reduce((acc, product) => {
-    return acc + product.price * product.stock;
-  }, 0);
+  const totalSales = calculateTotal(orders);
 
   const rounded = Math.ceil(totalSales);
 
   const totalProducts = products.length;
+  const totalOrders = orders?.length;
 
   return (
     <div className="flex flex-col h-full w-full bg-background text-foreground">
@@ -59,7 +74,7 @@ export function BasicDashboard() {
             <CardTitle>New Orders</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-bold">28</div>
+            <div className="text-4xl font-bold">{totalOrders}</div>
             <p className="text-sm text-muted-foreground">+4 from last week</p>
           </CardContent>
         </Card>
@@ -71,7 +86,7 @@ export function BasicDashboard() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Order</TableHead>
+                  <TableHead>Order Number</TableHead>
                   <TableHead>Customer</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>Amount</TableHead>
@@ -79,33 +94,23 @@ export function BasicDashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
-                  <TableCell>#1234</TableCell>
-                  <TableCell>Jane Doe</TableCell>
-                  <TableCell>2024-07-25</TableCell>
-                  <TableCell>$49.99</TableCell>
-                  <TableCell>
-                    <Badge variant="secondary">Fulfilled</Badge>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>#1235</TableCell>
-                  <TableCell>John Smith</TableCell>
-                  <TableCell>2024-08-12</TableCell>
-                  <TableCell>$99.99</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">Pending</Badge>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>#1236</TableCell>
-                  <TableCell>Sarah Johnson</TableCell>
-                  <TableCell>2024-07-30</TableCell>
-                  <TableCell>$79.99</TableCell>
-                  <TableCell>
-                    <Badge variant="secondary">Fulfilled</Badge>
-                  </TableCell>
-                </TableRow>
+                {orders?.map((order: TOrder) => {
+                  return (
+                    <TableRow key={order._id}>
+                      <TableCell>{order.orderData.orderNumber}</TableCell>
+                      <TableCell>
+                        {order.orderData.firstName} {order.orderData.lastName}
+                      </TableCell>
+                      <TableCell>{order.orderData.time}</TableCell>
+                      <TableCell>${calculateTotal([order])}</TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">
+                          {order.orderData.status}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </CardContent>
