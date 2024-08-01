@@ -178,7 +178,7 @@ const InvoiceDocument = ({ order }: { order: TOrder }) => (
             <Text style={[styles.text, { fontWeight: "bold", color: "green" }]}>
               Transaction ID:
               {order.orderData.paymentDetails.cardPaymentDetails
-                ?.transactionId || "pm-dkhl45435k0934h"}
+                ?.transactionId || " pm-dkhl45435k0934hb2"}
             </Text>
           )}
         </View>
