@@ -27,6 +27,18 @@ export default function OrderHistory() {
       </div>
     );
   }
+  const formatDate = (isoString: string) => {
+    const date = new Date(isoString);
+    return date.toLocaleString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true,
+    });
+  };
 
   return (
     <div>
@@ -188,7 +200,7 @@ export default function OrderHistory() {
                           {order.orderData.status} on{" "}
                           {order.orderData.status === "Order Placed"
                             ? order.orderData.time
-                            : order.updatedAt}
+                            : formatDate(order.updatedAt as string)}
                         </p>
                         <div className="mt-6" aria-hidden="true">
                           <div className="overflow-hidden rounded-full bg-gray-200">
