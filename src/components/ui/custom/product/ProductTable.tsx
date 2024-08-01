@@ -164,7 +164,7 @@ export function ProductTable() {
               <Edit3 className="h-5 w-5" />
             </Link>
             <Button
-              onClick={() => handleDeleteProduct(product._id)}
+              onClick={() => handleDeleteProduct(product._id as string)}
               className="h-8 w-8 px-2 py-1 rounded-md bg-red-500 text-white"
             >
               <Trash2 className="h-5 w-5" />
