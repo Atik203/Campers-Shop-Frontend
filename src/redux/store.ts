@@ -8,6 +8,7 @@ import {
   REHYDRATE,
 } from "redux-persist";
 import { baseApi } from "./api/baseApi";
+import orderReducer, { OrderState } from "./features/order/orderSlice";
 import productReducer, { ProductState } from "./features/product/productSlice";
 import searchReducer, { SearchState } from "./features/product/searchSlice";
 
@@ -16,6 +17,7 @@ export const store = configureStore({
     [baseApi.reducerPath]: baseApi.reducer,
     search: searchReducer,
     product: productReducer,
+    order: orderReducer,
   },
   middleware: (getDefaultMiddlewares) =>
     getDefaultMiddlewares({
@@ -29,6 +31,7 @@ export const store = configureStore({
 export type RootState = {
   search: SearchState;
   product: ProductState;
+  order: OrderState;
   [baseApi.reducerPath]: ReturnType<typeof baseApi.reducer>;
 };
 export type AppDispatch = typeof store.dispatch;
