@@ -7,6 +7,7 @@ import { routeGenerator } from "@/utils/routeGenerator";
 import { createBrowserRouter } from "react-router-dom";
 import ErrorPage from "../pages/ErrorPage";
 
+import InvoicePage from "@/components/ui/custom/order/InvoicePage";
 import ProductDetails from "@/pages/product/ProductDetails";
 import Products from "@/pages/product/Products";
 import WhishList from "@/pages/WishList";
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
     element: <DashboardLayout />,
     // @ts-expect-error disable error
     children: routeGenerator(adminPaths),
+  },
+  {
+    path: "/invoice/:id",
+    element: <InvoicePage />,
   },
 ]);
 

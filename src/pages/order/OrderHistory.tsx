@@ -99,9 +99,13 @@ export default function OrderHistory() {
                           </div>
                         </dl>
                         <div className="mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
-                          <p className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 md:w-auto">
+                          <a
+                            href={`/invoice/${order._id}`}
+                            target="_blank"
+                            className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 md:w-auto"
+                          >
                             View Invoice
-                          </p>
+                          </a>
                         </div>
                       </div>
 
