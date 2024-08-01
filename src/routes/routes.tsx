@@ -3,13 +3,13 @@ import Cart from "@/pages/Cart";
 import Checkout from "@/pages/order/Checkout";
 import SuccessOrder from "@/pages/order/SuccessOrder";
 
-import WishList from "@/pages/WishList";
 import { routeGenerator } from "@/utils/routeGenerator";
 import { createBrowserRouter } from "react-router-dom";
 import ErrorPage from "../pages/ErrorPage";
 
 import ProductDetails from "@/pages/product/ProductDetails";
 import Products from "@/pages/product/Products";
+import WhishList from "@/pages/WishList";
 import DashboardLayout from "./../components/layout/DashboardLayout";
 import MainLayout from "./../components/layout/MainLayout";
 import Contact from "./../pages/Contact";
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/wishlist",
-        element: <WishList />,
+        element: <WhishList />,
       },
       {
         path: "/cart",

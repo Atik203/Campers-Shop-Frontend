@@ -15,7 +15,7 @@ export default function OrderHistory() {
 
   const total = orders.reduce((acc, order) => {
     const orderTotal = order.products.reduce((orderAcc, product) => {
-      return orderAcc + product.price * product.quantity!;
+      return orderAcc + product.price * (product.quantity! || 1);
     }, 0);
     return acc + orderTotal;
   }, 0);
