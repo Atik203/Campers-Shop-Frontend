@@ -1,9 +1,12 @@
 import { FormInput } from "@/components/form/FormInput";
 import { FormWrapper } from "@/components/form/FormWrapper";
+import MultiColorPicker, {
+  TColor,
+} from "@/components/ui/custom/customUI/MultiColorPicker";
+import MultipleImageUploader from "@/components/ui/custom/customUI/MultipleImageUploader";
+import MultiSelect from "@/components/ui/custom/customUI/MultiSelect";
 import { Label } from "@/components/ui/label";
-import MultiColorPicker, { TColor } from "@/components/ui/MultiColorPicker";
-import MultipleImageUploader from "@/components/ui/MultipleImageUploader";
-import MultiSelect from "@/components/ui/MultiSelect";
+
 import {
   useGetSingleProductQuery,
   useUpdateProductMutation,

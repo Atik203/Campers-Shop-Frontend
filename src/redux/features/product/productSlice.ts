@@ -1,4 +1,4 @@
-import { CheckoutFormInputs } from "@/pages/Checkout";
+import { CheckoutFormInputs } from "@/pages/order/Checkout";
 import { TProduct } from "@/types/product.types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type FilterOption = {

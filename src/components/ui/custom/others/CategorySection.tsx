@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import TitleDescriptionBlock from "../TitleDescriptionBlock";
+import TitleDescriptionBlock from "../customUI/TitleDescriptionBlock";
 
 const categories = [
   {

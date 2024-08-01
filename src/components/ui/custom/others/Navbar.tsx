@@ -13,10 +13,11 @@ import {
 import { ShoppingCartIcon, StarIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
+import NavLogo from "../customUI/NavLogo";
+import SearchBar from "../customUI/SearchBar";
+
+import TooltipIcons from "../customUI/ToolTipIcons";
 import MobileMenuButton from "./MobileMenuButton";
-import NavLogo from "./NavLogo";
-import SearchBar from "./SearchBar";
-import TooltipIcons from "./ToolTipIcons";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");

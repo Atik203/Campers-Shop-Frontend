@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
-import { ScrollArea } from "./scroll-area";
+import { ScrollArea } from "../../scroll-area";
 
 export interface TColor {
   name: string;

@@ -1,4 +1,4 @@
-import ContactSection from "@/components/ui/ContactSection";
+import ContactSection from "@/components/ui/custom/others/ContactSection";
 
 const stats = [
   { label: "Happy Customers", value: "10,000+" },

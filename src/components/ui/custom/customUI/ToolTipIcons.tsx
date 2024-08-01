@@ -1,6 +1,6 @@
 import { FC } from "react";
+import { TooltipProvider } from "../../tooltip";
 import TooltipIcon, { TIcon } from "./TooltipIcon";
-import { TooltipProvider } from "./tooltip";
 
 interface TooltipIconsProps {
   className: string;

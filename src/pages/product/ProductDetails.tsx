@@ -1,10 +1,12 @@
-import ProductDetailsSkeleton from "@/components/ui/ProductDetailsSkeleton";
+import ProductDetailsSkeleton from "@/components/ui/custom/customUI/ProductDetailsSkeleton";
+import ReviewSection from "@/components/ui/custom/customUI/ReviewSection";
 import { useGetSingleProductQuery } from "@/redux/features/product/productApi";
 import {
   addTOCart,
   addToWishlist,
   updateCartProduct,
 } from "@/redux/features/product/productSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 import { RootState } from "@/redux/store";
 import { TProduct, TReview } from "@/types/product.types";
@@ -25,8 +27,6 @@ import { useState } from "react";
 import ReactImageMagnify from "react-image-magnify";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
-import ReviewSection from "../components/ui/ReviewSection";
-import { useAppDispatch, useAppSelector } from "./../redux/hooks";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");

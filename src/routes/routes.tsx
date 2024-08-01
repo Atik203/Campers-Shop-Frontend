@@ -1,13 +1,15 @@
 import About from "@/pages/About";
 import Cart from "@/pages/Cart";
-import Checkout from "@/pages/Checkout";
-import ProductDetails from "@/pages/ProductDetails";
-import SuccessOrder from "@/pages/SuccessOrder";
+import Checkout from "@/pages/order/Checkout";
+import SuccessOrder from "@/pages/order/SuccessOrder";
+
 import WishList from "@/pages/WishList";
 import { routeGenerator } from "@/utils/routeGenerator";
 import { createBrowserRouter } from "react-router-dom";
 import ErrorPage from "../pages/ErrorPage";
-import Products from "../pages/Products";
+
+import ProductDetails from "@/pages/product/ProductDetails";
+import Products from "@/pages/product/Products";
 import DashboardLayout from "./../components/layout/DashboardLayout";
 import MainLayout from "./../components/layout/MainLayout";
 import Contact from "./../pages/Contact";
@@ -61,6 +63,7 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <DashboardLayout />,
+    // @ts-expect-error disable error
     children: routeGenerator(adminPaths),
   },
 ]);

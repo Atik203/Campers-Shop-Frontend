@@ -32,8 +32,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
-import PaginationComponent from "../PaginationComponent";
-import { TableSkeleton } from "./TableSkeleton";
+import PaginationComponent from "../customUI/PaginationComponent";
+import { TableSkeleton } from "../others/TableSkeleton";
 
 export type Product = {
   _id?: string;

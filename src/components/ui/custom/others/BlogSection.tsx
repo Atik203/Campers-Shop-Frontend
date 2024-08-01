@@ -1,4 +1,4 @@
-import TitleDescriptionBlock from "../TitleDescriptionBlock";
+import TitleDescriptionBlock from "../customUI/TitleDescriptionBlock";
 
 const blogPosts = [
   {

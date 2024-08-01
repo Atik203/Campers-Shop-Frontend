@@ -1,4 +1,4 @@
-import { ProductTable } from "@/components/ui/custom/ProductTable";
+import { ProductTable } from "@/components/ui/custom/product/ProductTable";
 
 const AllProducts = () => {
   return (

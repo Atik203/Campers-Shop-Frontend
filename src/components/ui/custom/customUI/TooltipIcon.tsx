@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../tooltip";
 
 export type TIcon = React.ComponentType<React.ComponentProps<"svg">>;
 interface TooltipIconProps {
