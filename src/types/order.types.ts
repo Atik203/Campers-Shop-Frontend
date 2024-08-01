@@ -1,5 +1,13 @@
 import { TProduct } from "./product.types";
 
+export const STATUS = [
+  "Order Placed",
+  "Processing",
+  "Shipped",
+  "Delivered",
+  "Cancelled",
+];
+
 export type TCardPaymentDetails = {
   _id?: string;
   brand?: string;
@@ -33,12 +41,14 @@ export interface TOrderData {
     productId?: string;
     quantity?: number;
   }[];
+  status: string;
 }
 
 export interface TOrder {
   _id?: string;
   products: TProduct[];
   orderData: TOrderData;
+  updatedAt?: string;
 }
 
 export interface TSubmitOrder {

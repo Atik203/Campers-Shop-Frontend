@@ -431,7 +431,7 @@ export default function Checkout() {
               </fieldset>
 
               <div>
-                {selectedPaymentMethod.id === "stripe" ? (
+                {selectedPaymentMethod.id === "Stripe" ? (
                   <div className="max-w-md mx-auto my-6 bg-slate-100 p-12 shadow-md h-10">
                     <CardElement />
                   </div>
