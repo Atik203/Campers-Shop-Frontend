@@ -1,8 +1,8 @@
 import { useGetAllProductsQuery } from "@/redux/features/product/productApi";
 import { TProduct } from "@/types/product.types";
-import { CardSkeleton } from "../CardSkeleton";
-import ProductCardGrid from "../ProductCardGrid";
-import TitleDescriptionBlock from "../TitleDescriptionBlock";
+import { CardSkeleton } from "../customUI/CardSkeleton";
+import ProductCardGrid from "../customUI/ProductCardGrid";
+import TitleDescriptionBlock from "../customUI/TitleDescriptionBlock";
 
 const shuffleArray = (array: TProduct[]) => {
   const arrayCopy = [...array]; // Create a copy of the array

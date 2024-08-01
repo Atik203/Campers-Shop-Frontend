@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { CardSkeleton } from "@/components/ui/CardSkeleton";
-import { CardSkeletonList } from "@/components/ui/CardSkeletonList";
-import NoDataFound from "@/components/ui/NoDataFound";
+import { CardSkeleton } from "@/components/ui/custom/customUI/CardSkeleton";
+import { CardSkeletonList } from "@/components/ui/custom/customUI/CardSkeletonList";
+
+import NoDataFound from "@/components/ui/custom/customUI/NoDataFound";
+import PaginationComponent from "@/components/ui/custom/customUI/PaginationComponent";
+import { PriceRangeFilter } from "@/components/ui/custom/customUI/PriceRangeFilter";
+import ProductCardGrid from "@/components/ui/custom/customUI/ProductCardGrid";
+import ProductCardList from "@/components/ui/custom/customUI/ProductCardList";
 import {
   Tooltip,
   TooltipContent,
@@ -36,10 +41,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ListIcon } from "lucide-react";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import ProductCardGrid from "../components/ui/ProductCardGrid";
-import ProductCardList from "../components/ui/ProductCardList";
-import PaginationComponent from "./../components/ui/PaginationComponent";
-import { PriceRangeFilter } from "./../components/ui/PriceRangeFilter";
+
 const sortOptions = [
   { name: "Default", value: "" },
   { name: "Best Rating", value: "rating" },

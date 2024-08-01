@@ -5,8 +5,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Rating } from "../Rating";
-import TitleDescriptionBlock from "../TitleDescriptionBlock";
+
+import { Rating } from "../customUI/Rating";
+import TitleDescriptionBlock from "../customUI/TitleDescriptionBlock";
 
 const reviews = [
   {

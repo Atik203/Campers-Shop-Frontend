@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Star } from "lucide-react";
 import React, { useState } from "react";
-import { Badge } from "./badge";
+import { Badge } from "../../badge";
 
 interface RatingProps {
   rating: number;

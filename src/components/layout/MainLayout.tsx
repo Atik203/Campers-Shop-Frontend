@@ -4,9 +4,9 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { formatProductFilters } from "@/utils/formatProductsFilters";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import Banner from "../ui/Banner";
-import Footer from "../ui/Footer";
-import Navbar from "../ui/Navbar";
+import Banner from "../ui/custom/customUI/Banner";
+import Footer from "../ui/custom/others/Footer";
+import Navbar from "../ui/custom/others/Navbar";
 
 const MainLayout = () => {
   const queryStrings = "page=1";

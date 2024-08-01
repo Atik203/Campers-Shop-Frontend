@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import NavLogo from "./NavLogo";
+
+import NavLogo from "../customUI/NavLogo";
 
 const navigation = {
   solutions: [

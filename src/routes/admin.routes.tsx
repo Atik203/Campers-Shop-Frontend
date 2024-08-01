@@ -1,5 +1,5 @@
-import OrderHistory from "@/pages/OrderHistory";
-import UpdateProduct from "@/pages/UpdateProduct";
+import OrderHistory from "@/pages/order/OrderHistory";
+import UpdateProduct from "@/pages/product/UpdateProduct";
 import { ClipboardDocumentListIcon } from "@heroicons/react/20/solid";
 import {
   Cog6ToothIcon,
@@ -7,8 +7,8 @@ import {
   PlusCircleIcon,
   TableCellsIcon,
 } from "@heroicons/react/24/solid";
-import AddProduct from "../pages/AddProduct";
-import AllProducts from "../pages/AllProducts";
+import AddProduct from "../pages/product/AddProduct";
+import AllProducts from "../pages/product/AllProducts";
 import Dashboard from "./../pages/Dashboard";
 export const adminPaths = [
   {
