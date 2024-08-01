@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  addOrderedProducts,
-  removeCartProduct,
-} from "@/redux/features/product/productSlice";
+import { addOrder } from "@/redux/features/order/orderSlice";
+import { removeCartProduct } from "@/redux/features/product/productSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
+import { TOrderData } from "@/types";
 import { TProduct } from "@/types/product.types";
+import { createOrderData } from "@/utils/createOrder";
 import { RadioGroup } from "@headlessui/react";
 import { CheckCircleIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
@@ -13,7 +12,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
 const deliveryMethods = [
   {
     id: 1,
@@ -30,35 +28,12 @@ const deliveryMethods = [
 ];
 
 const paymentMethods = [
-  { id: "cash-on-delivery", title: "Cash on delivery" },
-  { id: "stripe", title: "Stripe" },
+  { id: "COD", title: "Cash on delivery" },
+  { id: "Stripe", title: "Stripe" },
 ];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
-}
-
-export type CardPaymentDetails = {
-  brand: string;
-  cardLast4: string;
-  expireMonth: string;
-  expireYear: string;
-  transitionId: string;
-};
-
-export interface CheckoutFormInputs {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  city: string;
-  postalCode: string;
-  paymentMethod?: string;
-  deliveryMethod?: string;
-  paymentDetails?: CardPaymentDetails | string;
-  time: string;
-  orderNumber: string;
 }
 
 export default function Checkout() {
@@ -71,7 +46,7 @@ export default function Checkout() {
   );
   const dispatch = useAppDispatch();
 
-  const { register, handleSubmit } = useForm<CheckoutFormInputs>();
+  const { register, handleSubmit } = useForm<TOrderData>();
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
     deliveryMethods[0]
   );
@@ -79,32 +54,8 @@ export default function Checkout() {
     paymentMethods[0]
   );
 
-  const createOrderData = (data: CheckoutFormInputs) => ({
-    products,
-    orderData: {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      phone: data.phone,
-      address: data.address,
-      city: data.city,
-      postalCode: data.postalCode,
-      deliveryMethod: selectedDeliveryMethod.title,
-      paymentMethod: selectedPaymentMethod.title,
-      time: new Date().toLocaleString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      }), // e.g. "September 20, 2021, 3:48:00 PM"
-      orderNumber: uuidv4().slice(0, 18),
-    },
-  });
   const handleStripePayment = async (
-    data: CheckoutFormInputs,
+    data: TOrderData,
     toastId: number | string
   ) => {
     if (!stripe || !elements) {
@@ -131,20 +82,24 @@ export default function Checkout() {
       toast.error("Payment failed. Please try again.", { id: toastId });
       return null;
     }
-
     return paymentMethod;
   };
 
-  const placeOrder = (orderData: any, toastId: number | string) => {
-    dispatch(addOrderedProducts({ products, orderData }));
+  const placeOrder = (orderData: TOrderData, toastId: number | string) => {
+    dispatch(addOrder({ products, orderData }));
     products.forEach((product) => dispatch(removeCartProduct(product._id)));
     toast.success("Order placed successfully.", { id: toastId });
     navigate("/success-order");
   };
 
-  const onSubmit = async (data: CheckoutFormInputs) => {
+  const onSubmit = async (data: TOrderData) => {
     const toastId = toast.loading("Processing Order...");
-    const orderProductData = createOrderData(data);
+    const orderProductData = createOrderData(
+      data,
+      products,
+      selectedDeliveryMethod,
+      selectedPaymentMethod
+    );
 
     if (!orderProductData.products.length) {
       toast.error("No products in cart.", { id: toastId });
@@ -163,11 +118,14 @@ export default function Checkout() {
         const orderData = {
           ...orderProductData.orderData,
           paymentDetails: {
-            transitionId: paymentMethod.id,
-            brand: paymentMethod.card?.brand,
-            cardLast4: paymentMethod.card?.last4,
-            expireMonth: paymentMethod.card?.exp_month,
-            expireYear: paymentMethod.card?.exp_year,
+            paymentType: selectedPaymentMethod.id as "COD" | "Stripe",
+            cardPaymentDetails: {
+              transactionId: paymentMethod.id,
+              brand: paymentMethod.card?.brand || "",
+              cardLast4: paymentMethod.card?.last4 || "",
+              expireMonth: paymentMethod.card?.exp_month?.toString() || "",
+              expireYear: paymentMethod.card?.exp_year?.toString() || "",
+            },
           },
         };
         placeOrder(orderData, toastId);
@@ -175,12 +133,13 @@ export default function Checkout() {
     } else {
       const orderData = {
         ...orderProductData.orderData,
-        paymentDetails: "Cash on delivery",
+        paymentDetails: {
+          paymentType: selectedPaymentMethod.id,
+        },
       };
       placeOrder(orderData, toastId);
     }
   };
-
   const subtotal = products.reduce(
     (acc, product) => acc + product.price * (product?.quantity ?? 1),
     0

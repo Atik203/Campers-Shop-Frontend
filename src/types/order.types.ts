@@ -2,16 +2,16 @@ import { TProduct } from "./product.types";
 
 export type TCardPaymentDetails = {
   _id?: string;
-  brand: string;
-  cardLast4: string;
-  expireMonth: string;
-  expireYear: string;
-  transitionId: string;
+  brand?: string;
+  cardLast4?: string;
+  expireMonth?: string;
+  expireYear?: string;
+  transactionId: string;
 };
 
 export type TPaymentDetails = {
   _id?: string;
-  paymentType: "COD" | "Stripe";
+  paymentType: string;
   cardPaymentDetails?: TCardPaymentDetails;
 };
 
@@ -29,7 +29,10 @@ export interface TOrderData {
   paymentDetails?: TPaymentDetails;
   time: string;
   orderNumber: string;
-  quantity: number;
+  productQuantity?: {
+    productId?: string;
+    quantity?: number;
+  }[];
 }
 
 export interface TOrder {
@@ -37,3 +40,15 @@ export interface TOrder {
   products: TProduct[];
   orderData: TOrderData;
 }
+
+export type TDeliveryMethod = {
+  id: number;
+  title: string;
+  price: number;
+  turnaround: string;
+};
+
+export type TPaymentMethod = {
+  id: string;
+  title: string;
+};

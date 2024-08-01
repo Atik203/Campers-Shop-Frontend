@@ -1,4 +1,3 @@
-import { CheckoutFormInputs } from "@/pages/order/Checkout";
 import { TProduct } from "@/types/product.types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type FilterOption = {
@@ -13,25 +12,16 @@ type Filter = {
   options: FilterOption[];
 };
 
-export type TOrderProducts = {
-  products: TProduct[];
-  orderData: CheckoutFormInputs;
-};
-
 export interface ProductState {
   cartProducts: TProduct[];
   wishlistProducts: TProduct[];
   filters: Filter[];
-  orderedProducts: TOrderProducts[];
-  currentOrder: TOrderProducts | null;
 }
 
 const initialState: ProductState = {
   cartProducts: [],
   wishlistProducts: [],
   filters: [],
-  orderedProducts: [],
-  currentOrder: null,
 };
 
 const productSlide = createSlice({
@@ -97,32 +87,6 @@ const productSlide = createSlice({
         return product;
       });
     },
-    addOrderedProducts: (
-      state,
-      action: PayloadAction<{
-        products: TProduct[];
-        orderData: CheckoutFormInputs;
-      }>
-    ) => {
-      const { products, orderData } = action.payload;
-
-      // Append the new order to the orderedProducts array
-      state.orderedProducts = [
-        ...state.orderedProducts,
-        {
-          products,
-          orderData,
-        },
-      ];
-
-      state.currentOrder = {
-        products: action.payload.products,
-        orderData: action.payload.orderData,
-      };
-    },
-    removeCurrentOrders: (state) => {
-      state.currentOrder = null;
-    },
   },
 });
 
@@ -135,8 +99,6 @@ export const {
   updateCartProduct,
   incrementCartQuantity,
   decrementCartQuantity,
-  addOrderedProducts,
-  removeCurrentOrders,
 } = productSlide.actions;
 
 export default productSlide.reducer;
