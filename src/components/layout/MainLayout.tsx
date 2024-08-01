@@ -9,7 +9,7 @@ import Footer from "../ui/custom/others/Footer";
 import Navbar from "../ui/custom/others/Navbar";
 
 const MainLayout = () => {
-  const queryStrings = "page=1";
+  const queryStrings = "page=1&limit=100";
   const products = useAppSelector((state) => state.product.cartProducts);
 
   useEffect(() => {

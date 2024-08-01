@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function SuccessOrder() {
   const currentOrder = useAppSelector(
-    (state: RootState) => state.product.currentOrder
+    (state: RootState) => state.order.currentOrder
   );
   const dispatch = useAppDispatch();
   if (currentOrder?.products.length == 0) {
@@ -140,7 +140,7 @@ export default function SuccessOrder() {
               </dd>
             </div>
             <div>
-              {typeof paymentDetails === "object" ? (
+              {paymentDetails?.paymentType === "Stripe" ? (
                 <div>
                   <dt className="font-medium text-gray-900">
                     Payment Information
@@ -166,16 +166,18 @@ export default function SuccessOrder() {
                       <p className="text-gray-900">
                         Transaction ID:{" "}
                         <span className="text-primary font-semibold">
-                          {paymentDetails.transitionId}
+                          {paymentDetails.cardPaymentDetails?.transactionId}
                         </span>
                       </p>
 
                       <p className="text-gray-900">
-                        Ending with {paymentDetails?.cardLast4}
+                        Ending with{" "}
+                        {paymentDetails?.cardPaymentDetails?.cardLast4}
                       </p>
                       <p>
-                        Expires {paymentDetails?.expireMonth} /
-                        {paymentDetails?.expireYear}
+                        Expires{" "}
+                        {paymentDetails?.cardPaymentDetails?.expireMonth} /
+                        {paymentDetails?.cardPaymentDetails?.expireYear}
                       </p>
                       <p>Order Date & TIme: {orderData?.time}</p>
                     </div>
@@ -188,7 +190,7 @@ export default function SuccessOrder() {
                   </dt>
                   <dd className="mt-2 space-y-2 sm:flex sm:space-x-4 sm:space-y-0">
                     <div className="flex-auto">
-                      <p className="text-gray-900">{paymentDetails}</p>
+                      <p className="text-gray-900">Cash on delivery</p>
                       <p className="text-gray-900">
                         Order Date & TIme: {orderData?.time}
                       </p>

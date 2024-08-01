@@ -41,6 +41,11 @@ export interface TOrder {
   orderData: TOrderData;
 }
 
+export interface TSubmitOrder {
+  products: { _id: string }[];
+  orderData: TOrderData;
+}
+
 export type TDeliveryMethod = {
   id: number;
   title: string;

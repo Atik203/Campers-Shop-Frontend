@@ -1,8 +1,9 @@
+import { useCreateOrderMutation } from "@/redux/features/order/orderApi";
 import { addOrder } from "@/redux/features/order/orderSlice";
 import { removeCartProduct } from "@/redux/features/product/productSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
-import { TOrderData } from "@/types";
+import { TOrderData, TSubmitOrder } from "@/types";
 import { TProduct } from "@/types/product.types";
 import { createOrderData } from "@/utils/createOrder";
 import { RadioGroup } from "@headlessui/react";
@@ -53,6 +54,7 @@ export default function Checkout() {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
     paymentMethods[0]
   );
+  const [CreateOrder] = useCreateOrderMutation();
 
   const handleStripePayment = async (
     data: TOrderData,
@@ -85,15 +87,31 @@ export default function Checkout() {
     return paymentMethod;
   };
 
-  const placeOrder = (orderData: TOrderData, toastId: number | string) => {
-    dispatch(addOrder({ products, orderData }));
-    products.forEach((product) => dispatch(removeCartProduct(product._id)));
-    toast.success("Order placed successfully.", { id: toastId });
-    navigate("/success-order");
+  const placeOrder = async (
+    orderData: TOrderData,
+    toastId: number | string,
+    order: TSubmitOrder
+  ) => {
+    try {
+      const result = await CreateOrder(order).unwrap();
+
+      console.log(result);
+      if (result.success) {
+        dispatch(addOrder({ products, orderData }));
+        products.forEach((product) => dispatch(removeCartProduct(product._id)));
+        toast.success("Order placed successfully.", { id: toastId });
+        navigate("/success-order");
+      } else {
+        toast.error("Order failed. Please try again.", { id: toastId });
+      }
+    } catch (error) {
+      toast.error("Order failed. Please try again.", { id: toastId });
+    }
   };
 
   const onSubmit = async (data: TOrderData) => {
     const toastId = toast.loading("Processing Order...");
+
     const orderProductData = createOrderData(
       data,
       products,
@@ -128,7 +146,7 @@ export default function Checkout() {
             },
           },
         };
-        placeOrder(orderData, toastId);
+        placeOrder(orderData, toastId, orderProductData as TSubmitOrder);
       }
     } else {
       const orderData = {
@@ -137,7 +155,7 @@ export default function Checkout() {
           paymentType: selectedPaymentMethod.id,
         },
       };
-      placeOrder(orderData, toastId);
+      placeOrder(orderData, toastId, orderProductData as TSubmitOrder);
     }
   };
   const subtotal = products.reduce(
@@ -202,17 +220,17 @@ export default function Checkout() {
               </div>
               <div className="mt-4">
                 <label
-                  htmlFor="email-address"
+                  htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Email address
                 </label>
                 <div className="mt-1">
                   <input
-                    {...register("email")}
+                    {...register("email", { required: true })}
                     type="email"
-                    id="email-address"
-                    name="emailAddress"
+                    id="email"
+                    name="email"
                     autoComplete="email"
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
