@@ -21,7 +21,12 @@ import {
   TabPanel,
   TabPanels,
 } from "@headlessui/react";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import {
+  CheckIcon,
+  MinusIcon,
+  PlusIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { BookmarkCheck, BookMarked } from "lucide-react";
 import { useState } from "react";
 import ReactImageMagnify from "react-image-magnify";
@@ -347,6 +352,20 @@ export default function ProductDetails() {
                     </button>
                   </div>
                 </div>
+
+                {product.stock ? (
+                  <div className="mt-4">
+                    <p className="flex items-center gap-1">
+                      <CheckIcon className="w-5 h-5" /> In Stock
+                    </p>
+                    <p className="mt-4">Stock: {product.stock} </p>
+                  </div>
+                ) : (
+                  <p className="flex items-center gap-1">
+                    <XMarkIcon className="w-5 h-5" /> Our of Stock
+                  </p>
+                )}
+
                 <button
                   type="button"
                   disabled={
