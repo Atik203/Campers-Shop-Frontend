@@ -41,9 +41,13 @@ const orderSlice = createSlice({
         (order) => order._id !== action.payload
       );
     },
+    removeCurrentOrders: (state) => {
+      state.currentOrder = null;
+    },
   },
 });
 
-export const { addOrder, removeOrder } = orderSlice.actions;
+export const { addOrder, removeOrder, removeCurrentOrders } =
+  orderSlice.actions;
 
 export default orderSlice.reducer;

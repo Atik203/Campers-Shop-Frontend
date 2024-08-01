@@ -1,4 +1,4 @@
-import { removeCurrentOrders } from "@/redux/features/product/productSlice";
+import { removeCurrentOrders } from "@/redux/features/order/orderSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { TProduct } from "@/types/product.types";
