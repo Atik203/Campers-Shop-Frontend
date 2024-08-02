@@ -14,8 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Create or close issue
-        uses: JasonEtco/create-an-issue@v2
+      - name: Create issue
+        uses: JasonEtco/create-an-issue@v2.9.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -26,7 +26,7 @@ jobs:
         if: github.event.action == 'opened'
         
       - name: Close related issue
-        uses: actions/github-script@v7
+        uses: actions/github-script@v7.0.1
         with:
           script: |
             const issueTitle = `PR: ${github.context.payload.pull_request.title}`;
