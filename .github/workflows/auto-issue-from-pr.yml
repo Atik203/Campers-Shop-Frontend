@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.action == 'opened' || github.event.action == 'edited'
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Create Issue from PR
         if: github.event.action == 'opened' || github.event.action == 'edited'
         uses: actions/github-script@v7.0.1
@@ -43,21 +46,29 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.action == 'closed' && github.event.pull_request.merged == true
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Close Related Issue
         uses: actions/github-script@v7.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const prBody = context.payload.pull_request.body;
-            const issueNumberMatch = prBody.match(/Related Issue: #(\d+)/);
+            if (prBody) {
+              const issueNumberMatch = prBody.match(/Related Issue: #(\d+)/);
+              if (issueNumberMatch) {
+                const issueNumber = issueNumberMatch[1];
 
-            if (issueNumberMatch) {
-              const issueNumber = issueNumberMatch[1];
-
-              await github.issues.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                state: 'closed'
-              });
+                await github.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  state: 'closed'
+                });
+              } else {
+                console.log('No issue number found in the pull request body.');
+              }
+            } else {
+              console.log('Pull request body is null.');
             }
