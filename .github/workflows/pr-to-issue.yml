@@ -55,3 +55,13 @@ jobs:
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  auto-close-old-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto Closer
+        uses: lowply/auto-closer@v0.0.6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AC_LABEL: "auto-generated"
+          AC_KEEP: 1
