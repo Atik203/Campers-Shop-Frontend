@@ -30,7 +30,7 @@ const InvoicePage = () => {
             padding: "10px 20px",
             borderRadius: "5px",
             textDecoration: "none",
-            margin: "20px auto",
+            margin: "80px auto",
             width: "fit-content",
           }}
         >
