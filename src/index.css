@@ -25,6 +25,18 @@
   color: hsl(var(--primary-foreground)) !important;
 }
 
+/* Media query for small devices */
+@media (max-width: 640px) {
+  .sider-style {
+    padding: 0.5rem 0 !important;
+    box-shadow: none !important;
+  }
+
+  .sider-menu-style {
+    padding: 2px 0 !important;
+  }
+}
+
 .toast-success {
   background-color: #38a169 !important; /* Green */
 }
