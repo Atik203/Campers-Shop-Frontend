@@ -17,29 +17,34 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { data: issue } = await github.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: context.payload.pull_request.title,
-              body: context.payload.pull_request.body,
-              labels: ['from-pull-request']
-            });
+            try {
+              const { data: issue } = await github.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: context.payload.pull_request.title,
+                body: context.payload.pull_request.body,
+                labels: ['from-pull-request']
+              });
 
-            const issueNumber = issue.number;
+              const issueNumber = issue.number;
 
-            await github.issues.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber,
-              body: `${issue.body}\n\n**Original Pull Request:** #${context.payload.pull_request.number}`
-            });
+              await github.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: `${issue.body}\n\n**Original Pull Request:** #${context.payload.pull_request.number}`
+              });
 
-            await github.pulls.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              body: `${context.payload.pull_request.body}\n\n**Related Issue:** #${issueNumber}`
-            });
+              await github.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                body: `${context.payload.pull_request.body}\n\n**Related Issue:** #${issueNumber}`
+              });
+
+            } catch (error) {
+              core.setFailed(`Action failed with error ${error}`);
+            }
 
   close-issue:
     runs-on: ubuntu-latest
@@ -53,21 +58,25 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prBody = context.payload.pull_request.body;
-            if (prBody) {
-              const issueNumberMatch = prBody.match(/Related Issue: #(\d+)/);
-              if (issueNumberMatch) {
-                const issueNumber = issueNumberMatch[1];
+            try {
+              const prBody = context.payload.pull_request.body;
+              if (prBody) {
+                const issueNumberMatch = prBody.match(/Related Issue: #(\d+)/);
+                if (issueNumberMatch) {
+                  const issueNumber = issueNumberMatch[1];
 
-                await github.issues.update({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issueNumber,
-                  state: 'closed'
-                });
+                  await github.issues.update({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issueNumber,
+                    state: 'closed'
+                  });
+                } else {
+                  console.log('No issue number found in the pull request body.');
+                }
               } else {
-                console.log('No issue number found in the pull request body.');
+                console.log('Pull request body is null.');
               }
-            } else {
-              console.log('Pull request body is null.');
+            } catch (error) {
+              core.setFailed(`Action failed with error ${error}`);
             }
