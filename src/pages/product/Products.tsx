@@ -31,13 +31,8 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import {
-  FunnelIcon,
-  MinusIcon,
-  PlusIcon,
-  Squares2X2Icon,
-} from "@heroicons/react/20/solid";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { MinusIcon, PlusIcon, Squares2X2Icon } from "@heroicons/react/20/solid";
+import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ListIcon } from "lucide-react";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -225,7 +220,7 @@ const Products = () => {
                                 <span className="font-medium text-gray-900">
                                   {section.name}
                                 </span>
-                                <span className="ml-6 flex items-center">
+                                <span className="ml-5 flex items-center">
                                   {open ? (
                                     <MinusIcon
                                       className="h-5 w-5"
@@ -295,15 +290,15 @@ const Products = () => {
 
         <main className="mx-auto max-w-7xl px-4 lg:px-0">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-16">
-            <h1 className="text-base md:text-4xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-base md:text-4xl font-medium md:font-bold tracking-tight text-gray-900">
               ALl Products
             </h1>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 md:gap-2">
               <Menu as="div" className="relative inline-block text-left">
                 <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                  <div className="flex justify-center items-center gap-2">
+                  <div className="flex justify-center items-center gap-1 md:gap-2">
                     Sort
-                    <span className="bg-slate-200 px-2 py-2 text-center flex justify-center items-center">
+                    <span className="bg-slate-200 px-2 py-2 text-sm text-center flex justify-center items-center">
                       {selectedSort ? `${selectedSortLabel}` : "Default"}
                     </span>
                   </div>
@@ -328,7 +323,7 @@ const Products = () => {
                               active ? "bg-gray-200" : ""
                             } ${
                               option.value === selectedSort
-                                ? "font-semibold text-base text-primary"
+                                ? "font-medium text-base text-primary"
                                 : ""
                             }`
                           }
@@ -344,9 +339,12 @@ const Products = () => {
                   </MenuItems>
                 </Transition>
               </Menu>
-              <Menu as="div" className="relative inline-block text-left ml-4">
+              <Menu
+                as="div"
+                className="relative inline-block text-left ml-2 md:ml-4"
+              >
                 <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                  <div className="flex justify-center items-center gap-2">
+                  <div className="flex justify-center items-center gap-1 md:gap-2">
                     Show
                     <span className="bg-slate-200 px-2 py-2 text-center flex justify-center items-center">
                       {selectedDisplay ? `${selectedDisplay}` : "6"}
@@ -373,7 +371,7 @@ const Products = () => {
                               active ? "bg-gray-200" : ""
                             } ${
                               option.value === selectedDisplay
-                                ? "font-semibold text-base text-primary"
+                                ? "font-medium text-base text-primary"
                                 : ""
                             }`
                           }
@@ -392,7 +390,7 @@ const Products = () => {
 
               <button
                 type="button"
-                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
+                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500"
                 onClick={toggleLayout}
               >
                 <span className="sr-only">Toggle layout</span>
@@ -423,7 +421,7 @@ const Products = () => {
               </button>
               <button
                 type="button"
-                className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
+                className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-2 lg:hidden"
                 onClick={() => setMobileFiltersOpen(true)}
               >
                 <span className="sr-only">Filters</span>
