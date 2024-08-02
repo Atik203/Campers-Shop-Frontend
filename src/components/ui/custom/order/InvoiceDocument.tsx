@@ -1,6 +1,7 @@
 import { TOrder } from "@/types";
 import {
   Document,
+  Font,
   Image,
   Page,
   StyleSheet,
@@ -8,15 +9,15 @@ import {
   View,
 } from "@react-pdf/renderer";
 
-// Font.register({
-//   family: "Times New Roman",
-//   src: "../../../../../public/Times New Roman.ttf",
-// });
+Font.register({
+  family: "Lore",
+  src: "http://fonts.gstatic.com/s/lora/v10/4A-myfZX6oDr9CtSTkTGig.ttf",
+});
 
 const styles = StyleSheet.create({
   page: {
     padding: 25,
-    // fontFamily: "Times New Roman",
+    fontFamily: "Lore",
   },
   header: {
     flexDirection: "row",
