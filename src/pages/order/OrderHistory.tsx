@@ -69,7 +69,8 @@ export default function OrderHistory() {
               <h2 className="sr-only">Recent orders</h2>
 
               <div className="space-y-16 sm:space-y-24">
-                {orders.map((order) => {
+                {orders.slice(0, 5).map((order) => {
+                  // Display only 5 orders
                   const statusIndex = STATUS.indexOf(order.orderData.status);
                   const progressPercentage =
                     ((statusIndex + 1) / STATUS.length) * 100;
