@@ -7,7 +7,7 @@ const { Content } = Layout;
 
 const DashboardLayout = () => {
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh", overflow: "hidden" }}>
       <Sidebar />
       <Layout>
         <Navbar />
@@ -16,6 +16,7 @@ const DashboardLayout = () => {
             style={{
               padding: 24,
               minHeight: 360,
+              overflow: "hidden",
             }}
           >
             <Outlet />
