@@ -1,14 +1,14 @@
-## Campers Shop Frontend
+# Campers Shop Frontend
 
 **Campers Shop** is an e-commerce platform for camping enthusiasts. This repository contains the frontend code for the Campers Shop application.
 
 ## Table of Contents
 
 - [Campers Shop Frontend](#campers-shop-frontend)
-- [Table of Contents](#table-of-contents)
-- [Features](#features)
-- [Technologies](#technologies)
-- [Installation](#installation)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Technologies](#technologies)
+  - [Installation](#installation)
 
 ## Features
 
