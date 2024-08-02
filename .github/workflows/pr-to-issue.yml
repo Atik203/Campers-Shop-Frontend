@@ -1,0 +1,57 @@
+name: PR to Issue
+
+on:
+  pull_request:
+    types: [opened, closed]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  create-or-close-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get commit details
+        id: get-commit
+        run: |
+          echo "COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
+          echo "COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')" >> $GITHUB_ENV
+          echo "COMMIT_URL=https://github.com/${{ github.repository }}/commit/$(git log -1 --pretty=format:'%H')" >> $GITHUB_ENV
+
+      - name: Create issue
+        if: github.event.action == 'opened'
+        uses: JasonEtco/create-an-issue@v2.9.2
+        with:
+          filename: .github/ISSUE_TEMPLATE.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}
+          COMMIT_AUTHOR: ${{ env.COMMIT_AUTHOR }}
+          COMMIT_URL: ${{ env.COMMIT_URL }}
+
+      - name: Close related issue
+        if: github.event.action == 'closed' && github.event.pull_request.merged == true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueTitle = `Commit: ${process.env.COMMIT_MESSAGE}`;
+            const issues = await github.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'auto-generated'
+            });
+            const issue = issues.data.find(i => i.title === issueTitle);
+            if (issue) {
+              await github.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed'
+              });
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
