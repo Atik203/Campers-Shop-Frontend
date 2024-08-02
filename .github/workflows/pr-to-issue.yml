@@ -1,0 +1,50 @@
+name: PR to Issue
+
+on:
+  pull_request:
+    types: [opened, closed]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  create-or-close-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create or close issue
+        uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          assignees: Atik203
+          filename: .github/ISSUE_TEMPLATE.md
+          update_existing: true
+          search_existing: all
+        if: github.event.action == 'opened'
+        
+      - name: Close related issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueTitle = `PR: ${github.context.payload.pull_request.title}`;
+            const issues = await github.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'auto-generated'
+            });
+            const issue = issues.data.find(i => i.title === issueTitle);
+            if (issue) {
+              await github.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed'
+              });
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: github.event.action == 'closed' && github.event.pull_request.merged == true
