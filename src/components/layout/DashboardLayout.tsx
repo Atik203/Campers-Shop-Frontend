@@ -11,6 +11,7 @@ const DashboardLayout = () => {
       <Sidebar />
       <Layout>
         <Navbar />
+
         <Content style={{ margin: "24px 16px 0" }}>
           <div
             style={{

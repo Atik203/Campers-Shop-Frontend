@@ -1,6 +1,8 @@
 import { adminPaths } from "@/routes/admin.routes";
-import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/20/solid";
-import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowLeftEndOnRectangleIcon,
+  ArrowRightStartOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 import { Layout, Menu, MenuProps } from "antd";
 import { useState } from "react";
 import { sidebarItemsGenerator } from "../../utils/sidebarItemsGenerator";
