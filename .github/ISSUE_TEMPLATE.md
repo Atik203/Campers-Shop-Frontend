@@ -1,15 +1,15 @@
 ---
-title: "PR: {{ pull_request.title }}"
+title: "{{ commit_message }}"
 assignees: ["Atik203"]
 labels: ["auto-generated"]
 ---
 
-### Pull Request Details
+### Commit Details
 
-**Title:** {{ pull_request.title }}
-**Author:** {{ pull_request.user.login }}
-**URL:** [{{ pull_request.html_url }}]({{ pull_request.html_url }})
+**Message:** {{ commit_message }}
+**Author:** {{ commit_author }}
+**URL:** [{{ commit_url }}]({{ commit_url }})
 
 ---
 
-Describe the issue that this pull request is addressing.
+Describe the issue that this commit is addressing.
