@@ -1,6 +1,7 @@
 import { useGetSingleOrderQuery } from "@/redux/features/order/orderApi";
 import { TOrder } from "@/types";
-import { PDFViewer } from "@react-pdf/renderer";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { isMobile } from "react-device-detect";
 import { useParams } from "react-router-dom";
 import InvoiceDocument from "./InvoiceDocument";
 
@@ -16,9 +17,19 @@ const InvoicePage = () => {
 
   return (
     <div className="">
-      <PDFViewer style={{ width: "100%", height: "800px" }}>
-        <InvoiceDocument order={order} />
-      </PDFViewer>
+      {isMobile ? (
+        <PDFDownloadLink
+          document={<InvoiceDocument order={order} />}
+          fileName={`invoice-${id}.pdf`}
+          className="btn btn-primary"
+        >
+          {({ loading }) => (loading ? "Generating PDF..." : "Download PDF")}
+        </PDFDownloadLink>
+      ) : (
+        <PDFViewer style={{ width: "100%", height: "800px" }}>
+          <InvoiceDocument order={order} />
+        </PDFViewer>
+      )}
     </div>
   );
 };
