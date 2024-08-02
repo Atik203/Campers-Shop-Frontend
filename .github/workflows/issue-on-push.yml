@@ -8,21 +8,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Get commit details
+        id: get-commit
+        run: |
+          echo "COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
+          echo "COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')" >> $GITHUB_ENV
+          echo "COMMIT_URL=https://github.com/${{ github.repository }}/commit/$(git log -1 --pretty=format:'%H')" >> $GITHUB_ENV
       - name: Create an issue
         uses: JasonEtco/create-an-issue@v2.9.2
         with:
-          title: "Commit: ${{ github.event.head_commit.message }}"
-          body: |
-            ### Commit Details
-
-            **Message:** ${{ github.event.head_commit.message }}
-            **Author:** ${{ github.event.head_commit.author.name }}
-            **URL:** [${{ github.event.head_commit.url }}](${{ github.event.head_commit.url }})
-
-            ---
-
-            Describe the issue that this commit is addressing.
-          assignees: Atik203
-          labels: auto-generated
+          filename: .github/ISSUE_TEMPLATE.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}
+          COMMIT_AUTHOR: ${{ env.COMMIT_AUTHOR }}
+          COMMIT_URL: ${{ env.COMMIT_URL }}

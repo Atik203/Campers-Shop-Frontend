@@ -1,14 +1,14 @@
 ---
-title: "{{ commit_message }}"
+title: "Title: {{ env.COMMIT_MESSAGE }}"
 assignees: ["Atik203"]
 labels: ["auto-generated"]
 ---
 
 ### Commit Details
 
-**Message:** {{ commit_message }}
-**Author:** {{ commit_author }}
-**URL:** [{{ commit_url }}]({{ commit_url }})
+**Message:** {{ env.COMMIT_MESSAGE }}
+**Author:** {{ env.COMMIT_AUTHOR }}
+**URL:** [{{ env.COMMIT_URL }}]({{ env.COMMIT_URL }})
 
 ---
 
