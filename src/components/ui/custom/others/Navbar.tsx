@@ -164,7 +164,7 @@ export default function Navbar() {
               <div className="mt-3 space-y-1">
                 <DisclosureButton
                   as={NavLink}
-                  to={"/contact-us"}
+                  to={"/dashboard/home"}
                   className="block text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
                 >
                   Dashboard

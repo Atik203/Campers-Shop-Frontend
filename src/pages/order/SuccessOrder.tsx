@@ -145,7 +145,7 @@ export default function SuccessOrder() {
                   <dt className="font-medium text-gray-900">
                     Payment Information
                   </dt>
-                  <dd className="mt-2 space-y-2 sm:flex sm:space-x-4 sm:space-y-0">
+                  <dd className="mt-2 space-y-2 sm:flex sm:space-x-2 sm:space-y-0">
                     <div className="flex-none">
                       <svg
                         aria-hidden="true"
@@ -161,13 +161,13 @@ export default function SuccessOrder() {
                         />
                       </svg>
                     </div>
-                    <div className="flex-auto">
-                      <p className="text-gray-900">
+                    <div className="flex-auto text-wrap">
+                      <h1 className="text-gray-900">
                         Transaction ID:{" "}
-                        <span className="text-primary font-medium">
+                        <span className="text-primary break-words">
                           {paymentDetails.cardPaymentDetails?.transactionId}
                         </span>
-                      </p>
+                      </h1>
 
                       <p className="text-gray-900">
                         Ending with{" "}
