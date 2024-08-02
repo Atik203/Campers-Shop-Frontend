@@ -1,0 +1,22 @@
+version: 1
+
+merge:
+  trigger:
+    branches: ["dev"]
+    branch_patterns: ["feature/.*"]
+  method: squash
+  options:
+    squash:
+      title: "pull_request_title"
+      body: "empty_body"
+  delete_after_merge: false
+  allow_merge_with_no_checks: false
+
+update:
+  trigger:
+    labels: ["WIP", "Update Me"]
+  ignore:
+    labels: ["Do Not Update"]
+  ignore_drafts: false
+  required_statuses:
+    - "ci/circleci: ete-tests"
