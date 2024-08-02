@@ -1,8 +1,9 @@
-name: PR to Issue
+name: Auto Close Old Issues
 
 on:
   pull_request:
     types: [opened, closed]
+  push:
 
 permissions:
   contents: read
