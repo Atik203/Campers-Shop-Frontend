@@ -11,7 +11,7 @@ import {
 
 Font.register({
   family: "Lore",
-  src: "http://fonts.gstatic.com/s/lora/v10/4A-myfZX6oDr9CtSTkTGig.ttf",
+  src: "https://fonts.gstatic.com/s/lora/v10/4A-myfZX6oDr9CtSTkTGig.ttf",
 });
 
 const styles = StyleSheet.create({
