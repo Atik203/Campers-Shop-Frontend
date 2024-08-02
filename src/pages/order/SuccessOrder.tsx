@@ -99,7 +99,7 @@ export default function SuccessOrder() {
                   </div>
                 </div>
                 <p className="flex-none font-medium text-gray-900">
-                  ${product.price * product.quantity!}
+                  ${(product.price * product.quantity!).toFixed(2)}
                 </p>
               </li>
             ))}
@@ -108,7 +108,7 @@ export default function SuccessOrder() {
           <dl className="space-y-6 border-t border-gray-200 pt-6 text-sm font-medium text-gray-500">
             <div className="flex items-center justify-between border-t border-gray-200 pt-6 text-gray-900">
               <dt className="text-base">Total</dt>
-              <dd className="text-base">${total}</dd>
+              <dd className="text-base">${total.toFixed(2)}</dd>
             </div>
           </dl>
 
@@ -160,12 +160,11 @@ export default function SuccessOrder() {
                           fill="#fff"
                         />
                       </svg>
-                      <p className="sr-only"></p>
                     </div>
                     <div className="flex-auto">
                       <p className="text-gray-900">
                         Transaction ID:{" "}
-                        <span className="text-primary font-semibold">
+                        <span className="text-primary font-medium">
                           {paymentDetails.cardPaymentDetails?.transactionId}
                         </span>
                       </p>
@@ -188,7 +187,7 @@ export default function SuccessOrder() {
                   <dt className="font-medium text-gray-900">
                     Payment Information
                   </dt>
-                  <dd className="mt-2 space-y-2 sm:flex sm:space-x-4 sm:space-y-0">
+                  <dd className="mt-2 space-y-2 sm:flex sm:space-x-2 sm:space-y-0">
                     <div className="flex-auto">
                       <p className="text-gray-900">Cash on delivery</p>
                       <p className="text-gray-900">

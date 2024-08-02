@@ -513,7 +513,7 @@ export default function Checkout() {
               <div className="px-4 py-6 sm:px-6">
                 <div className="flex justify-between text-sm font-medium text-gray-900">
                   <p>Subtotal</p>
-                  <p>${subtotal}</p>
+                  <p>${subtotal.toFixed(2)}</p>
                 </div>
                 <div className="mt-6 flex justify-between text-sm font-medium text-gray-900">
                   <p>Shipping</p>
@@ -521,7 +521,7 @@ export default function Checkout() {
                 </div>
                 <div className="mt-6 flex justify-between text-sm font-medium text-gray-900">
                   <p>Total</p>
-                  <p>${total}</p>
+                  <p>${total.toFixed()}</p>
                 </div>
               </div>
             </div>
