@@ -1,0 +1,63 @@
+name: Auto Issue from PR
+
+on:
+  pull_request:
+    types: [opened, edited, closed]
+
+jobs:
+  create-issue:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened' || github.event.action == 'edited'
+    steps:
+      - name: Create Issue from PR
+        if: github.event.action == 'opened' || github.event.action == 'edited'
+        uses: actions/github-script@v7.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: issue } = await github.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: context.payload.pull_request.title,
+              body: context.payload.pull_request.body,
+              labels: ['from-pull-request']
+            });
+
+            const issueNumber = issue.number;
+
+            await github.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: `${issue.body}\n\n**Original Pull Request:** #${context.payload.pull_request.number}`
+            });
+
+            await github.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              body: `${context.payload.pull_request.body}\n\n**Related Issue:** #${issueNumber}`
+            });
+
+  close-issue:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'closed' && github.event.pull_request.merged == true
+    steps:
+      - name: Close Related Issue
+        uses: actions/github-script@v7.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prBody = context.payload.pull_request.body;
+            const issueNumberMatch = prBody.match(/Related Issue: #(\d+)/);
+
+            if (issueNumberMatch) {
+              const issueNumber = issueNumberMatch[1];
+
+              await github.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                state: 'closed'
+              });
+            }
