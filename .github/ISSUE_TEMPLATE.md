@@ -1,10 +1,15 @@
 ---
-name: issue template
-about: Describe this issue template's purpose here.
-title: Test issue template
-labels: enhancement
+title: PR: {{ pull_request.title }}
 assignees: Atik203
+labels: auto-generated
+---
+
+### Pull Request Details
+
+**Title:** {{ pull_request.title }}
+**Author:** {{ pull_request.user.login }}
+**URL:** [{{ pull_request.html_url }}]({{ pull_request.html_url }})
 
 ---
 
-test purposes
+Describe the issue that this pull request is addressing.
