@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 35,
-    height: 35,
+    width: 45,
+    height: 45,
     marginRight: 10,
   },
   shopName: {
@@ -128,7 +128,10 @@ const InvoiceDocument = ({ order }: { order: TOrder }) => (
       <Text style={styles.watermark}>Campers Shop</Text>
       <View style={styles.header}>
         <View style={styles.leftHeader}>
-          <Image src="../../../../../public/Logo.png" style={styles.logo} />
+          <Image
+            src="https://img.icons8.com/color/48/shop.png"
+            style={styles.logo}
+          />
           <View>
             <Text style={styles.shopName}>Campers Shop</Text>
             <Text style={styles.shopAddress}>
