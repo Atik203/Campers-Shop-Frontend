@@ -21,7 +21,18 @@ const InvoicePage = () => {
         <PDFDownloadLink
           document={<InvoiceDocument order={order} />}
           fileName={`invoice-${id}.pdf`}
-          className="btn btn-primary"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "green",
+            color: "white",
+            padding: "10px 20px",
+            borderRadius: "5px",
+            textDecoration: "none",
+            margin: "20px auto",
+            width: "fit-content",
+          }}
         >
           {({ loading }) => (loading ? "Generating PDF..." : "Download PDF")}
         </PDFDownloadLink>
