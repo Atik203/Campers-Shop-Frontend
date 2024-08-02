@@ -64,4 +64,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AC_LABEL: "auto-generated"
-          AC_KEEP: 1
+          AC_KEEP: 0
