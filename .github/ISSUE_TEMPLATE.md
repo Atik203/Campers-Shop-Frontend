@@ -1,7 +1,7 @@
 ---
-title: PR: {{ pull_request.title }}
-assignees: Atik203
-labels: auto-generated
+title: "PR: {{ pull_request.title }}"
+assignees: ["Atik203"]
+labels: ["auto-generated"]
 ---
 
 ### Pull Request Details
