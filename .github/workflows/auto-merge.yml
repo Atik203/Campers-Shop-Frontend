@@ -1,0 +1,12 @@
+name: Enable Auto Merge
+on:
+  pull_request_target:
+    branches:
+      - main
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: kenhowardpdx/auto-merge-action@v1.1.0
+        if: ${{ github.actor == 'dependabot[bot]' }}
