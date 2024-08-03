@@ -112,7 +112,14 @@ export function ProductTable() {
           Title <ChevronDown className="ml-2 h-4 w-4" />
         </Button>
       ),
-      cell: ({ row }) => <div>{row.original.title}</div>,
+      cell: ({ row }) => (
+        <Link
+          to={`/product-details/${row.original._id}`}
+          className="text-black hover:text-primary"
+        >
+          {row.original.title}
+        </Link>
+      ),
     },
     {
       accessorKey: "category",
