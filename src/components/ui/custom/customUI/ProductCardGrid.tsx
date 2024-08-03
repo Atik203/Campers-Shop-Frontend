@@ -13,17 +13,23 @@ import _ from "lodash";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const ProductCardGrid: React.FC<TProduct> = ({
+type TProductCard = {
+  showSizeColor?: boolean;
+  showDescription?: boolean;
+};
+
+const ProductCardGrid: React.FC<TProduct & TProductCard> = ({
   _id,
   title,
   category,
   sizes,
   colors,
   price,
-  stock,
   description,
   images,
   averageRating,
+  showSizeColor = false,
+  showDescription = true,
 }) => {
   return (
     <Card className="w-full bg-slate-100 shadow-md">
@@ -31,27 +37,27 @@ const ProductCardGrid: React.FC<TProduct> = ({
         <img
           src={images[0]}
           alt={title}
-          className="w-full h-40 object-contain mb-4 rounded"
+          className="w-full h-44 md:h-40  object-contain rounded"
         />
         <CardTitle className="text-xl">{title}</CardTitle>
         <CardDescription>{category}</CardDescription>
       </CardHeader>
-      <CardContent>
-        {sizes && <p>Sizes: {sizes.join(", ")}</p>}
-        {colors && (
-          <p>Colors: {colors.map((color) => color.name).join(", ")}</p>
+      <CardContent className="-mt-4">
+        {showSizeColor && (
+          <>
+            {sizes && <p>Sizes: {sizes.join(", ")}</p>}
+            {colors && (
+              <p>Colors: {colors.map((color) => color.name).join(", ")}</p>
+            )}
+          </>
         )}
         <p>Price: ${price}</p>
-        <p>Stock: {stock}</p>
         <Rating rating={averageRating as number} readOnly variant="yellow" />
-        <p>{_.truncate(description, { length: 80 })}</p>
+        {showDescription && <p>{_.truncate(description, { length: 60 })}</p>}
       </CardContent>
       <CardFooter>
         <Link to={`/product-details/${_id}`}>
-          <Button
-            variant="outline"
-            className="bg-primary text-white hover:bg-indigo-600 hover:text-white"
-          >
+          <Button className="bg-primary text-white text-sm hover:bg-indigo-600 hover:text-white">
             Show Details
           </Button>
         </Link>
