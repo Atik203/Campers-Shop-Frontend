@@ -52,6 +52,7 @@ const UpdateProduct = () => {
       sizes: selectedSizes,
       colors,
       _id: id,
+      inStock: Number(stock) > 0,
     };
 
     try {
