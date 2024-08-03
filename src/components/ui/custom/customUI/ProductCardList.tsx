@@ -50,7 +50,10 @@ const ProductCardList: React.FC<TProduct & TProductCard> = ({
           </>
         )}
         <p>Price: ${price}</p>
-        <Rating rating={averageRating as number} readOnly variant="yellow" />
+        {averageRating !== 0 && (
+          <Rating rating={averageRating as number} readOnly variant="yellow" />
+        )}
+
         {showDescription && <p>{_.truncate(description, { length: 150 })}</p>}
       </CardContent>
       <CardFooter className="flex-shrink-0 md:w-1/4">

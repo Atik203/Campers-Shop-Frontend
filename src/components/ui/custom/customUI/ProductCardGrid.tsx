@@ -7,11 +7,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Rating } from "@/components/ui/custom/customUI/Rating";
 import { TProduct } from "@/types/product.types";
 import _ from "lodash";
 import React from "react";
 import { Link } from "react-router-dom";
+import { Rating } from "./Rating";
 
 type TProductCard = {
   showSizeColor?: boolean;
@@ -52,7 +52,10 @@ const ProductCardGrid: React.FC<TProduct & TProductCard> = ({
           </>
         )}
         <p>Price: ${price}</p>
-        <Rating rating={averageRating as number} readOnly variant="yellow" />
+        {averageRating !== 0 && (
+          <Rating rating={averageRating as number} readOnly variant="yellow" />
+        )}
+
         {showDescription && <p>{_.truncate(description, { length: 60 })}</p>}
       </CardContent>
       <CardFooter>

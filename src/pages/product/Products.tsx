@@ -251,7 +251,7 @@ const Products = () => {
                                           {...field}
                                           id={`filter-${section.id}-${optionIdx}`}
                                           type="checkbox"
-                                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                                           onChange={(e) => {
                                             field.onChange(e.target.checked);
                                             handleSubmit(onSubmit)();
@@ -261,7 +261,7 @@ const Products = () => {
                                     />
                                     <label
                                       htmlFor={`filter-${section.id}-${optionIdx}`}
-                                      className="ml-3 text-sm text-black font-semibold"
+                                      className="ml-3 text-sm text-black font-medium"
                                     >
                                       {option.label}
                                     </label>
@@ -490,7 +490,7 @@ const Products = () => {
                                       {...field}
                                       id={`filter-${section.id}-${optionIdx}`}
                                       type="checkbox"
-                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                                       onChange={(e) => {
                                         field.onChange(e.target.checked);
                                         handleSubmit(onSubmit)();
@@ -500,7 +500,7 @@ const Products = () => {
                                 />
                                 <label
                                   htmlFor={`filter-${section.id}-${optionIdx}`}
-                                  className="ml-3 text-black font-semibold"
+                                  className="ml-3 text-black font-medium"
                                 >
                                   {option.label}
                                 </label>
