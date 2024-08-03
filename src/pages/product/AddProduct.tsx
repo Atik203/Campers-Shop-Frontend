@@ -12,6 +12,7 @@ import { SIZES, TProduct } from "@/types/product.types";
 import { uploadImageToCloudinary } from "@/utils/uploadImageToCloudinary";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const AddProduct = () => {
@@ -20,6 +21,7 @@ const AddProduct = () => {
   const { reset } = useForm();
   const [CreateProduct] = useCreateProductMutation();
   const [colors, setColors] = useState<TColor[]>([]);
+  const navigate = useNavigate();
 
   const onSubmit = async (data: Partial<TProduct>) => {
     const toastId = toast.loading("Submitting Data...");
@@ -51,6 +53,7 @@ const AddProduct = () => {
         toast.success("Product Added Successfully", { id: toastId });
         reset();
         setSelectedFiles([]);
+        navigate(`/product-details/${result.data._id}`);
       } else {
         toast.error("Failed to add product", { id: toastId });
       }
