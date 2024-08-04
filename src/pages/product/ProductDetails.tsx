@@ -238,16 +238,6 @@ export default function ProductDetails() {
                 </div>
 
                 <div className="mt-6">
-                  <h3 className="sr-only">Description</h3>
-
-                  <div className="space-y-6">
-                    <p className="text-base text-gray-900">
-                      {product.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-6">
                   <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
                   <RadioGroup
@@ -384,6 +374,14 @@ export default function ProductDetails() {
                 >
                   Add to Cart
                 </button>
+                <div className="mt-8">
+                  <h3 className="text-lg font-semibold">Description:</h3>
+                  <div className="">
+                    <p className="text-base text-justify ">
+                      {product.description}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

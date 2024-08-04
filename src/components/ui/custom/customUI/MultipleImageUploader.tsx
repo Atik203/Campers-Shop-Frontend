@@ -6,12 +6,14 @@ interface MultiImageUploaderProps {
   images: File[];
   setImages: React.Dispatch<React.SetStateAction<File[]>>;
   initialImageUrls?: string[]; // Optional prop for existing image URLs
+  setRemovedInitialImages?: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const MultipleImageUploader: React.FC<MultiImageUploaderProps> = ({
   images,
   setImages,
   initialImageUrls = [],
+  setRemovedInitialImages = () => {},
 }) => {
   const initialUrlsRef = useRef(initialImageUrls);
   const [previews, setPreviews] = useState<string[]>(initialUrlsRef.current);
@@ -34,6 +36,10 @@ const MultipleImageUploader: React.FC<MultiImageUploaderProps> = ({
 
   const removeImage = (index: number) => {
     if (index < initialUrlsRef.current.length) {
+      const removedUrl = initialUrlsRef.current[index];
+      if (setRemovedInitialImages) {
+        setRemovedInitialImages((prev) => [...prev, removedUrl]);
+      }
       const newInitialUrls = [...initialUrlsRef.current];
       newInitialUrls.splice(index, 1);
       initialUrlsRef.current = newInitialUrls;

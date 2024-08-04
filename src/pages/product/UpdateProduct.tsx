@@ -22,6 +22,9 @@ const UpdateProduct = () => {
   const { id } = useParams<{ id: string }>();
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [removedInitialImages, setRemovedInitialImages] = useState<string[]>(
+    []
+  );
   const { reset } = useForm();
   const navigate = useNavigate();
   const [UpdateProduct] = useUpdateProductMutation();
@@ -32,7 +35,10 @@ const UpdateProduct = () => {
   const onSubmit = async (data: Partial<TProduct>) => {
     const toastId = toast.loading("Submitting Data...");
 
-    const urls = [...product.images];
+    const urls =
+      product?.images.filter(
+        (url: string) => !removedInitialImages.includes(url)
+      ) || [];
     for (const file of selectedFiles) {
       try {
         const url = await uploadImageToCloudinary(file);
@@ -42,7 +48,6 @@ const UpdateProduct = () => {
         return;
       }
     }
-    console.log(urls);
     const { stock, price, ...remainingData } = data;
     const productData = {
       ...remainingData,
@@ -159,6 +164,7 @@ const UpdateProduct = () => {
               images={selectedFiles}
               initialImageUrls={product?.images}
               setImages={setSelectedFiles}
+              setRemovedInitialImages={setRemovedInitialImages}
             />
           </FormWrapper>
         </div>
