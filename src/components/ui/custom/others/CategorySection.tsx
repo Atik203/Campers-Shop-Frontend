@@ -18,7 +18,7 @@ const categories = [
       "https://adventureshop.mt/cdn/shop/products/the-north-face-m-descendit-jacket-20b-tnf-nf0a4qww-flare-1.jpg?v=1696169277&width=500",
   },
   {
-    name: "Ski & Snowports",
+    name: "Ski & Snowboards",
     imageSrc:
       "https://adventureshop.mt/cdn/shop/files/1_BasileEtOscar_VillardDeLans_Rossignol_HD_LouisGarnier-15-3500x5247-8f7acbc3-f500-4068-8381-fdd7c9b5b195.png?v=1698678464&width=600",
   },
