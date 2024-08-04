@@ -72,31 +72,31 @@ Instructions on how to install, configure, and get the project running locally.
 
 ### Home Page
 
-![Home Page]('./screenshots/home.png')
+![Home Page](./screenshots/home.png)
 
 ### Product Page
 
-![Product Page]('./screenshots/product.png')
+![Product Page](./screenshots/products.png)
 
 ### Cart Page
 
-![Cart Page]('./screenshots/cart.png')
+![Cart Page](./screenshots/cart.png)
 
 ### Order Page
 
-![Order Page]('./screenshots/order.png')
+![Order Page](./screenshots/order-page.png)
 
 ### Dashboard Home Page
 
-![Dashboard Home Page]('./screenshots/dashboard-home.png')
+![Dashboard Home Page](./screenshots/dashboard-home.png)
 
 ### Dashboard All Product List
 
-![Dashboard All Product List]('./screenshots/all-product-list.png')
+![Dashboard All Product List](./screenshots/all-product-list.png)
 
 ### Order History
 
-![Order History]('./screenshots/order-history.png')
+![Order History](./screenshots/order-history.png)
 
 ## License
 
