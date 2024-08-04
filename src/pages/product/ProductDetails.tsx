@@ -214,9 +214,17 @@ export default function ProductDetails() {
               {/* Product info */}
               <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
                 <div className="flex items-center justify-between">
-                  <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-                    {product.title}
-                  </h1>
+                  <div>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+                      {product.title}
+                    </h1>
+                    <p className="">
+                      By:{" "}
+                      <span className="text-primary font-medium">
+                        {product.brand}
+                      </span>{" "}
+                    </p>
+                  </div>
                   <button
                     type="button"
                     onClick={handleWishlist}
