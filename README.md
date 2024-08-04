@@ -2,8 +2,9 @@
 
 ## Introduction
 
-
 The Campers Shop Frontend is a React-based web application that serves as the user interface for the Campers Shop. It enables users to browse through a wide range of camping products, view product details, manage their shopping cart, and place orders. The application integrates with a backend server to fetch product data, handle user authentication, and process orders. The UI is built using modern React practices, including hooks and functional components, and styled with Tailwind CSS.
+
+**_Live Link_**: [Campers Shop](https://campers-shop-frontend-lac.vercel.app/)
 
 ## Features
 
@@ -42,3 +43,35 @@ Instructions on how to install, configure, and get the project running locally.
    ```bash
    git clone https://github.com/Atik293/campers-shop-frontend.git
    cd campers-shop-frontend
+   ```
+2. Install dependencies:
+
+   ```bash
+   yarn install
+
+   ```
+
+3. Create a `.env` file in the root directory and add the following environment variables:
+
+   ```bash
+   VITE_BASE_URL=http://localhost:5000
+   VITE_COULDINARY_UPLOAD_PRESET=your_cloudinary_upload_preset
+   VITE_COULDINARY_NAME=your_cloudinary_name
+   VITE_STRIPE_SECRET=your_stripe_secret_key
+   ```
+
+4. Start the development server:
+
+   ```bash
+    yarn dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:5173) to view it in the browser.
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## Contributors
+
+Contributions are welcome! Please create a pull request or open an issue to discuss changes.
