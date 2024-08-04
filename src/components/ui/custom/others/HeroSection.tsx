@@ -67,14 +67,14 @@ export default function HeroSection() {
                     <div className="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
                       <div className="h-64 w-44 overflow-hidden rounded-lg">
                         <img
-                          src="https://contents.mediadecathlon.com/s1045801/k$f565435ab9f757520f7ff22b34494a77?format=auto&f=969x0"
+                          src="https://i.ibb.co/6ZZ9CvH/images.jpg"
                           alt=""
                           className="h-full w-full object-cover object-center"
                         />
                       </div>
                       <div className="h-64 w-44 overflow-hidden rounded-lg">
                         <img
-                          src="https://contents.mediadecathlon.com/s1030714/k$14e6d43dc72f03c7b6248c95b3cfe8e1/1800x0/1061pt553/1290xcr1106/default.jpg?format=auto"
+                          src="https://i.ibb.co/3MDWbZp/camping-image.jpg"
                           alt=""
                           className="h-full w-full object-cover object-center"
                         />
