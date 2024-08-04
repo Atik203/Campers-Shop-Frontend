@@ -56,7 +56,7 @@ const ProductCardGrid: React.FC<TProduct & TProductCard> = ({
           <Rating rating={averageRating as number} readOnly variant="yellow" />
         )}
 
-        {showDescription && <p>{_.truncate(description, { length: 60 })}</p>}
+        {showDescription && <p>{_.truncate(description, { length: 50 })}</p>}
       </CardContent>
       <CardFooter>
         <Link to={`/product-details/${_id}`}>

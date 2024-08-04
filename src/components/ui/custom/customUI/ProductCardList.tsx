@@ -54,7 +54,7 @@ const ProductCardList: React.FC<TProduct & TProductCard> = ({
           <Rating rating={averageRating as number} readOnly variant="yellow" />
         )}
 
-        {showDescription && <p>{_.truncate(description, { length: 150 })}</p>}
+        {showDescription && <p>{_.truncate(description, { length: 100 })}</p>}
       </CardContent>
       <CardFooter className="flex-shrink-0 md:w-1/4">
         <Link to={`/product-details/${_id}`}>
