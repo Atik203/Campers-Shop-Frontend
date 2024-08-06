@@ -13,13 +13,6 @@ export default function OrderHistory() {
 
   const orders: TOrder[] = data?.data || [];
 
-  const total = orders.reduce((acc, order) => {
-    const orderTotal = order.products.reduce((orderAcc, product) => {
-      return orderAcc + product.price * (product.quantity! || 1);
-    }, 0);
-    return acc + orderTotal;
-  }, 0);
-
   if (isLoading || isError) {
     return (
       <div className="mt-5 text-center text-gray-500">
@@ -71,6 +64,14 @@ export default function OrderHistory() {
               <div className="space-y-16 sm:space-y-24">
                 {orders.slice(0, 5).map((order) => {
                   // Display only 5 orders
+                  const orderTotal = order.products.reduce(
+                    (orderAcc, product) => {
+                      return (
+                        orderAcc + product.price * (product.quantity! || 1)
+                      );
+                    },
+                    0
+                  );
                   const statusIndex = STATUS.indexOf(order.orderData.status);
                   const progressPercentage =
                     ((statusIndex + 1) / STATUS.length) * 100;
@@ -96,7 +97,7 @@ export default function OrderHistory() {
                           </div>
                           <div className="flex justify-between pt-4 font-medium text-gray-900 md:block md:pt-0">
                             <dt>Total amount</dt>
-                            <dd className="md:mt-1">{total}</dd>
+                            <dd className="md:mt-1">{orderTotal.toFixed(2)}</dd>
                           </div>
                         </dl>
                         <div className="mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
@@ -127,6 +128,9 @@ export default function OrderHistory() {
                                         </h4>
                                         <p className="mt-1 font-medium text-gray-900  sm:mt-0">
                                           {product.price}
+                                        </p>
+                                        <p className="mt-1 text-gray-900">
+                                          Quantity: {product.quantity || 1}
                                         </p>
                                       </div>
                                       <div className="mt-2 flex space-x-6">
