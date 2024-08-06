@@ -26,6 +26,9 @@ export function BasicDashboard() {
   const { data, isFetching, isLoading } = useGetAllProductsQuery("page=1");
   const [page, setPage] = useState(1);
 
+  const { data: ForCalculatingTotalSales } =
+    useGetAllOrdersQuery(`page=1&limit=`);
+
   const {
     data: orderData,
     isLoading: isOrderLoading,
@@ -42,7 +45,7 @@ export function BasicDashboard() {
 
   const orders: TOrder[] = orderData?.data;
 
-  const totalSales = calculateTotal(orders);
+  const totalSales = calculateTotal(ForCalculatingTotalSales?.data);
 
   const rounded = Math.ceil(totalSales);
 
