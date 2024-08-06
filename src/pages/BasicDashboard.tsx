@@ -11,7 +11,6 @@ import {
 import { useGetAllOrdersQuery } from "@/redux/features/order/orderApi";
 import { useGetAllProductsQuery } from "@/redux/features/product/productApi";
 import { TOrder } from "@/types";
-import { TProduct } from "@/types/product.types";
 
 function calculateTotal(orders: TOrder[]): number {
   return orders.reduce((overallTotal, order) => {
@@ -23,6 +22,7 @@ function calculateTotal(orders: TOrder[]): number {
 }
 export function BasicDashboard() {
   const { data, isFetching, isLoading } = useGetAllProductsQuery("page=1");
+
   const {
     data: orderData,
     isLoading: isOrderLoading,
@@ -36,15 +36,15 @@ export function BasicDashboard() {
       </div>
     );
   }
-  const products = data?.data as TProduct[];
+
   const orders: TOrder[] = orderData?.data;
 
   const totalSales = calculateTotal(orders);
 
   const rounded = Math.ceil(totalSales);
 
-  const totalProducts = products.length;
-  const totalOrders = orders?.length;
+  const totalProducts = data?.totalData;
+  const totalOrders = orderData?.totalData;
 
   return (
     <div className="flex flex-col h-full w-full bg-background text-foreground">
