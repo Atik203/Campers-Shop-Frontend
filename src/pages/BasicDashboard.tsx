@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import PaginationComponent from "@/components/ui/custom/customUI/PaginationComponent";
 import {
   Table,
   TableBody,
@@ -11,6 +12,7 @@ import {
 import { useGetAllOrdersQuery } from "@/redux/features/order/orderApi";
 import { useGetAllProductsQuery } from "@/redux/features/product/productApi";
 import { TOrder } from "@/types";
+import { useState } from "react";
 
 function calculateTotal(orders: TOrder[]): number {
   return orders.reduce((overallTotal, order) => {
@@ -22,12 +24,13 @@ function calculateTotal(orders: TOrder[]): number {
 }
 export function BasicDashboard() {
   const { data, isFetching, isLoading } = useGetAllProductsQuery("page=1");
+  const [page, setPage] = useState(1);
 
   const {
     data: orderData,
     isLoading: isOrderLoading,
     isFetching: isOrderFetching,
-  } = useGetAllOrdersQuery(undefined);
+  } = useGetAllOrdersQuery(`page=${page}&limit=5`);
 
   if (isFetching || isLoading || isOrderLoading || isOrderFetching) {
     return (
@@ -45,6 +48,7 @@ export function BasicDashboard() {
 
   const totalProducts = data?.totalData;
   const totalOrders = orderData?.totalData;
+  const totalPages = Math.ceil(totalOrders / 5);
 
   return (
     <div className="flex flex-col h-full w-full bg-background text-foreground">
@@ -111,6 +115,11 @@ export function BasicDashboard() {
           </CardContent>
         </Card>
       </main>
+      <PaginationComponent
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
     </div>
   );
 }
